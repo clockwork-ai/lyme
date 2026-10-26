@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /
-Sitemap: https://clockwork-ai.github.io/lyme/sitemap.xml
+Allow: /
