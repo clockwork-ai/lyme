@@ -186,6 +186,8 @@ html.menu-open { overflow: hidden; }
 .ph { margin: 0; display: grid; place-items: center; text-align: center; aspect-ratio: 4 / 3; border-radius: var(--r); border: 1.5px dashed color-mix(in oklab, currentColor 35%, transparent); color: var(--sc-ink-soft); font-weight: 600; background: repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in oklab, currentColor 5%, transparent) 14px 15px); }
 .ph small { font-weight: 400; }
 .ph--tall { aspect-ratio: 4 / 5; }
+.photo { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r); box-shadow: var(--sc-e2); }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .ph--map { aspect-ratio: 21 / 9; margin-top: var(--sc-7); }
 .todo { margin-top: var(--sc-5); padding: 0.8rem 1rem; border-radius: 8px; background: #fff4d6; color: #3b2c00; border: 1.5px dashed #b88a00; font-size: var(--sc-t-sm); max-width: 62ch; }
 .todo code { font-size: 0.95em; }
