@@ -1,5 +1,6 @@
 /* Lyme home page. The engine drives the acts; this file is the page's own behaviour:
-   1. the hero pipe run, read off the hero's --sc-p: copper reaches each fitting in turn, then stops dead at the boiler
+   1. the hero pipe run, read off the hero's --sc-p: copper reaches each fitting in turn, stops dead at the boiler,
+      then carries on out through the wall to the heat pump
    2. "Point at the problem": the fault finder (the signature move)
    3. per-row swipe-ins for the job key and the reviews line */
 ScrollCraft.mount(document.body);
@@ -31,22 +32,25 @@ ScrollCraft.mount(document.body);
   var cap = hero.querySelector('[data-cap]');
   // key, from, to (hero progress), caption once it's lit
   var RUN = [
-    ['stopcock', 0.02, 0.09, 'Stopcock: where your water comes in.'],
-    ['tap', 0.09, 0.17, 'Kitchen tap: <em>that’s me.</em>'],
-    ['outside', 0.17, 0.25, 'Outside tap: <em>me.</em>'],
-    ['basin', 0.25, 0.34, 'Basin and taps: <em>me.</em>'],
-    ['toilet', 0.34, 0.41, 'Toilet: <em>me.</em>'],
-    ['leak', 0.41, 0.46, 'Water where it shouldn’t be: <em>me.</em>'],
-    ['pump', 0.46, 0.53, 'Pump and valves: <em>me.</em>'],
-    ['rad1', 0.53, 0.61, 'Radiators: <em>me.</em>'],
-    ['rad2', 0.61, 0.67, 'Radiators: <em>me.</em>'],
-    ['stat', 0.67, 0.73, 'Smart thermostat and controls: <em>me.</em>'],
-    ['toboiler', 0.73, 0.84, 'And the boiler?'],
+    ['stopcock', 0.02, 0.08, 'Stopcock: where your water comes in.'],
+    ['tap', 0.08, 0.15, 'Kitchen tap: <em>that’s me.</em>'],
+    ['outside', 0.15, 0.22, 'Outside tap: <em>me.</em>'],
+    ['basin', 0.22, 0.30, 'Basin and taps: <em>me.</em>'],
+    ['toilet', 0.30, 0.36, 'Toilet: <em>me.</em>'],
+    ['leak', 0.36, 0.41, 'Water where it shouldn’t be: <em>me.</em>'],
+    ['pump', 0.41, 0.47, 'Pump and valves: <em>me.</em>'],
+    ['rad1', 0.47, 0.53, 'Radiators: <em>me.</em>'],
+    ['rad2', 0.53, 0.58, 'Radiators: <em>me.</em>'],
+    ['stat', 0.58, 0.63, 'Smart thermostat and controls: <em>me.</em>'],
+    ['toboiler', 0.63, 0.71, 'And the boiler?'],
+    ['heatpump', 0.79, 0.87, 'Heat pump outside? <em>That’s me.</em>'],
   ];
-  var DONE_AT = 0.86, ANGLE_AT = 0.93;
+  // the boiler gets its own beat between the last pipe inside and the run out to the heat pump
+  var BOILER_AT = 0.72, DONE_AT = 0.89, ANGLE_AT = 0.95;
   var BOILER = '<span class="no">Boiler: not me.</span> That’s a Gas Safe engineer.';
+  var DONE = '<span class="no">Boiler: not me.</span> Heat pump: <em>me.</em>';
   var ANGLE = 'The bloke who quotes it is <em>the bloke who fixes it.</em>';
-  var pipes = {}, marks = {}, drips = svg.querySelector('.drips');
+  var pipes = {}, marks = {}, drips = svg.querySelector('.drips'), hpu = svg.querySelector('.hpu');
   svg.querySelectorAll('.pipe').forEach(function (p) { pipes[p.dataset.k] = p; });
   svg.querySelectorAll('.mk').forEach(function (m) { marks[m.dataset.k] = m; });
   var lastCap = null;
@@ -60,11 +64,14 @@ ScrollCraft.mount(document.body);
       var m = marks[r[0]];
       if (m) { m.classList.toggle('is-lit', t >= 1); m.classList.toggle('is-near', t > 0); }
       if (r[0] === 'leak' && drips) drips.classList.toggle('is-lit', t >= 1);
-      if (t > 0.5) capHtml = r[3];
+      if (r[0] === 'heatpump' && hpu) hpu.classList.toggle('is-lit', t >= 1);
+      if (t > 0.5 && (r[0] !== 'heatpump' || p >= BOILER_AT)) capHtml = r[3];
+      if (r[0] === 'toboiler' && p >= BOILER_AT) capHtml = BOILER;
     });
+    hero.classList.toggle('is-boiler', p >= BOILER_AT);
     var done = p >= DONE_AT;
     hero.classList.toggle('is-done', done);
-    if (done) capHtml = p >= ANGLE_AT ? ANGLE : BOILER;
+    if (done) capHtml = p >= ANGLE_AT ? ANGLE : DONE;
     setCap(capHtml);
   }
 
@@ -88,7 +95,7 @@ ScrollCraft.mount(document.body);
     var spots = [].slice.call(finder.querySelectorAll('.spot'));
     var fmarks = {};
     fsvg.querySelectorAll('.mk').forEach(function (m) { fmarks[m.dataset.k] = m; });
-    var boilerG = fsvg.querySelector('.boiler');
+    var boilerG = fsvg.querySelector('.boiler'), fhpu = fsvg.querySelector('.hpu');
     var current = '';
     function show(k, fromSpot) {
       current = (k === current && fromSpot) ? '' : k;
@@ -101,6 +108,7 @@ ScrollCraft.mount(document.body);
       spots.forEach(function (s) { s.classList.toggle('is-on', s.dataset.fault === current); });
       Object.keys(fmarks).forEach(function (key) { fmarks[key].classList.toggle('is-on', key === current); });
       boilerG.classList.toggle('is-on', current === 'boiler');
+      if (fhpu) fhpu.classList.toggle('is-on', current === 'heatpump');
     }
     function reveal() {
       if (!matchMedia('(max-width: 860px)').matches) return;

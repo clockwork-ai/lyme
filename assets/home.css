@@ -52,9 +52,21 @@
 .house--hero .mk.is-lit text { opacity: 1; }
 .house--hero .mk circle { opacity: 0.0; transition: fill 220ms var(--sc-ease-out), opacity 220ms var(--sc-ease-out); }
 .house--hero .mk.is-near circle, .house--hero .mk.is-lit circle { opacity: 1; }
-#hero.is-done .boiler__tag, .house--done .boiler__tag, .house--finder .boiler__tag { opacity: 1; }
-#hero.is-done .pipe-end, .house--done .pipe-end, .house--finder .pipe-end { opacity: 1; }
-#hero.is-done .boiler__box { stroke: #fff; opacity: 1; }
+#hero.is-boiler .boiler__tag, .house--done .boiler__tag, .house--finder .boiler__tag { opacity: 1; }
+#hero.is-boiler .pipe-end, .house--done .pipe-end, .house--finder .pipe-end { opacity: 1; }
+#hero.is-boiler .boiler__box { stroke: #fff; opacity: 1; }
+/* the heat pump outside: dashed like the boiler until the copper reaches it, then drawn in copper */
+.house .hp-guide { fill: none; stroke: var(--sc-ink-soft); stroke-width: 2.2; stroke-dasharray: 7 7; opacity: 0.8; }
+.house .hpu path, .house .hpu circle { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.house .hpu__ghost path, .house .hpu__ghost circle { stroke: var(--sc-ink-soft); stroke-dasharray: 7 7; }
+.house .hpu__ghost { opacity: 0.8; transition: opacity 260ms var(--sc-ease-out); }
+.house .hpu__lit path, .house .hpu__lit circle { stroke: var(--copper); }
+.house .hpu__lit { opacity: 0; transition: opacity 260ms var(--sc-ease-out); }
+.house .hpu.is-lit .hpu__ghost, .house--done .hpu__ghost, .house--finder .hpu__ghost { opacity: 0; }
+.house .hpu.is-lit .hpu__lit, .house--done .hpu__lit, .house--finder .hpu__lit { opacity: 1; }
+.ground-light .house .hpu__lit path, .ground-light .house .hpu__lit circle { stroke: var(--copper-deep); }
+.house--finder .hpu__lit path, .house--finder .hpu__lit circle { stroke: var(--paper-ink); }
+.house--finder .hpu.is-on .hpu__lit path, .house--finder .hpu.is-on .hpu__lit circle { stroke: var(--copper-deep); stroke-width: 3; }
 .house .drips.is-lit path, .house--done .drips path { fill: var(--copper); opacity: 1; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fadein { to { opacity: 0.55; } }
