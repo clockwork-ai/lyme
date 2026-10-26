@@ -32,11 +32,12 @@ ScrollCraft.mount(document.body);
   var cap = hero.querySelector('[data-cap]');
   // key, from, to (hero progress), caption once it's lit
   var RUN = [
-    ['stopcock', 0.02, 0.08, 'Stopcock: where your water comes in.'],
-    ['tap', 0.08, 0.15, 'Kitchen tap: <em>that’s me.</em>'],
-    ['outside', 0.15, 0.22, 'Outside tap: <em>me.</em>'],
-    ['basin', 0.22, 0.30, 'Basin and taps: <em>me.</em>'],
-    ['toilet', 0.30, 0.36, 'Toilet: <em>me.</em>'],
+    ['stopcock', 0.02, 0.07, 'Stopcock: where your water comes in.'],
+    ['tap', 0.07, 0.13, 'Kitchen tap: <em>that’s me.</em>'],
+    ['outside', 0.13, 0.19, 'Outside tap: <em>me.</em>'],
+    ['basin', 0.19, 0.25, 'Basin and taps: <em>me.</em>'],
+    ['toilet', 0.25, 0.30, 'Toilet: <em>me.</em>'],
+    ['cylinder', 0.30, 0.36, 'Hot water cylinder, unvented or standard: <em>me.</em>'],
     ['leak', 0.36, 0.41, 'Water where it shouldn’t be: <em>me.</em>'],
     ['pump', 0.41, 0.47, 'Pump and valves: <em>me.</em>'],
     ['rad1', 0.47, 0.53, 'Radiators: <em>me.</em>'],
