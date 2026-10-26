@@ -29,7 +29,7 @@
     cots.forEach(function (d) { if (d.open) { d.open = false; d.querySelector('summary').focus(); } });
   });
 
-  /* ---- quote form: check it, then send (or, until it's connected, go to the thanks page) ---- */
+  /* ---- quote form: check the required boxes, then let the browser post to /api/quote ---- */
   var form = document.getElementById('quote');
   if (form) {
     form.addEventListener('submit', function (e) {
@@ -44,7 +44,14 @@
         bad[0].focus();
         return;
       }
-      if (!cfg.formAction) { e.preventDefault(); location.href = cfg.thanks; }
+      var honey = form.querySelector('[name="hp"]');
+      if (honey && honey.value) {
+        e.preventDefault();
+        location.href = cfg.thanks || "/thanks/";
+        return;
+      }
+      var btn = form.querySelector('[type="submit"]');
+      if (btn) btn.setAttribute("aria-busy", "true");
     });
   }
 })();

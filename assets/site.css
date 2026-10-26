@@ -194,7 +194,11 @@ html.menu-open { overflow: hidden; }
 .reviews-list:empty { display: none; }
 
 /* --------------------------------------------------------------- form */
-.form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
+.form { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
+.hp { position: absolute; left: -10000px; top: 0; width: 1px; height: 1px; overflow: hidden; }
+.hours { margin: 0.7rem 0 0; font-size: var(--sc-t-sm); line-height: 1.45; }
+.hours-line { margin: 0.85rem 0 0; max-width: 48ch; }
+.hours-line a, .side__card .hours + p a { text-underline-offset: 0.18em; }
 .field { display: grid; gap: 0.35rem; }
 .field--full { grid-column: 1 / -1; }
 .field label { font-weight: 600; font-size: var(--sc-t-sm); }

@@ -1,0 +1,13 @@
+# Cloudflare Pages. Build command: none. Output directory: repository root.
+# Deploy with the dashboard or `npx wrangler pages deploy .`
+# Do not change DNS, MX or Email Routing records from this file.
+name = "lyme-plumbing"
+compatibility_date = "2026-10-26"
+pages_build_output_dir = "."
+
+# Email Sending. Variable name EMAIL is what functions/api/quote.js reads.
+# destination_address locks every message to the address already verified
+# as an Email Routing destination on lymeplumbing.co.uk.
+[[send_email]]
+name = "EMAIL"
+destination_address = "lymeplumbingandheating@gmail.com"
