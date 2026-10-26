@@ -37,7 +37,7 @@ ScrollCraft.mount(document.body);
     ['outside', 0.13, 0.19, 'Outside tap: <em>me.</em>'],
     ['basin', 0.19, 0.25, 'Basin and taps: <em>me.</em>'],
     ['toilet', 0.25, 0.30, 'Toilet: <em>me.</em>'],
-    ['cylinder', 0.30, 0.36, 'Hot water cylinder, unvented or standard: <em>me.</em>'],
+    ['cylinder', 0.30, 0.36, 'Hot water tank, unvented or standard: <em>me.</em>'],
     ['leak', 0.36, 0.41, 'Water where it shouldn’t be: <em>me.</em>'],
     ['pump', 0.41, 0.47, 'Pump and valves: <em>me.</em>'],
     ['rad1', 0.47, 0.53, 'Radiators: <em>me.</em>'],
