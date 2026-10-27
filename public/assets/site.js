@@ -1,6 +1,69 @@
-/* Lyme Plumbing & Heating: phone menu, the "Call or text" chooser, and the quote form. Every page. */
+/* Lyme Plumbing & Heating: phone menu, the "Call or text" chooser, and the quote form. Every page.
+   Reviews: set SHOW_REVIEWS to true to put the Reviews link back in the nav, the phone menu
+   and the footer, and to show the home page Reviews section. The page file stays at
+   public/reviews/index.html either way. When you turn it on, add the reviews address
+   back to public/sitemap.xml as well. */
+var SHOW_REVIEWS = false;
+
 (function () {
   var cfg = window.LYME || {};
+
+  /* Reviews links are not in the HTML while SHOW_REVIEWS is false, so nothing points at /reviews/. */
+  (function () {
+    var reviewsHref = function (contactHref) {
+      return String(contactHref || "").replace(/contact\/$/, "reviews/");
+    };
+    var contactIn = function (root) {
+      return [].slice.call(root.querySelectorAll("a")).find(function (a) {
+        return /contact\/$/.test(a.getAttribute("href") || "");
+      });
+    };
+    var addLink = function (root, beforeContact) {
+      if (!root) return;
+      var contact = contactIn(root);
+      if (!contact) return;
+      var href = reviewsHref(contact.getAttribute("href"));
+      if (root.querySelector('a[href="' + href + '"]')) return;
+      var a = document.createElement("a");
+      a.setAttribute("href", href);
+      a.textContent = "Reviews";
+      if (beforeContact) {
+        var li = document.createElement("li");
+        li.appendChild(a);
+        contact.closest("li").before(li);
+      } else {
+        contact.before(a);
+      }
+    };
+    if (SHOW_REVIEWS) {
+      addLink(document.querySelector(".bar__nav"), false);
+      addLink(document.querySelector(".menu__nav"), false);
+      var more = [].slice.call(document.querySelectorAll(".foot h2")).find(function (h) {
+        return h.textContent.trim() === "More";
+      });
+      addLink(more && more.nextElementSibling, true);
+      if (document.body.classList.contains("is-home") && !document.getElementById("reviews")) {
+        var close = document.getElementById("close");
+        if (close) {
+          var section = document.createElement("section");
+          section.id = "reviews";
+          section.className = "ground-light-2 section";
+          section.setAttribute("aria-labelledby", "rev-h");
+          section.innerHTML = '<div class="wrap reviews swipe"><h2 id="rev-h" class="h2">Reviews</h2><p class="lede">I\'m building my reviews up. If I\'ve done a job for you, I\'d appreciate a Google review.</p></div>';
+          close.before(section);
+        }
+      }
+      return;
+    }
+    document.querySelectorAll("a").forEach(function (a) {
+      if (!/(^|\/)reviews\/$/.test(a.getAttribute("href") || "")) return;
+      var li = a.parentElement && a.parentElement.tagName === "LI" ? a.parentElement : null;
+      if (li) li.remove();
+      else a.remove();
+    });
+    var homeReviews = document.getElementById("reviews");
+    if (homeReviews) homeReviews.remove();
+  })();
 
   /* ---- phone menu: closes on the button, a link or Escape, and locks the page scroll ---- */
   var menu = document.getElementById('menu');

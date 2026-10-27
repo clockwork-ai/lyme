@@ -34,7 +34,15 @@ export const qualifications: readonly Qualification[] = [
   },
 ];
 
-/** Home-page trust line for one qualification. */
+/** Home page trust strip. Edit this string when the wording changes. */
+export const homeTrustStrip =
+  "City & Guilds qualified plumber · BPEC Level 3 heat pump qualified · Local to High Lane";
+
+/** Heat pump page. Edit this string when the wording changes. */
+export const heatPumpLine =
+  "I service, repair and maintain air source heat pumps, whoever fitted them. That covers the plumbing side: cylinders, pipework, radiators, flow rates, system water, filters and controls. I'm BPEC Level 3 qualified in heat pump systems.";
+
+/** Home-page trust line for one qualification. Kept so a later item can still carry its own short line. */
 export function homeTrust(item: Qualification): string {
   const line = item.short ?? item.title;
   return item.label ? `${line}, ${item.label}` : line;
@@ -59,8 +67,9 @@ export function qualificationReply(items: readonly Qualification[] = qualificati
     return "The site does not list a qualification. Ring Callum on 07846 729203, or use Get a quote.";
   }
   const body = items.map(detail).join(" ");
+  const lead = "Callum is a City & Guilds qualified plumber, and he is BPEC Level 3 heat pump qualified.";
   if (items.length === 1) {
-    return `Callum holds the ${body} That is the only qualification listed on the site.`;
+    return `${lead} ${body} That is the only qualification listed on the site.`;
   }
-  return `Callum holds these qualifications. ${body} Those are the only qualifications listed on the site.`;
+  return `${lead} ${body} Those are the only qualifications listed on the site.`;
 }

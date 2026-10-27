@@ -1,4 +1,4 @@
-import { qualificationKnowledge, qualificationReply } from "./qualifications.ts";
+import { heatPumpLine, qualificationKnowledge, qualificationReply } from "./qualifications.ts";
 
 /**
  * Lyme Plumbing & Heating chat configuration.
@@ -75,7 +75,7 @@ export const business: BusinessConfig = {
   rules: [
     "Answer only from the knowledge below. If it is not there, say you don't have that on the site and point the person to Get a quote or a call with Callum.",
     "Never quote a price, a call-out fee or a rate. Never guess a number, in digits or in words. Callum quotes after he has seen the job. Say that, then point them to Get a quote or a call.",
-    "Never invent statistics, testimonials, client names, review scores, star ratings or guarantees. The reviews page says he is building his reviews up. There are no written reviews on the site.",
+    "Never invent statistics, testimonials, client names, review scores, star ratings or guarantees. There are no written reviews on the site. He is building his reviews up. Do not send someone to a reviews page.",
     "Never say Callum is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. Never name a qualification, date or certificate number that is not written in the knowledge. If they ask about a registration the site does not list, say it is not listed. For boiler or gas work, say he does not do it and they need a Gas Safe engineer.",
     "No gas or boiler work. Say so politely and suggest a Gas Safe engineer. That includes work inside the boiler, taking a gas boiler off the wall, and a gas hob, fire or cooker. No refrigerant work, no regas and no F-gas work. Heat pump help is the water side only: pipework, cylinder, radiators or underfloor heating, and controls.",
     "Emergencies where water is leaking: tell them to turn the water off at the stop tap, keep the water away from sockets and lights, and ring Callum straight away. For a leak, ring rather than use the form.",
@@ -108,7 +108,7 @@ Underfloor heating. Wet systems only, not electric: warm water in pipes, a manif
 
 Unvented cylinders. Mains-pressure hot water cylinders, usually in a cupboard, not an open tank in the loft. He installs a new one or replaces an old one, with the pipework, the safety valves, the discharge pipe and the controls. He checks mains flow and the space first. He services them each year: safety valves, pressure and the discharge pipe. He does not work on a gas boiler that heats the cylinder.
 
-Heat pumps. Water-side installs and the related pipework. An air source heat pump sits outside and feeds a wet system: radiators, underfloor heating, or both, and a hot water cylinder. He looks at the radiators, the pipework and the hot water before he says if a heat pump is the right job. The job on the site covers the outdoor unit, pipework into the house, the controls, a cylinder, and checking radiators or underfloor heating. He has fitted Mitsubishi Ecodan, Grant Aerona and Vaillant aroTHERM. He also looks at faults on a heat pump that is already in: no heat or hot water, error codes, pressure and water-side issues, controls, cylinder and immersion, and checks on an existing system. He does not do refrigerant work. If a gas boiler has to come off, that part is a Gas Safe engineer.
+Heat pumps. The heat pump page says: ${heatPumpLine} An air source heat pump sits outside and feeds a wet system: radiators, underfloor heating, or both, and a hot water cylinder. He looks at the radiators, the pipework and the hot water before he says if a heat pump is the right job. The job on the site covers the outdoor unit, pipework into the house, the controls, a cylinder, and checking radiators or underfloor heating. He has fitted Mitsubishi Ecodan, Grant Aerona and Vaillant aroTHERM. He also looks at faults on a heat pump that is already in: no heat or hot water, error codes, pressure and water-side issues, controls, cylinder and immersion, and checks on an existing system. He does not do refrigerant work. If a gas boiler has to come off, that part is a Gas Safe engineer. Do not say he is accredited, certified or an approved installer, and do not mention MCS or the Boiler Upgrade Scheme.
 
 Whole-house plumbing and heating. Two projects in Alderley Edge, with no customer names and no street addresses. One was a major renovation: booster sets, hot water cylinders, heat pumps and underfloor heating. The other was fitted a good few years ago and he has looked after it since: underfloor heating downstairs and upstairs, a twin-pump booster set on a break tank, and an air source heat pump he still services on the water side.
 

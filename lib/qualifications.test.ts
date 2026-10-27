@@ -4,7 +4,7 @@ import { test } from "node:test";
 import { business } from "./business.ts";
 import { fixedReply } from "./intent.ts";
 import { buildInstructions } from "./prompt.ts";
-import { homeTrust, qualificationReply, qualifications } from "./qualifications.ts";
+import { heatPumpLine, homeTrust, homeTrustStrip, qualificationReply, qualifications } from "./qualifications.ts";
 
 const bpec =
   "BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits)";
@@ -49,25 +49,31 @@ test("the about page lists every qualification in the array", () => {
   assert.doesNotMatch(section, forbidden);
 });
 
-test("the home page trust line sits with the years of experience", () => {
+test("the home page trust strip sits with the years of experience", () => {
   const html = readFileSync("public/index.html", "utf8");
-  const facts = html.slice(html.indexOf('class="facts"'), html.indexOf('class="facts"') + 800);
+  const facts = html.slice(html.indexOf('class="facts"'), html.indexOf('class="facts"') + 400);
   assert.match(facts, /Over 26 years of experience/);
-  for (const item of qualifications) {
-    const line = homeTrust(item).replaceAll("&", "&amp;");
-    assert.equal(facts.includes(line), true);
-    assert.match(facts, new RegExp(`href="about/#qualifications"[^>]*>${escapeReg(line)}`));
-  }
+  assert.equal(facts.includes(homeTrustStrip.replaceAll("&", "&amp;")), true);
   assert.equal(facts.includes("NVQ"), false);
   assert.equal(facts.includes(".html"), false);
   assert.doesNotMatch(facts, /[\u2013\u2014]/);
   assert.doesNotMatch(facts, forbidden);
+  assert.doesNotMatch(facts, /accredited|certified|approved installer|\bBUS\b/i);
+});
+
+test("the heat pump page uses the final wording", () => {
+  const html = readFileSync("public/services/heat-pumps/index.html", "utf8");
+  assert.equal(html.includes(heatPumpLine), true);
+  assert.doesNotMatch(html, /\bMCS\b|accredited|certified|approved installer|\bBUS\b/i);
+  assert.doesNotMatch(html, /[\u2013\u2014]/);
+  assert.equal(html.includes(".html"), false);
 });
 
 test("the chat names that qualification and still refuses the ones not listed", () => {
   const reply = fixedReply("What qualifications do you have?", business) || "";
   assert.equal(reply, qualificationReply());
-  assert.match(reply, /City & Guilds qualified/);
+  assert.match(reply, /City & Guilds qualified plumber/);
+  assert.match(reply, /BPEC Level 3 heat pump qualified/);
   assert.match(reply, /BPEC Level 3 Award/);
   assert.match(reply, /Ofqual regulated/);
   assert.match(reply, /non-refrigerant circuits/);
