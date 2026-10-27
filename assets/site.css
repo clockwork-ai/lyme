@@ -194,7 +194,11 @@ html.menu-open { overflow: hidden; }
 .reviews-list:empty { display: none; }
 
 /* --------------------------------------------------------------- form */
-.form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
+.form { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
+.hp { position: absolute; left: -10000px; top: 0; width: 1px; height: 1px; overflow: hidden; }
+.hours { margin: 0.7rem 0 0; font-size: var(--sc-t-sm); line-height: 1.45; }
+.hours-line { margin: 0.85rem 0 0; max-width: 48ch; }
+.hours-line a, .side__card .hours + p a { text-underline-offset: 0.18em; }
 .field { display: grid; gap: 0.35rem; }
 .field--full { grid-column: 1 / -1; }
 .field label { font-weight: 600; font-size: var(--sc-t-sm); }
@@ -271,4 +275,42 @@ html.menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .btn, .menu, .more svg, .faq summary::after, .iconbtn { transition: none; }
   .cot[open] .cot__pop { animation: none; }
+}
+
+/* Job photos. .photo crops to 4/3, so these show the whole frame. */
+.ph--photo { border: 0; background: none; overflow: hidden; padding: 0; }
+.ph--photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; }
+.shot { margin: 0 0 var(--sc-5); }
+.shot--job { max-width: 28rem; }
+.shot--lead { max-width: 36rem; }
+.shots .shot { margin: 0; }
+.shot img { width: 100%; height: auto; display: block; border-radius: var(--r); }
+.shot figcaption, .work figcaption, .clip figcaption, .recent span { margin-top: 0.45rem; font-size: var(--sc-t-sm); color: var(--paper-soft); }
+.shots { display: grid; gap: 0.8rem; margin: 0 0 var(--sc-5); }
+.shots--2 { grid-template-columns: 1fr 1fr; }
+.shots--grid { grid-template-columns: 1fr 1fr; }
+.shots--grid .shot { margin: 0; }
+@media (max-width: 700px) { .shots--2 { grid-template-columns: 1fr; } }
+.work { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.9rem; }
+.work figure { margin: 0; }
+.work img { width: 100%; height: 16rem; object-fit: cover; border-radius: var(--r); display: block; }
+.recent { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin: 0 0 var(--sc-5); }
+@media (max-width: 700px) {
+  .recent { grid-template-columns: 1fr 1fr; }
+  .feature { grid-template-columns: 1fr 1.4fr; }
+}
+.recent a { text-decoration: none; color: inherit; }
+.recent img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r); display: block; }
+.recent span { display: block; }
+.clip { margin: 0; max-width: 20rem; justify-self: start; }
+.feature { display: grid; grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr); gap: clamp(1rem, 3vw, 2rem); align-items: center; text-decoration: none; color: inherit; margin-top: var(--sc-5); padding: 0.75rem; border-radius: calc(var(--r) + 6px); background: #fff; box-shadow: var(--sc-e2); }
+.feature img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; border-radius: var(--r); display: block; }
+.feature h3 { margin: 0.2rem 0 0.4rem; }
+.feature p { margin: 0; color: var(--paper-soft); }
+.project-list { display: grid; gap: 1rem; }
+.clip video, .clip .clip__still { width: 100%; height: auto; display: block; border-radius: var(--r); background: #111; }
+.clip .clip__still { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .clip video { display: none; }
+  .clip .clip__still { display: block; }
 }

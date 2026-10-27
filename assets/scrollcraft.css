@@ -262,9 +262,9 @@ video[data-sc-scrub] { opacity: 0; transition: opacity 380ms var(--sc-ease-out);
 .sc-copy--center { inset-inline: auto; left: 50%; top: 50%; translate: -50% -50%; text-align: center; }
 .sc-copy--trail  { inset-inline: auto; right: var(--sc-gutter); bottom: clamp(3rem, 12vh, 9rem); text-align: right; }
 
-/* cue defaults: the engine writes opacity/transform inline, these are the
-   pre-paint state so nothing flashes before the first read() */
-[data-sc-cue] { opacity: 0; will-change: opacity, transform; }
+/* Cues stay visible until the engine writes an inline opacity. A hidden
+   default leaves a blank band when the script has not run. */
+[data-sc-cue] { opacity: 1; transform: none; }
 .sc-ready [data-sc-cue] { transition: none; }
 
 /* kinetic split */
@@ -282,11 +282,16 @@ video[data-sc-scrub] { opacity: 0; transition: opacity 380ms var(--sc-ease-out);
 [data-sc-reveal] { will-change: clip-path; }
 [data-sc-parallax] { will-change: transform; }
 
-/* flow reveal (fires once) */
+/* flow reveal (fires once). Visible unless the page has started the engine. */
 [data-sc-in], [data-sc-stagger] > * {
+  opacity: 1;
+  transform: none;
+  transition: opacity 620ms var(--sc-ease-out), transform 620ms var(--sc-ease-out);
+}
+html.sc-animate [data-sc-in]:not(.sc-in),
+html.sc-animate [data-sc-stagger] > *:not(.sc-in) {
   opacity: 0;
   transform: translate3d(0, 14px, 0);
-  transition: opacity 620ms var(--sc-ease-out), transform 620ms var(--sc-ease-out);
 }
 [data-sc-in].sc-in, [data-sc-stagger] > .sc-in { opacity: 1; transform: none; }
 

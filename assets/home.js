@@ -1,7 +1,6 @@
 /* Lyme home page. The engine drives the acts; this file is the page's own behaviour:
-   1. the hero pipe run, read off the hero's --sc-p: copper reaches each fitting in turn, stops dead at the boiler,
-      then carries on out through the wall to the heat pump
-   2. "Point at the problem": the fault finder (the signature move)
+   1. the hero pipe run, read off the hero's --sc-p: copper reaches each fitting in turn and stops at the boiler
+   2. "Point at the problem": the fault finder
    3. per-row swipe-ins for the job key and the reviews line */
 ScrollCraft.mount(document.body);
 
@@ -25,6 +24,7 @@ ScrollCraft.mount(document.body);
 
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) document.documentElement.classList.add('sc-animate');
 
   /* ---------------------------------------------------------------- 1. hero */
   var hero = document.getElementById('hero');
@@ -32,24 +32,23 @@ ScrollCraft.mount(document.body);
   var cap = hero.querySelector('[data-cap]');
   // key, from, to (hero progress), caption once it's lit
   var RUN = [
-    ['stopcock', 0.02, 0.07, 'Stopcock: where your water comes in.'],
-    ['tap', 0.07, 0.13, 'Kitchen tap: <em>that’s me.</em>'],
-    ['outside', 0.13, 0.19, 'Outside tap: <em>me.</em>'],
-    ['basin', 0.19, 0.25, 'Basin and taps: <em>me.</em>'],
-    ['toilet', 0.25, 0.30, 'Toilet: <em>me.</em>'],
-    ['cylinder', 0.30, 0.36, 'Hot water tank, unvented or standard: <em>me.</em>'],
-    ['leak', 0.36, 0.41, 'Water where it shouldn’t be: <em>me.</em>'],
-    ['pump', 0.41, 0.47, 'Pump and valves: <em>me.</em>'],
-    ['rad1', 0.47, 0.53, 'Radiators: <em>me.</em>'],
-    ['rad2', 0.53, 0.58, 'Radiators: <em>me.</em>'],
-    ['stat', 0.58, 0.63, 'Smart thermostat and controls: <em>me.</em>'],
-    ['toboiler', 0.63, 0.71, 'And the boiler?'],
-    ['heatpump', 0.79, 0.87, 'Heat pump outside? <em>That’s me.</em>'],
+    ['stopcock', 0.02, 0.08, 'Stopcock: where your water comes in.'],
+    ['tap', 0.08, 0.16, 'Kitchen tap: <em>that’s me.</em>'],
+    ['outside', 0.16, 0.24, 'Outside tap: <em>me.</em>'],
+    ['basin', 0.24, 0.32, 'Basin and taps: <em>me.</em>'],
+    ['toilet', 0.32, 0.40, 'Toilet: <em>me.</em>'],
+    ['leak', 0.40, 0.48, 'Water where it shouldn’t be: <em>me.</em>'],
+    ['pump', 0.48, 0.56, 'Pump and valves: <em>me.</em>'],
+    ['rad1', 0.56, 0.62, 'Radiators: <em>me.</em>'],
+    ['rad2', 0.62, 0.66, 'Radiators: <em>me.</em>'],
+    ['stat', 0.66, 0.72, 'Thermostat and controls: <em>me.</em>'],
+    ['cylinder', 0.72, 0.78, 'Hot water cylinder: <em>me.</em>'],
+    ['heatpump', 0.78, 0.86, 'Air source heat pump: <em>me.</em>'],
+    ['toboiler', 0.86, 0.92, 'And the boiler?'],
   ];
-  // the boiler gets its own beat between the last pipe inside and the run out to the heat pump
-  var BOILER_AT = 0.72, DONE_AT = 0.89, ANGLE_AT = 0.95;
+  var BOILER_AT = 0.92, DONE_AT = 0.95, ANGLE_AT = 0.98;
   var BOILER = '<span class="no">Boiler: not me.</span> That’s a Gas Safe engineer.';
-  var DONE = '<span class="no">Boiler: not me.</span> Heat pump: <em>me.</em>';
+  var DONE = '<span class="no">Boiler: not me.</span>';
   var ANGLE = 'The bloke who quotes it is <em>the bloke who fixes it.</em>';
   var pipes = {}, marks = {}, drips = svg.querySelector('.drips'), hpu = svg.querySelector('.hpu');
   svg.querySelectorAll('.pipe').forEach(function (p) { pipes[p.dataset.k] = p; });
@@ -66,7 +65,7 @@ ScrollCraft.mount(document.body);
       if (m) { m.classList.toggle('is-lit', t >= 1); m.classList.toggle('is-near', t > 0); }
       if (r[0] === 'leak' && drips) drips.classList.toggle('is-lit', t >= 1);
       if (r[0] === 'heatpump' && hpu) hpu.classList.toggle('is-lit', t >= 1);
-      if (t > 0.5 && (r[0] !== 'heatpump' || p >= BOILER_AT)) capHtml = r[3];
+      if (t > 0.5) capHtml = r[3];
       if (r[0] === 'toboiler' && p >= BOILER_AT) capHtml = BOILER;
     });
     hero.classList.toggle('is-boiler', p >= BOILER_AT);

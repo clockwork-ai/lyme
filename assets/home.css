@@ -45,17 +45,22 @@
 .hero__draw { position: relative; align-self: center; transform: scale(calc(1 + var(--sc-p, 0) * 0.035)); transform-origin: 60% 55%; }
 #hero .h-back { transform: translateY(calc(var(--sc-p, 0) * 16px)); }
 #hero .h-front { transform: translateY(calc(var(--sc-p, 0) * -9px)); }
-.house--hero .h-mid .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw 1500ms var(--sc-ease-out) 120ms forwards; }
-.house--hero .h-mid .room { opacity: 0; animation: fadein 500ms var(--sc-ease-out) 1100ms forwards; }
-.house--hero .pipe { stroke-dashoffset: 1; }
-.house--hero .mk text { opacity: 0; }
-.house--hero .mk.is-lit text { opacity: 1; }
-.house--hero .mk circle { opacity: 0.0; transition: fill 220ms var(--sc-ease-out), opacity 220ms var(--sc-ease-out); }
-.house--hero .mk.is-near circle, .house--hero .mk.is-lit circle { opacity: 1; }
+/* Drawn in full until the engine starts, so a missing script is not a blank house. */
+.house--hero .h-mid .ln { stroke-dashoffset: 0; }
+.house--hero .h-mid .room { opacity: 0.55; }
+.house--hero .pipe { stroke-dashoffset: 0; }
+.house--hero .mk text, .house--hero .mk circle { opacity: 1; }
+html.sc-animate .house--hero .h-mid .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw 1500ms var(--sc-ease-out) 120ms forwards; }
+html.sc-animate .house--hero .h-mid .room { opacity: 0; animation: fadein 500ms var(--sc-ease-out) 1100ms forwards; }
+html.sc-animate .house--hero .pipe { stroke-dashoffset: 1; }
+html.sc-animate .house--hero .mk text { opacity: 0; }
+html.sc-animate .house--hero .mk.is-lit text { opacity: 1; }
+html.sc-animate .house--hero .mk circle { opacity: 0; transition: fill 220ms var(--sc-ease-out), opacity 220ms var(--sc-ease-out); }
+html.sc-animate .house--hero .mk.is-near circle, html.sc-animate .house--hero .mk.is-lit circle { opacity: 1; }
 #hero.is-boiler .boiler__tag, .house--done .boiler__tag, .house--finder .boiler__tag { opacity: 1; }
 #hero.is-boiler .pipe-end, .house--done .pipe-end, .house--finder .pipe-end { opacity: 1; }
 #hero.is-boiler .boiler__box { stroke: #fff; opacity: 1; }
-/* the heat pump outside: dashed like the boiler until the copper reaches it, then drawn in copper */
+/* Outdoor unit on the drawing. It lights up with the heat pump pipe. */
 .house .hp-guide { fill: none; stroke: var(--sc-ink-soft); stroke-width: 2.2; stroke-dasharray: 7 7; opacity: 0.8; }
 .house .hpu path, .house .hpu circle { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .house .hpu__ghost path, .house .hpu__ghost circle { stroke: var(--sc-ink-soft); stroke-dasharray: 7 7; }
@@ -111,8 +116,9 @@
 .key span:not(.key__ico) { grid-column: 2; color: var(--paper-soft); margin-top: 0.2rem; }
 .key a > svg { grid-column: 3; grid-row: 1 / span 2; width: 1.3rem; height: 1.3rem; color: var(--copper-deep); transition: transform 160ms var(--sc-ease-out); }
 .key a:hover > svg { transform: translateX(3px); }
-.swipe { clip-path: inset(0 100% 0 0); transition: clip-path 760ms var(--sc-ease-out); }
-.swipe.in { clip-path: inset(0 0 0 0); }
+.swipe { clip-path: none; }
+html.sc-animate .swipe { clip-path: inset(0 100% 0 0); transition: clip-path 760ms var(--sc-ease-out); }
+html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 
 /* ------------------------------------------------------ 3b. SMART CONTROLS */
 .smart { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
@@ -198,9 +204,14 @@
   .hero__draw, #hero .h-back, #hero .h-front { transform: none; }
   .house--hero .h-mid .ln, .house--hero .h-mid .room { animation: none; stroke-dashoffset: 0; opacity: 1; }
   .house--hero .h-mid .room { opacity: 0.55; }
-  .swipe { clip-path: none; transition: none; }
+  .house--hero .pipe { stroke-dashoffset: 0; }
+  .house--hero .mk text, .house--hero .mk circle { opacity: 1; }
+  html.sc-animate .swipe { clip-path: none; transition: none; }
   .answer.is-in { animation: none; }
   .tile { transition: none; }
   .tstat .arc, .tstat .knob { transition: none; }
 }
 .house--done .mk circle { fill: var(--copper); }
+
+/* The dashed guide duplicates the heat pump pipe, so the pipe is the line that lights up. */
+.house .hp-guide { display: none; }
