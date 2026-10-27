@@ -290,23 +290,29 @@ html.menu-open { overflow: hidden; }
 .shots--2 { grid-template-columns: 1fr 1fr; }
 .shots--grid { grid-template-columns: 1fr 1fr; }
 .shots--grid .shot { margin: 0; }
-@media (max-width: 700px) { .shots--2 { grid-template-columns: 1fr; } }
+@media (max-width: 700px) {
+  .shots--2,
+  .shots--grid { grid-template-columns: 1fr; }
+}
 .work { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.9rem; }
 .work figure { margin: 0; }
 .work img { width: 100%; height: 16rem; object-fit: cover; border-radius: var(--r); display: block; }
 .recent { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin: 0 0 var(--sc-5); }
 @media (max-width: 700px) {
   .recent { grid-template-columns: 1fr 1fr; }
-  .feature { grid-template-columns: 1fr 1.4fr; }
 }
 .recent a { text-decoration: none; color: inherit; }
-.recent img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r); display: block; }
+.recent img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r); display: block; }
 .recent span { display: block; }
 .clip { margin: 0; max-width: 20rem; justify-self: start; }
 .feature { display: grid; grid-template-columns: minmax(10rem, 16rem) minmax(0, 1fr); gap: clamp(1rem, 3vw, 2rem); align-items: center; text-decoration: none; color: inherit; margin-top: var(--sc-5); padding: 0.75rem; border-radius: calc(var(--r) + 6px); background: #fff; box-shadow: var(--sc-e2); }
-.feature img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; border-radius: var(--r); display: block; }
-.feature h3 { margin: 0.2rem 0 0.4rem; }
+.feature img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 30%; border-radius: var(--r); display: block; }
+.feature h3, .feature h2 { margin: 0.2rem 0 0.4rem; }
 .feature p { margin: 0; color: var(--paper-soft); }
+@media (max-width: 700px) {
+  .feature { grid-template-columns: 1fr; align-items: start; }
+  .feature img { aspect-ratio: 16 / 10; object-fit: cover; object-position: center; }
+}
 .project-list { display: grid; gap: 1rem; }
 .clip video, .clip .clip__still { width: 100%; height: auto; display: block; border-radius: var(--r); background: #111; }
 .clip .clip__still { display: none; }

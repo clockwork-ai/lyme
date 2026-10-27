@@ -23,3 +23,9 @@ run_worker_first = [ "/api/*" ]
 [[send_email]]
 name = "EMAIL"
 destination_address = "lymeplumbingandheating@gmail.com"
+
+# Pull request builds run `npx wrangler preview`. That command stops if this
+# block is missing. Previews do not inherit the bindings above. Assets and
+# the compatibility date stay at the top level. The quote form refuses
+# preview hostnames, so the email binding is not copied here.
+[previews]
