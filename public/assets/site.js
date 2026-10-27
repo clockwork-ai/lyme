@@ -55,12 +55,33 @@
     });
   }
 
-  /* Muted clips: ask to play, and leave the poster alone when motion is reduced. */
+  /* Muted clips: ask to play, and leave the poster alone when motion is reduced.
+     A source with data-src waits until the clip is near the screen. */
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('video').forEach(function (v) {
+    var playClip = function (v) {
       v.muted = true;
+      var pending = v.querySelector('source[data-src]');
+      if (pending && !pending.getAttribute('src')) {
+        pending.src = pending.getAttribute('data-src');
+        v.load();
+      }
       var play = v.play();
       if (play && play.catch) play.catch(function () {});
+    };
+    document.querySelectorAll('video').forEach(function (v) {
+      v.muted = true;
+      if (v.querySelector('source[data-src]') && 'IntersectionObserver' in window) {
+        var watch = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            watch.disconnect();
+            playClip(v);
+          });
+        }, { rootMargin: '240px 0px' });
+        watch.observe(v);
+        return;
+      }
+      playClip(v);
     });
   }
 
