@@ -24,8 +24,17 @@ run_worker_first = [ "/api/*" ]
 name = "EMAIL"
 destination_address = "lymeplumbingandheating@gmail.com"
 
+# Workers AI. No API key. The binding name is AI, which the chat route reads.
+# If this binding is missing, Ask Lyme stays hidden.
+[ai]
+binding = "AI"
+remote = false
+
 # Pull request builds run `npx wrangler preview`. That command stops if this
 # block is missing. Previews do not inherit the bindings above. Assets and
 # the compatibility date stay at the top level. The quote form refuses
-# preview hostnames, so the email binding is not copied here.
+# preview hostnames, so the email binding is not copied here. The chat can
+# still answer on a preview, because Workers AI does not send mail.
 [previews]
+[previews.ai]
+binding = "AI"
