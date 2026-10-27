@@ -164,6 +164,12 @@ html.menu-open { overflow: hidden; }
 .faq p { margin: 0 0 1.1rem; color: var(--sc-ink-soft); max-width: 60ch; }
 .facts { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding: 0.9rem 1.1rem; border-radius: var(--r); background: var(--paper-2); font-size: var(--sc-t-sm); }
 .facts b { font-weight: 600; margin-right: 0.35rem; color: var(--paper-soft); }
+.facts__trust { flex: 1 0 100%; color: var(--copper-deep); font-weight: 600; }
+.quals { list-style: none; padding: 0; margin: var(--sc-6) 0 0; display: grid; gap: 0.8rem; max-width: 42rem; }
+.quals li { padding: 1.25rem 1.35rem; border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
+.quals h3 { margin: 0; max-width: 36ch; }
+.quals__label { margin: 0.55rem 0 0; font-size: var(--sc-t-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--copper-deep); }
+.quals li > p:last-child { margin: 0.75rem 0 0; color: var(--paper-soft); max-width: 58ch; }
 .near { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .near a { display: inline-block; padding: 0.5rem 0.85rem; border-radius: 8px; border: 1px solid var(--sc-hairline); text-decoration: none; font-weight: 500; transition: border-color 160ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out); }
 .near a:hover { border-color: var(--sc-accent); background: #fff; }

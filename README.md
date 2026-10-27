@@ -57,6 +57,8 @@ A floating chat button on every page. The script and stylesheet load after the p
 
 It will not quote a price. Callum quotes after he has seen the job. It will not do boiler, gas or refrigerant work. If water is leaking, it tells the visitor to turn the water off at the stop tap, keep it away from electrics, and ring 07846 729203. The site does not describe a 12 month labour guarantee or a handover pack, so the chat will not invent either.
 
+The only qualification on the site is the BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits). It is Ofqual regulated, and it covers installing, commissioning, servicing and maintaining heat pump systems (non-refrigerant circuits). The chat names that one and no others. It does not claim MCS, F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance. Add another qualification in `lib/qualifications.ts`, then add the same wording to the About page list.
+
 The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote and Call. There is no WhatsApp link on the site, so the chat does not offer one.
 
 ### How a reply is written

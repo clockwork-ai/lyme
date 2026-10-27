@@ -1,3 +1,5 @@
+import { qualificationKnowledge, qualificationReply } from "./qualifications.ts";
+
 /**
  * Lyme Plumbing & Heating chat configuration.
  *
@@ -55,6 +57,7 @@ export type BusinessConfig = {
     boiler: string;
     refrigerant: string;
     qualification: string;
+    registration: string;
     guarantee: string;
     reviews: string;
     price: string;
@@ -73,7 +76,7 @@ export const business: BusinessConfig = {
     "Answer only from the knowledge below. If it is not there, say you don't have that on the site and point the person to Get a quote or a call with Callum.",
     "Never quote a price, a call-out fee or a rate. Never guess a number, in digits or in words. Callum quotes after he has seen the job. Say that, then point them to Get a quote or a call.",
     "Never invent statistics, testimonials, client names, review scores, star ratings or guarantees. The reviews page says he is building his reviews up. There are no written reviews on the site.",
-    "Never say Callum is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered, and never say he holds any other qualification. The site does not list them. If they ask, say the site does not list qualifications. For boiler or gas work, say he does not do it and they need a Gas Safe engineer.",
+    "Never say Callum is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. Never name a qualification, date or certificate number that is not written in the knowledge. If they ask about a registration the site does not list, say it is not listed. For boiler or gas work, say he does not do it and they need a Gas Safe engineer.",
     "No gas or boiler work. Say so politely and suggest a Gas Safe engineer. That includes work inside the boiler, taking a gas boiler off the wall, and a gas hob, fire or cooker. No refrigerant work, no regas and no F-gas work. Heat pump help is the water side only: pipework, cylinder, radiators or underfloor heating, and controls.",
     "Emergencies where water is leaking: tell them to turn the water off at the stop tap, keep the water away from sockets and lights, and ring Callum straight away. For a leak, ring rather than use the form.",
     "The site does not describe a 12 month labour guarantee or a handover pack with service reminders. If they ask, say that is not written on the site and Callum can talk it through when he quotes. Do not invent either.",
@@ -84,6 +87,8 @@ export const business: BusinessConfig = {
   ],
   knowledge: `
 Who. Lyme Plumbing & Heating is Callum Broadfoot, a sole trader, based in High Lane, Stockport, SK6. He answers the phone, he comes round, he quotes it and he fixes it. He has been on the tools since he was 16. He has run a trades business before, with vans and a team. Now he works for himself. Phone ${phone}. Email callum@lymeplumbing.co.uk. Hours: Monday to Friday, 8am to 6pm. Saturday, 8am to 1pm. Sunday, closed. Payment is on the day when the job is done. Travel is in the quote. You get a price before he starts, after he has seen the job. There is no price list on the site.
+
+Qualifications. ${qualificationKnowledge()}
 
 Where. From High Lane across the Stockport side and into Cheshire. Towns on the site: High Lane (SK6), Stockport (SK1, SK2, SK3, SK4), Hazel Grove (SK7), Marple (SK6), Bramhall (SK7), Offerton (SK2), Disley (SK12), Poynton (SK12), Wilmslow (SK9), Alderley Edge (SK9), Prestbury (SK10), Hale (WA15), Hale Barns (WA15). If a town is not in that list, say it is not listed and he can say when they get a quote.
 
@@ -192,8 +197,9 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
       "Callum doesn't do boiler or gas work. If it's the boiler, you need a Gas Safe engineer. He can still help with the pipes, radiators, controls and other jobs around the boiler. Ring him on 07846 729203, or use Get a quote for one of those.",
     refrigerant:
       "Callum doesn't do refrigerant work. On a heat pump he does the water side: the pipework, the cylinder, radiators or underfloor heating, and the controls. Ring him on 07846 729203, or use Get a quote.",
-    qualification:
-      "The site doesn't list qualifications or insurance. Callum doesn't do boiler or gas work, and he doesn't do refrigerant work. For the boiler, you need a Gas Safe engineer. For a job he does do, use Get a quote or ring him on 07846 729203.",
+    qualification: qualificationReply(),
+    registration:
+      "The site doesn't list Gas Safe, G3, MCS, F-gas, NICEIC, Benchmark or insurance. Callum doesn't do boiler or gas work, and he doesn't do refrigerant work. For the boiler, you need a Gas Safe engineer.",
     guarantee:
       "A 12 month labour guarantee and a handover pack aren't written on the site, so I can't describe them. Ask Callum when he quotes, or ring him on 07846 729203.",
     reviews:
