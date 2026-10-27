@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "measure": "node scripts/apply-measure.mjs",
     "test": "node --test lib/*.test.ts server/*.test.ts"
   },
   "devDependencies": {

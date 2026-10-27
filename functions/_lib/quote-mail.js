@@ -3,6 +3,8 @@
  * No Cloudflare imports here, so it can be tested on its own.
  */
 
+import { headSnippet } from "../../public/assets/measure.js";
+
 export const FROM = "quotes@lymeplumbing.co.uk";
 export const TO = "lymeplumbingandheating@gmail.com";
 export const FROM_HEADER = '"Lyme Plumbing & Heating" <quotes@lymeplumbing.co.uk>';
@@ -261,6 +263,7 @@ export function errorPage(message) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Quote not sent | Lyme Plumbing &amp; Heating</title>
+${headSnippet()}
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/scrollcraft.css">
 <link rel="stylesheet" href="/assets/site.css">
@@ -279,6 +282,7 @@ export function errorPage(message) {
   </div>
 </section>
 </main>
+<script type="module" src="/assets/measure.js"></script>
 </body>
 </html>`;
 }
