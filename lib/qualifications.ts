@@ -10,17 +10,20 @@
  */
 
 export type Qualification = {
-  /** Full name, as verified. */
+  /** Wording to publish. Edit this when the verified name changes. */
   title: string;
-  /** Short line under the title, such as "Ofqual regulated". */
-  label: string;
-  /** What it covers, in plain language. */
-  summary: string;
-  /** Shorter home-page line. The full title stays on the About page. */
-  short: string;
+  /** Optional line under the title, such as "Ofqual regulated". */
+  label?: string;
+  /** Optional plain-language line about what it covers. */
+  summary?: string;
+  /** Shorter home-page line. Omit to use `title`. */
+  short?: string;
 };
 
 export const qualifications: readonly Qualification[] = [
+  {
+    title: "City & Guilds qualified",
+  },
   {
     title:
       "BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits)",
@@ -31,19 +34,31 @@ export const qualifications: readonly Qualification[] = [
   },
 ];
 
+/** Home-page trust line for one qualification. */
+export function homeTrust(item: Qualification): string {
+  const line = item.short ?? item.title;
+  return item.label ? `${line}, ${item.label}` : line;
+}
+
+function detail(item: Qualification): string {
+  const parts = [item.title, item.label, item.summary].filter((part): part is string => Boolean(part));
+  const text = parts.join(". ");
+  return text.endsWith(".") ? text : `${text}.`;
+}
+
 export function qualificationKnowledge(items: readonly Qualification[] = qualifications): string {
-  const body = items.map((item) => `${item.title}. ${item.label}. ${item.summary}`).join(" ");
+  const body = items.map(detail).join(" ");
   const only = items.length === 1
     ? "That is the only qualification on the site."
     : "Those are the only qualifications on the site.";
-  return `${body} ${only} Do not name any other qualification, certificate number or date. Do not say he is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
+  return `${body} ${only} Do not add an NVQ, a level, a date or a certificate number unless those words are already in the wording above. Do not name any other qualification. Do not say he is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
 }
 
 export function qualificationReply(items: readonly Qualification[] = qualifications): string {
   if (items.length === 0) {
     return "The site does not list a qualification. Ring Callum on 07846 729203, or use Get a quote.";
   }
-  const body = items.map((item) => `${item.title}. ${item.label}. ${item.summary}`).join(" ");
+  const body = items.map(detail).join(" ");
   if (items.length === 1) {
     return `Callum holds the ${body} That is the only qualification listed on the site.`;
   }

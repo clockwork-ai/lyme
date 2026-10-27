@@ -11,7 +11,7 @@ const PRICE = /\b(how much|what(?:'s| is) the (?:price|cost)|price list|what do 
 const QUOTE = /\b(get a quote|quote for|want a quote|like a quote|can i get a quote)\b/i;
 const ASKING = /\b(are you|is he|is callum|do you have|does he have|does callum have|have you got|has he got)\b/i;
 const UNLISTED = /\b(gas safe|g3|mcs|f-?gas|niceic|benchmark|insured|insurance)\b/i;
-const QUALIFICATION = /\b(qualifications?|bpec|ofqual)\b/i;
+const QUALIFICATION = /\b(qualifications?|bpec|ofqual|city\s*(?:&|and)\s*guilds)\b/i;
 const QUALIFIED = /\b(qualified|certified|certificates?)\b/i;
 
 export function fixedReply(text: string, config: BusinessConfig): string | null {
