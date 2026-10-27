@@ -204,7 +204,13 @@
   gap: 8px;
   padding: 0 14px 10px;
 }
-.cw-form.is-open { display: grid; }
+.cw-form.is-open {
+  display: grid;
+  min-height: 0;
+  max-height: 30%;
+  overflow-y: auto;
+}
+.cw-chat:has(.cw-form.is-open) .cw-composer { display: none; }
 .cw-field, .cw-area {
   width: 100%;
   min-height: 44px;
