@@ -54,4 +54,13 @@
       if (btn) btn.setAttribute("aria-busy", "true");
     });
   }
+
+  /* Muted clips: ask to play, and leave the poster alone when motion is reduced. */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video').forEach(function (v) {
+      v.muted = true;
+      var play = v.play();
+      if (play && play.catch) play.catch(function () {});
+    });
+  }
 })();

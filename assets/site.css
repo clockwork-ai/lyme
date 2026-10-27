@@ -275,8 +275,6 @@ html.menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .btn, .menu, .more svg, .faq summary::after, .iconbtn { transition: none; }
   .cot[open] .cot__pop { animation: none; }
-  .clip video { display: none; }
-  .clip .clip__still { display: block; }
 }
 
 /* Job photos. .photo crops to 4/3, so these show the whole frame. */
@@ -312,3 +310,7 @@ html.menu-open { overflow: hidden; }
 .project-list { display: grid; gap: 1rem; }
 .clip video, .clip .clip__still { width: 100%; height: auto; display: block; border-radius: var(--r); background: #111; }
 .clip .clip__still { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .clip video { display: none; }
+  .clip .clip__still { display: block; }
+}
