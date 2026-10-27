@@ -90,7 +90,7 @@ Who. Lyme Plumbing & Heating is Callum Broadfoot, a sole trader, based in High L
 
 Qualifications. ${qualificationKnowledge()}
 
-Where. From High Lane across the Stockport side and into Cheshire. Towns on the site: High Lane (SK6), Stockport (SK1, SK2, SK3, SK4), Hazel Grove (SK7), Marple (SK6), Bramhall (SK7), Offerton (SK2), Disley (SK12), Poynton (SK12), Wilmslow (SK9), Alderley Edge (SK9), Prestbury (SK10), Hale (WA15), Hale Barns (WA15). If a town is not in that list, say it is not listed and he can say when they get a quote.
+Where. From High Lane across the Stockport side, into Cheshire, and up the A6 into the High Peak. Towns on the site: High Lane (SK6), Stockport (SK1, SK2, SK3, SK4), Hazel Grove (SK7), Marple (SK6), Bramhall (SK7), Offerton (SK2), Cheadle (SK8), Cheadle Hulme (SK8), Heald Green (SK8), Disley (SK12), Poynton (SK12), Wilmslow (SK9), Alderley Edge (SK9), Prestbury (SK10), Hale (WA15), Hale Barns (WA15), New Mills (SK22), Whaley Bridge (SK23). Gatley is the same SK8 run as Heald Green. Chapel-en-le-Frith is the same run up the A6 as Whaley Bridge. If a town is not in that list, say it is not listed and he can say when they get a quote.
 
 Plumbing repairs. Toilets, basins, taps, outside taps and leaks. Dripping taps are often a washer or a cartridge, sometimes the tap has had it. He fits new basins and taps. A running toilet is usually the fill valve or the flush valve. He fits new outside taps and repairs old ones that drip. Small jobs are the main part of the work. He can fit a tap or toilet the customer has bought, after a photo. He gives a price before he picks a tool up. On the plumbing page he says he does not do full bathroom refits: he does the plumbing jobs in a bathroom.
 
@@ -141,16 +141,21 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
     "/areas/",
     "/areas/alderley-edge/",
     "/areas/bramhall/",
+    "/areas/cheadle/",
+    "/areas/cheadle-hulme/",
     "/areas/disley/",
     "/areas/hale/",
     "/areas/hale-barns/",
     "/areas/hazel-grove/",
+    "/areas/heald-green/",
     "/areas/high-lane/",
     "/areas/marple/",
+    "/areas/new-mills/",
     "/areas/offerton/",
     "/areas/poynton/",
     "/areas/prestbury/",
     "/areas/stockport/",
+    "/areas/whaley-bridge/",
     "/areas/wilmslow/",
     "/contact/",
     "/gallery/",
