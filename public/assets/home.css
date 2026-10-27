@@ -145,6 +145,7 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 .bline { margin: 0; font-family: var(--sc-font-display); font-stretch: 110%; font-weight: 780; font-size: clamp(2rem, 1.2rem + 3vw, 3.9rem); line-height: 1.06; letter-spacing: -0.035em; }
 .bline--last { color: var(--copper); }
 .bloke__story { max-width: 46ch; color: #dbe5ea; margin: var(--sc-6) 0 0; }
+#bloke .facts { max-width: 46ch; margin: var(--sc-5) 0 0; color: var(--paper-ink); }
 .more--dark { color: var(--copper); margin-top: var(--sc-4); }
 .ph--bloke { aspect-ratio: 4 / 5; max-height: 70svh; color: var(--sc-ink-soft); }
 
@@ -186,6 +187,7 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
   .jobs, .smart { grid-template-columns: 1fr; }
   .smart__draw { order: -1; padding: 0.75rem; }
   #bloke .sc-stage { grid-template-columns: 1fr; align-content: center; padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+  #bloke figure { display: none; }
   .ph--bloke { display: none; }
   #where .sc-stage { padding-bottom: 4.5rem; gap: var(--sc-5); }
   .tile { flex-basis: 70vw; min-height: 9.5rem; }
