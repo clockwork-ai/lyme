@@ -1,5 +1,5 @@
 /**
- * Quote form checks and the raw email the Pages Function sends.
+ * Quote form checks and the raw email the Worker sends.
  * No Cloudflare imports here, so it can be tested on its own.
  */
 
@@ -53,6 +53,8 @@ const EXT_TYPE = {
 const ALLOWED_ORIGINS = [
   "https://lymeplumbing.co.uk",
   "https://www.lymeplumbing.co.uk",
+  "https://lymeplumbing.uk",
+  "https://www.lymeplumbing.uk",
   "http://localhost:8788",
   "http://127.0.0.1:8788",
   "http://localhost:8787",

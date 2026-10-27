@@ -1,11 +1,23 @@
-# Cloudflare Pages. Build command: none. Output directory: repository root.
-# Deploy with the dashboard or `npx wrangler pages deploy .`
+"$schema" = "./node_modules/wrangler/config-schema.json"
+# Cloudflare Worker with static assets.
+# Dashboard: Workers & Pages > Create > Worker > Import a repository.
+# Build command: none. Deploy command: npx wrangler deploy
 # Do not change DNS, MX or Email Routing records from this file.
 name = "lyme-plumbing"
-compatibility_date = "2026-10-26"
-pages_build_output_dir = "."
+main = "src/worker.js"
+compatibility_date = "2026-10-27"
 
-# Email Sending. Variable name EMAIL is what functions/api/quote.js reads.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
+# A quote form POST is a navigation request. From compatibility date 2025-04-01
+# those skip the Worker unless the route runs first. Other paths stay on the
+# asset layer so public/_redirects, extensionless URLs and /404.html still apply.
+run_worker_first = [ "/api/*" ]
+
+# Email Sending. Variable name EMAIL is what the quote handler reads.
 # destination_address locks every message to the address already verified
 # as an Email Routing destination on lymeplumbing.co.uk.
 [[send_email]]

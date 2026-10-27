@@ -68,3 +68,8 @@ export async function onRequestPost(context) {
 export async function onRequestGet() {
   return fail(405, "Use the quote form on the contact page to get in touch.");
 }
+
+export async function handleQuote(request, env) {
+  if (request.method === "POST") return onRequestPost({ request, env });
+  return onRequestGet();
+}
