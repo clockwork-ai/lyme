@@ -188,7 +188,8 @@ html.menu-open { overflow: hidden; }
 .ph--tall { aspect-ratio: 4 / 5; }
 .photo { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r); box-shadow: var(--sc-e2); }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
-.ph--map { aspect-ratio: 21 / 9; margin-top: var(--sc-7); }
+.ph--map { aspect-ratio: 4 / 5; margin-top: var(--sc-7); display: block; }
+@media (min-width: 721px) { .ph--map { aspect-ratio: 21 / 9; } }
 .todo { margin-top: var(--sc-5); padding: 0.8rem 1rem; border-radius: 8px; background: #fff4d6; color: #3b2c00; border: 1.5px dashed #b88a00; font-size: var(--sc-t-sm); max-width: 62ch; }
 .todo code { font-size: 0.95em; }
 .reviews-list:empty { display: none; }
@@ -280,6 +281,9 @@ html.menu-open { overflow: hidden; }
 /* Job photos. .photo crops to 4/3, so these show the whole frame. */
 .ph--photo { border: 0; background: none; overflow: hidden; padding: 0; }
 .ph--photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; }
+.ph--map.ph--photo { border: 1px solid var(--sc-hairline); background: #f4f8f9; box-shadow: var(--sc-e1); }
+.ph--map picture, .ph--map img { display: block; width: 100%; height: 100%; }
+.ph--map img { object-fit: fill; object-position: center; }
 .shot { margin: 0 0 var(--sc-5); }
 .shot--job { max-width: 28rem; }
 .shot--lead { max-width: 36rem; }
@@ -319,4 +323,16 @@ html.menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .clip video { display: none; }
   .clip .clip__still { display: block; }
+}
+/* About page: the loop sits in the same rounded 4/5 card as the photo above it. */
+.ph--photo.clip { max-width: none; justify-self: stretch; position: relative; }
+.ph--photo.clip video,
+.ph--photo.clip .clip__still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
 }
