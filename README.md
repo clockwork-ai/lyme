@@ -28,7 +28,7 @@ Add the custom domains on the Worker: `lymeplumbing.co.uk` and `www.lymeplumbing
 
 The quote form sends mail with Cloudflare Email Sending (`send_email`). The destination is already a verified Email Routing destination on `lymeplumbing.co.uk`.
 
-`wrangler.toml` sets the binding. Workers Builds applies it when the deploy command runs:
+`wrangler.toml` sets the binding. Workers Builds applies it when the deploy command runs. Pull request builds use `npx wrangler preview`, which needs the `previews` block in that file. The email binding stays on production. Preview hostnames are refused by the quote form, so the binding is not copied into `previews`.
 
 | Type | Variable name | Destination |
 | --- | --- | --- |
