@@ -57,6 +57,10 @@ A floating chat button on every page. The script and stylesheet load after the p
 
 It will not quote a price. Callum quotes after he has seen the job. It will not do boiler, gas or refrigerant work. If water is leaking, it tells the visitor to turn the water off at the stop tap, keep it away from electrics, and ring 07846 729203. The site does not describe a 12 month labour guarantee or a handover pack, so the chat will not invent either.
 
+The home page trust strip and the heat pump page wording live in `lib/qualifications.ts` (`homeTrustStrip` and `heatPumpLine`). The home strip is "City & Guilds qualified plumber · BPEC Level 3 heat pump qualified · Local to High Lane". The heat pump page says he services, repairs and maintains air source heat pumps, whoever fitted them, on the plumbing side, and that he is BPEC Level 3 qualified in heat pump systems. The About page still lists City & Guilds qualified, and the BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits), Ofqual regulated. The chat names those and no others. It does not say accredited, certified, approved installer, MCS, grant or BUS, and it does not claim F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance.
+
+Reviews are hidden. `SHOW_REVIEWS` at the top of `public/assets/site.js` is false, so the nav, menu, footer and home section do not link to `/reviews/`. The page file is still `public/reviews/index.html`. Set the flag to true, and add the reviews address back to `public/sitemap.xml`, to show it again.
+
 The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote and Call. There is no WhatsApp link on the site, so the chat does not offer one.
 
 ### How a reply is written

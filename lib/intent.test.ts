@@ -31,7 +31,11 @@ test("a quote opens the form, and a price is not a number", () => {
 });
 
 test("qualifications, refrigerant and the guarantee stay inside the site", () => {
-  assert.match(fixedReply("Are you Gas Safe?", business) || "", /doesn't list qualifications/);
+  assert.match(fixedReply("Are you Gas Safe?", business) || "", /doesn't list Gas Safe/);
+  assert.equal((fixedReply("Are you Gas Safe?", business) || "").includes("BPEC"), false);
+  assert.match(fixedReply("What qualifications do you have?", business) || "", /City & Guilds qualified/);
+  assert.match(fixedReply("What qualifications do you have?", business) || "", /BPEC Level 3 Award/);
+  assert.equal((fixedReply("Are you City and Guilds?", business) || "").includes("NVQ"), false);
   assert.match(fixedReply("Can you regas the heat pump?", business) || "", /doesn't do refrigerant/);
   assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /aren't written on the site/);
 });
