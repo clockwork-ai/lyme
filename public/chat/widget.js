@@ -411,6 +411,13 @@
       const response = await fetch("/api/quote", { method: "POST", body: data });
       const landed = new URL(response.url, location.origin);
       if (response.ok && /\/thanks\/?$/.test(landed.pathname)) {
+        try {
+          if (typeof window.plausible === "function") {
+            window.plausible("Quote Form Submit", { props: { page: pagePath(), location: "chat" } });
+          }
+        } catch {
+          /* The form has already been accepted. Analytics must not change that. */
+        }
         add("assistant", "That's with Callum. He'll use it to come back to you.");
         form.reset();
         form.hidden = true;
