@@ -60,7 +60,7 @@ html.sc-animate .house--hero .mk.is-near circle, html.sc-animate .house--hero .m
 #hero.is-boiler .boiler__tag, .house--done .boiler__tag, .house--finder .boiler__tag { opacity: 1; }
 #hero.is-boiler .pipe-end, .house--done .pipe-end, .house--finder .pipe-end { opacity: 1; }
 #hero.is-boiler .boiler__box { stroke: #fff; opacity: 1; }
-/* Outside unit drawing, kept in the file and hidden. Not a service on this site. */
+/* Outdoor unit on the drawing. It lights up with the heat pump pipe. */
 .house .hp-guide { fill: none; stroke: var(--sc-ink-soft); stroke-width: 2.2; stroke-dasharray: 7 7; opacity: 0.8; }
 .house .hpu path, .house .hpu circle { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .house .hpu__ghost path, .house .hpu__ghost circle { stroke: var(--sc-ink-soft); stroke-dasharray: 7 7; }
@@ -213,10 +213,5 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 }
 .house--done .mk circle { fill: var(--copper); }
 
-/* Not offered: heat pumps, and hot water cylinders. Keep them out of the drawing. */
-.house .hpu,
-.house .hp-guide,
-.house .pipe[data-k="heatpump"],
-.house .pipe[data-k="cylinder"],
-.house .mk[data-k="heatpump"],
-.house .mk[data-k="cylinder"] { display: none; }
+/* The dashed guide duplicates the heat pump pipe, so the pipe is the line that lights up. */
+.house .hp-guide { display: none; }

@@ -39,12 +39,14 @@ ScrollCraft.mount(document.body);
     ['toilet', 0.32, 0.40, 'Toilet: <em>me.</em>'],
     ['leak', 0.40, 0.48, 'Water where it shouldn’t be: <em>me.</em>'],
     ['pump', 0.48, 0.56, 'Pump and valves: <em>me.</em>'],
-    ['rad1', 0.56, 0.64, 'Radiators: <em>me.</em>'],
-    ['rad2', 0.64, 0.72, 'Radiators: <em>me.</em>'],
-    ['stat', 0.72, 0.80, 'Thermostat and controls: <em>me.</em>'],
-    ['toboiler', 0.80, 0.90, 'And the boiler?'],
+    ['rad1', 0.56, 0.62, 'Radiators: <em>me.</em>'],
+    ['rad2', 0.62, 0.66, 'Radiators: <em>me.</em>'],
+    ['stat', 0.66, 0.72, 'Thermostat and controls: <em>me.</em>'],
+    ['cylinder', 0.72, 0.78, 'Hot water cylinder: <em>me.</em>'],
+    ['heatpump', 0.78, 0.86, 'Air source heat pump: <em>me.</em>'],
+    ['toboiler', 0.86, 0.92, 'And the boiler?'],
   ];
-  var BOILER_AT = 0.90, DONE_AT = 0.94, ANGLE_AT = 0.97;
+  var BOILER_AT = 0.92, DONE_AT = 0.95, ANGLE_AT = 0.98;
   var BOILER = '<span class="no">Boiler: not me.</span> That’s a Gas Safe engineer.';
   var DONE = '<span class="no">Boiler: not me.</span>';
   var ANGLE = 'The bloke who quotes it is <em>the bloke who fixes it.</em>';
@@ -63,7 +65,7 @@ ScrollCraft.mount(document.body);
       if (m) { m.classList.toggle('is-lit', t >= 1); m.classList.toggle('is-near', t > 0); }
       if (r[0] === 'leak' && drips) drips.classList.toggle('is-lit', t >= 1);
       if (r[0] === 'heatpump' && hpu) hpu.classList.toggle('is-lit', t >= 1);
-      if (t > 0.5 && (r[0] !== 'heatpump' || p >= BOILER_AT)) capHtml = r[3];
+      if (t > 0.5) capHtml = r[3];
       if (r[0] === 'toboiler' && p >= BOILER_AT) capHtml = BOILER;
     });
     hero.classList.toggle('is-boiler', p >= BOILER_AT);

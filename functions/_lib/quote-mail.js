@@ -16,9 +16,14 @@ export const LIMITS = {
 
 export const JOBS = [
   "Plumbing jobs",
+  "Bathrooms",
   "Emergency plumbing",
   "Radiators",
+  "Underfloor heating",
+  "Heat pumps",
+  "Unvented cylinders",
   "Heating controls",
+  "Smart controls",
   "Heating faults (not the boiler)",
   "Something else",
 ];
