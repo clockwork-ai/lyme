@@ -1,0 +1,7 @@
+{
+  "name": "lyme-plumbing",
+  "private": true,
+  "devDependencies": {
+    "wrangler": "^4.153.0"
+  }
+}
