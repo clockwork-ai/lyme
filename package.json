@@ -1,6 +1,10 @@
 {
   "name": "lyme-plumbing",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test lib/*.test.ts server/*.test.ts"
+  },
   "devDependencies": {
     "wrangler": "^4.153.0"
   }

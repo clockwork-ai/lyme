@@ -63,4 +63,21 @@
       if (play && play.catch) play.catch(function () {});
     });
   }
+
+  /* Ask Lyme loads after the page is idle. The widget stays hidden if the chat is off. */
+  addEventListener('load', function () {
+    if (window.__lymeChat) return;
+    window.__lymeChat = 1;
+    var start = function () {
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/chat/widget.css';
+      document.head.appendChild(css);
+      var script = document.createElement('script');
+      script.src = '/chat/widget.js';
+      document.body.appendChild(script);
+    };
+    if (window.requestIdleCallback) requestIdleCallback(start, { timeout: 1800 });
+    else setTimeout(start, 800);
+  });
 })();

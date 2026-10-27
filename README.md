@@ -51,6 +51,30 @@ Limits: up to 4 photos, 3MB each, 8MB together. JPG, PNG, WEBP, GIF or HEIC.
 
 The posted Origin must be `https://lymeplumbing.co.uk`, `https://www.lymeplumbing.co.uk`, `https://lymeplumbing.uk` or `https://www.lymeplumbing.uk` (or localhost on port 8787 or 8788 while trying the Worker). Other hostnames, including a `*.workers.dev` preview, are refused until that hostname is added in `functions/_lib/quote-mail.js`.
 
+## Ask Lyme
+
+A floating chat button on every page. The script and stylesheet load after the page is idle. The assistant answers from what is published on this site. The system prompt stays on the server, in `lib/business.ts`.
+
+It will not quote a price. Callum quotes after he has seen the job. It will not do boiler, gas or refrigerant work. If water is leaking, it tells the visitor to turn the water off at the stop tap, keep it away from electrics, and ring 07846 729203. The site does not describe a 12 month labour guarantee or a handover pack, so the chat will not invent either.
+
+The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote and Call. There is no WhatsApp link on the site, so the chat does not offer one.
+
+### How a reply is written
+
+The chat route is `GET` and `POST /api/chat`, handled by `src/worker.js`. `GET` returns the button wording. `POST` answers.
+
+Cloudflare Workers AI does the open questions. `wrangler.toml` sets the binding `AI`. There is no model API key and no secret to add for the chat. The model id lives in `lib/business.ts` (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`). Set the var `AI_MODEL` only if you want a different Workers AI model. `remote = false` on the binding applies to local `wrangler dev` only.
+
+If the `AI` binding is missing, `GET /api/chat` returns `{ "enabled": false }` and the button is not added to the page. A fixed safety reply (a leak, a boiler, a price, a quote) does not need the model. Anything else, when the model cannot answer, tells the visitor to ring or use Get a quote.
+
+A server-side check removes prices, em dashes, en dashes, and raw addresses before the visitor sees them.
+
+### Where chat leads go
+
+The form inside the chat posts to `POST /api/quote` as `multipart/form-data`, the same route as the contact page. It asks for the same fields, including the consent tick. The quote handler still checks the Origin. A preview hostname is still refused, so a chat lead from a `*.workers.dev` URL does not email anyone. On the real site, the email goes to `lymeplumbingandheating@gmail.com`, from `quotes@lymeplumbing.co.uk`, the same as the contact form. The message starts with "From the site chat." so you can tell them apart.
+
+The email binding stays on production only. It is not copied into `[previews]`. The Workers AI binding is copied there, so a pull request preview can still answer. It does not send mail.
+
 ## Preview
 
 Paths to CSS, scripts and other pages are relative. Serve the `public/` folder for a root-domain preview of the pages. The quote form itself only works through `npx wrangler dev` or the deployed Worker, because `POST /api/quote` is handled by `src/worker.js`.
