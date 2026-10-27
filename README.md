@@ -79,6 +79,20 @@ The form inside the chat posts to `POST /api/quote` as `multipart/form-data`, th
 
 The email binding stays on production only. It is not copied into `[previews]`. The Workers AI binding is copied there, so a pull request preview can still answer. It does not send mail.
 
+## Measurement
+
+Plausible is cookieless, so the site still sets no cookies and shows no consent banner. The script address and the `data-domain` (`lymeplumbing.co.uk`) are set once in `public/assets/measure.js`. Search Console's HTML verification token is `GSC_VERIFICATION` in that same file. Leave it as an empty string until Google gives you one. An empty value does not write a meta tag. Paste only the token, then run `npm run measure`. That rewrites the measure block on every page. Do not invent a token, and do not change DNS for this.
+
+Page views load with the standard Plausible script. Custom events use `plausible()`:
+
+| Event | When it is sent | Props |
+| --- | --- | --- |
+| Call Click | A `tel:` link is clicked | `page`, `location` (header, menu, call bar, banner, and so on), `button` |
+| Text Click | An `sms:` link is clicked | same |
+| Quote Form Submit | The contact form is accepted and the thanks page opens, or the chat quote form gets a thanks response | `page`, `location` (`quote form` or `chat`) |
+
+A click on Call or Text does not wait for Plausible. A quote is counted only after a real success, not when the button is pressed and not when the form is rejected.
+
 ## Preview
 
 Paths to CSS, scripts and other pages are relative. Serve the `public/` folder for a root-domain preview of the pages. The quote form itself only works through `npx wrangler dev` or the deployed Worker, because `POST /api/quote` is handled by `src/worker.js`.
