@@ -9,6 +9,8 @@ const GUARANTEE = /\b(guarantee|warranty|handover|service reminders?)\b/i;
 const REVIEWS = /\b(reviews?|testimonials?|star ratings?|rated)\b/i;
 const PRICE = /\b(how much|what(?:'s| is) the (?:price|cost)|price list|what do you charge|how much do you charge)\b|£\s?\d/i;
 const QUOTE = /\b(get a quote|quote for|want a quote|like a quote|can i get a quote)\b/i;
+const PAYMENT =
+  /\b(how (?:do|can) (?:i|we) pay|card payments?|pay(?:ing)? by card|pay with (?:a )?card|take cards?|accept cards?|cards? accepted|debit cards?|credit cards?)\b/i;
 const ASKING = /\b(are you|is he|is callum|do you have|does he have|does callum have|have you got|has he got)\b/i;
 const UNLISTED = /\b(gas safe|g3|mcs|f-?gas|niceic|benchmark|insured|insurance)\b/i;
 const QUALIFICATION = /\b(qualifications?|bpec|ofqual|city\s*(?:&|and)\s*guilds)\b/i;
@@ -31,5 +33,6 @@ export function fixedReply(text: string, config: BusinessConfig): string | null 
   if (REVIEWS.test(text)) return config.fixed.reviews;
   if (PRICE.test(text)) return config.fixed.price;
   if (QUOTE.test(text)) return config.fixed.quote;
+  if (PAYMENT.test(text)) return config.fixed.payment;
   return null;
 }

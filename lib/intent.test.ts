@@ -40,6 +40,16 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
   assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /aren't written on the site/);
 });
 
+test("paying by card is on completion, with no other method named", () => {
+  const text = fixedReply("Can I pay by card?", business) || "";
+  assert.match(text, /Payment on completion\. Card payments accepted\./);
+  assert.equal(fixedReply("How do I pay?", business), text);
+  assert.equal(fixedReply("Do you take cards?", business), text);
+  assert.doesNotMatch(text, /sumup|cash|bank transfer/i);
+  assert.match(fixedReply("Can I get a quote?", business) || "", /your name/);
+  assert.match(fixedReply("How much is a new tap?", business) || "", /isn't a price list/);
+});
+
 test("fixed replies have no dash characters and no addresses", () => {
   for (const text of Object.values(business.fixed)) {
     assert.doesNotMatch(text, /[\u2013\u2014]/);
