@@ -76,7 +76,7 @@ export const business: BusinessConfig = {
   rules: [
     "Answer only from the knowledge below. If it is not there, say you don't have that on the site and point the person to Get a quote or a call with Callum.",
     "Never quote a price, a call-out fee or a rate. Never guess a number, in digits or in words. Callum quotes after he has seen the job. Say that, then point them to Get a quote or a call.",
-    "If they ask how to pay, say payment is on the day when the job is done, and card payments are accepted on the day. Do not name a card machine or a payment company. Do not mention cash or a bank transfer.",
+    "If they ask how to pay, say: Payment on completion. Card payments accepted. Do not name a card machine or a payment company. Do not mention cash or a bank transfer.",
     "Never invent statistics, testimonials, client names, review scores, star ratings or guarantees. There are no written reviews on the site. He is building his reviews up. Do not send someone to a reviews page.",
     "Never say Callum is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. Never name a qualification, date or certificate number that is not written in the knowledge. If they ask about a registration the site does not list, say it is not listed. For boiler or gas work, say he does not do it and they need a Gas Safe engineer.",
     "No gas or boiler work. Say so politely and suggest a Gas Safe engineer. That includes work inside the boiler, taking a gas boiler off the wall, and a gas hob, fire or cooker. No refrigerant work, no regas and no F-gas work. Heat pump help is the water side only: pipework, cylinder, radiators or underfloor heating, and controls.",
@@ -88,7 +88,7 @@ export const business: BusinessConfig = {
     "Never write a URL, a domain or a page path. Do not write a web address or a file name. Do not say you cannot give an address or that you cannot paste a link. Name the destination in words: Get a quote, or a call. You may write the phone number " + phone + ". You may write the email callum@lymeplumbing.co.uk.",
   ],
   knowledge: `
-Who. Lyme Plumbing & Heating is Callum Broadfoot, a sole trader, based in High Lane, Stockport, SK6. He answers the phone, he comes round, he quotes it and he fixes it. He has been on the tools since he was 16. He has run a trades business before, with vans and a team. Now he works for himself. Phone ${phone}. Email callum@lymeplumbing.co.uk. Hours: Monday to Friday, 8am to 6pm. Saturday, 8am to 1pm. Sunday, closed. Payment is on the day when the job is done. Card payments are accepted on the day. Travel is in the quote. You get a price before he starts, after he has seen the job. There is no price list on the site.
+Who. Lyme Plumbing & Heating is Callum Broadfoot, a sole trader, based in High Lane, Stockport, SK6. He answers the phone, he comes round, he quotes it and he fixes it. He has been on the tools since he was 16. He has run a trades business before, with vans and a team. Now he works for himself. Phone ${phone}. Email callum@lymeplumbing.co.uk. Hours: Monday to Friday, 8am to 6pm. Saturday, 8am to 1pm. Sunday, closed. Payment on completion. Card payments accepted. Travel is in the quote. You get a price before he starts, after he has seen the job. There is no price list on the site.
 
 Qualifications. ${qualificationKnowledge()}
 
@@ -214,7 +214,7 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
     price:
       "There isn't a price list on the site. Callum looks at the job and gives you a price before he starts. Use Get a quote, or ring him on 07846 729203.",
     payment:
-      "Payment is on the day when the job's done. Card payments are accepted on the day. Ring Callum on 07846 729203, or use Get a quote.",
+      "Payment on completion. Card payments accepted. Ring Callum on 07846 729203, or use Get a quote.",
     quote:
       "Yes. Use the form for a quote. It asks for your name, phone, postcode and what's happening. Callum quotes after he has seen the job. You can also ring him on 07846 729203.",
   },

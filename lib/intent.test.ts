@@ -40,10 +40,9 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
   assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /aren't written on the site/);
 });
 
-test("paying by card is on the day, with no other method named", () => {
+test("paying by card is on completion, with no other method named", () => {
   const text = fixedReply("Can I pay by card?", business) || "";
-  assert.match(text, /Payment is on the day when the job's done/);
-  assert.match(text, /Card payments are accepted on the day/);
+  assert.match(text, /Payment on completion\. Card payments accepted\./);
   assert.equal(fixedReply("How do I pay?", business), text);
   assert.equal(fixedReply("Do you take cards?", business), text);
   assert.doesNotMatch(text, /sumup|cash|bank transfer/i);
