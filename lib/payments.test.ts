@@ -4,6 +4,7 @@ import { test } from "node:test";
 import { business } from "./business.ts";
 
 const line = "Payment on completion. Card payments accepted.";
+const deposit = "A deposit for materials to be supplied may be required.";
 const icon = '<svg aria-hidden="true" viewBox="0 0 24 24">';
 
 function files(path: string): string[] {
@@ -29,7 +30,10 @@ test("every page says payment is on completion and cards are accepted", () => {
     const html = readFileSync(file, "utf8");
     const footer = slice(html, "<footer", "</footer>");
     assert.equal(footer.includes(line), true, file);
+    assert.equal(footer.includes(deposit), true, file);
+    assert.equal(footer.includes('class="pay__next"'), true, file);
     assert.equal(footer.includes(icon), true, file);
+    assert.equal(footer.includes("£"), false, file);
     assert.equal(/sumup/i.test(html), false, file);
     assert.equal(html.includes("bank transfer"), false, file);
     assert.equal(html.includes("Pay by card, cash"), false, file);
@@ -43,8 +47,10 @@ test("the note sits with the quote buttons and the payment line", () => {
   const contact = readFileSync("public/contact/index.html", "utf8");
   const head = slice(contact, 'class="phead', "</section>");
   assert.equal(head.includes(line), true);
+  assert.equal(head.includes(deposit), true);
   const form = contact.slice(contact.indexOf('id="quote"'), contact.indexOf("</form>"));
   assert.equal(form.includes(line), true);
+  assert.equal(form.includes(deposit), true);
   assert.equal(form.includes("on the day"), false);
 
   const home = readFileSync("public/index.html", "utf8");
@@ -53,7 +59,9 @@ test("the note sits with the quote buttons and the payment line", () => {
   const about = readFileSync("public/about/index.html", "utf8");
   assert.equal(slice(about, "cta-band", "</section>").includes(line), true);
 
-  assert.match(business.knowledge, /Payment on completion\. Card payments accepted\./);
+  assert.match(business.knowledge, /Payment on completion\. Card payments accepted\. A deposit for materials to be supplied may be required\./);
+  assert.match(business.fixed.payment, /A deposit for materials to be supplied may be required\./);
+  assert.equal(business.fixed.payment.includes("£"), false);
   assert.doesNotMatch(business.knowledge, /sumup|cash|bank transfer/i);
   assert.doesNotMatch(business.fixed.payment, /sumup|cash|bank transfer/i);
 });

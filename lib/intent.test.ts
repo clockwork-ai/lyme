@@ -42,7 +42,8 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
 
 test("paying by card is on completion, with no other method named", () => {
   const text = fixedReply("Can I pay by card?", business) || "";
-  assert.match(text, /Payment on completion\. Card payments accepted\./);
+  assert.match(text, /Payment on completion\. Card payments accepted\. A deposit for materials to be supplied may be required\./);
+  assert.equal(text.includes("£"), false);
   assert.equal(fixedReply("How do I pay?", business), text);
   assert.equal(fixedReply("Do you take cards?", business), text);
   assert.doesNotMatch(text, /sumup|cash|bank transfer/i);
