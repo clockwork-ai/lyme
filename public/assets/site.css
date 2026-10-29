@@ -220,6 +220,11 @@ html.menu-open { overflow: hidden; }
 .check label { font-weight: 500; }
 .form .btn { width: 100%; min-height: 3.3rem; }
 .form-note { margin: 0; font-size: var(--sc-t-sm); color: var(--paper-soft); }
+.pay { display: flex; align-items: center; gap: 0.45rem; margin: 0.85rem 0 0; font-size: var(--sc-t-sm); line-height: 1.4; }
+.pay svg { width: 1.2rem; height: 1.2rem; flex: none; color: var(--sc-accent); }
+.form-note.pay { margin: 0; align-items: flex-start; }
+.form-note.pay svg { margin-top: 0.15rem; }
+.cta-band .pay, .close .pay, .phead .pay { color: #dbe5ea; }
 .form-err { grid-column: 1 / -1; margin: 0; padding: 0.7rem 0.9rem; border-radius: 8px; background: #fdecea; color: #8a1c12; font-weight: 600; }
 
 /* ---------------------------------------------------------------- CTA band */
