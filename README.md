@@ -81,17 +81,18 @@ The email binding stays on production only. It is not copied into `[previews]`. 
 
 ## Measurement
 
-Plausible is cookieless, so the site still sets no cookies and shows no consent banner. The script address and the `data-domain` (`lymeplumbing.co.uk`) are set once in `public/assets/measure.js`. Search Console's HTML verification token is `GSC_VERIFICATION` in that same file. Leave it as an empty string until Google gives you one. An empty value does not write a meta tag. Paste only the token, then run `npm run measure`. That rewrites the measure block on every page. Do not invent a token, and do not change DNS for this.
+Plausible is cookieless, so the site still sets no cookies and shows no consent banner. The site-specific script address is set once in `public/assets/measure.js`. It has no `data-domain`; the script file is issued for `lymeplumbing.co.uk`. Search Console's HTML verification token is `GSC_VERIFICATION` in that same file. Leave it as an empty string until Google gives you one. An empty value does not write a meta tag. Paste only the token, then run `npm run measure`. That rewrites the measure block on every page. Do not invent a token, and do not change DNS for this.
 
-Page views load with the standard Plausible script. Custom events use `plausible()`:
+Page views load from that script in the `<head>`. Custom events use `window.plausible('Event Name')`:
 
 | Event | When it is sent | Props |
 | --- | --- | --- |
-| Call Click | A `tel:` link is clicked | `page`, `location` (header, menu, call bar, banner, and so on), `button` |
+| Phone Call | A `tel:` link is clicked | `page`, `location` (header, menu, call bar, banner, and so on), `button` |
+| Email Click | A `mailto:` link is clicked | same |
 | Text Click | An `sms:` link is clicked | same |
-| Quote Form Submit | The contact form is accepted and the thanks page opens, or the chat quote form gets a thanks response | `page`, `location` (`quote form` or `chat`) |
+| Quote Request | The contact form is accepted and the thanks page opens, or the chat quote form gets a thanks response | `page`, `location` (`quote form` or `chat`) |
 
-A click on Call or Text does not wait for Plausible. A quote is counted only after a real success, not when the button is pressed and not when the form is rejected.
+A click on Call, Email or Text does not wait for Plausible. A quote is counted only after a real success, not when the button is pressed and not when the form is rejected. The script may also record outbound links and file downloads on its own.
 
 ## Preview
 
