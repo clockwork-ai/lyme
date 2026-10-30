@@ -1,9 +1,9 @@
 /**
  * Cookieless measurement for Lyme Plumbing & Heating.
  *
- * PLAUSIBLE_DOMAIN and PLAUSIBLE_SRC are the only place the Plausible
- * data-domain and script address are set. After changing either one, run
- * `npm run measure` so every page is rewritten from this file.
+ * PLAUSIBLE_SRC is the site-specific Plausible script. The address is issued
+ * for lymeplumbing.co.uk, so the tag has no data-domain. After changing it,
+ * run `npm run measure` so every page is rewritten from this file.
  *
  * GSC_VERIFICATION is the Google Search Console HTML token only (the content
  * value, not the whole meta tag). Leave it as an empty string until Search
@@ -12,7 +12,7 @@
  */
 
 export const PLAUSIBLE_DOMAIN = "lymeplumbing.co.uk";
-export const PLAUSIBLE_SRC = "https://plausible.io/js/script.js";
+export const PLAUSIBLE_SRC = "https://plausible.io/js/pa-koUHcizG62rO_S0gqTqbm.js";
 export const GSC_VERIFICATION = "";
 
 export const QUOTE_STORAGE_KEY = "lyme-quote";
@@ -33,17 +33,20 @@ function attr(value) {
 }
 
 export function headSnippet(config) {
-  const domain = config && config.domain != null ? config.domain : PLAUSIBLE_DOMAIN;
   const src = config && config.src != null ? config.src : PLAUSIBLE_SRC;
   const token = gscToken(config && "gsc" in config ? config.gsc : GSC_VERIFICATION);
   const lines = [];
   if (token) {
     lines.push(`<meta name="google-site-verification" content="${attr(token)}">`);
   }
+  lines.push("<!-- Privacy-friendly analytics by Plausible -->");
+  lines.push(`<script async src="${attr(src)}"></script>`);
+  lines.push("<script>");
   lines.push(
-    "<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>",
+    "  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};",
   );
-  lines.push(`<script defer data-domain="${attr(domain)}" src="${attr(src)}"></script>`);
+  lines.push("  plausible.init()");
+  lines.push("</script>");
   return lines.join("\n");
 }
 
@@ -59,7 +62,8 @@ export function isThanksPath(pathname) {
 
 export function clickEventName(href) {
   const value = String(href || "").trim().toLowerCase();
-  if (value.startsWith("tel:")) return "Call Click";
+  if (value.startsWith("tel:")) return "Phone Call";
+  if (value.startsWith("mailto:")) return "Email Click";
   if (value.startsWith("sms:")) return "Text Click";
   return "";
 }
@@ -111,7 +115,7 @@ export function quoteEventFromRecord(raw, pathname) {
   if (!stored || typeof stored !== "object") return null;
   const page = typeof stored.page === "string" && stored.page ? stored.page : pagePath(pathname);
   const location = typeof stored.location === "string" && stored.location ? stored.location : "quote form";
-  return { name: "Quote Form Submit", props: { page, location } };
+  return { name: "Quote Request", props: { page, location } };
 }
 
 function classNamesFrom(el) {

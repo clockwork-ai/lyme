@@ -413,7 +413,7 @@
       if (response.ok && /\/thanks\/?$/.test(landed.pathname)) {
         try {
           if (typeof window.plausible === "function") {
-            window.plausible("Quote Form Submit", { props: { page: pagePath(), location: "chat" } });
+            window.plausible("Quote Request", { props: { page: pagePath(), location: "chat" } });
           }
         } catch {
           /* The form has already been accepted. Analytics must not change that. */

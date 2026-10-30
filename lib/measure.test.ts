@@ -27,16 +27,27 @@ function htmlFiles(dir: string): string[] {
 
 const pages = htmlFiles("public");
 const snippet = headSnippet();
+const exactSnippet = `<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-koUHcizG62rO_S0gqTqbm.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>`;
 
-test("the Plausible snippet is the standard script and lives on every page", () => {
+test("the Plausible snippet is the site script and lives once in every head", () => {
   assert.equal(PLAUSIBLE_DOMAIN, "lymeplumbing.co.uk");
-  assert.equal(PLAUSIBLE_SRC, "https://plausible.io/js/script.js");
-  assert.match(snippet, /<script defer data-domain="lymeplumbing\.co\.uk" src="https:\/\/plausible\.io\/js\/script\.js"><\/script>/);
+  assert.equal(PLAUSIBLE_SRC, "https://plausible.io/js/pa-koUHcizG62rO_S0gqTqbm.js");
+  assert.equal(snippet, exactSnippet);
+  assert.equal(pages.length > 0, true);
   for (const file of pages) {
     const html = readFileSync(file, "utf8");
-    assert.equal(html.includes(snippet), true, file);
+    const head = html.slice(html.indexOf("<head>"), html.indexOf("</head>"));
+    assert.equal(head.includes(exactSnippet), true, file);
+    assert.equal(html.split(exactSnippet).length - 1, 1, file);
+    assert.equal(html.split("pa-koUHcizG62rO_S0gqTqbm.js").length - 1, 1, file);
+    assert.equal(html.includes("plausible.io/js/script.js"), false, file);
+    assert.equal(html.includes("data-domain="), false, file);
     assert.equal(html.includes('type="module" src="') && html.includes("assets/measure.js"), true, file);
-    assert.equal(html.split("plausible.io/js/script.js").length - 1, 1, file);
   }
 });
 
@@ -53,9 +64,11 @@ test("an empty Search Console token renders no meta tag", () => {
   assert.match(withToken, /<meta name="google-site-verification" content="abc123XYZ_token">/);
 });
 
-test("call and text clicks are named from the link, and quote success waits for thanks", () => {
-  assert.equal(clickEventName("tel:+447846729203"), "Call Click");
+test("call, email and text clicks are named from the link, and quote success waits for thanks", () => {
+  assert.equal(clickEventName("tel:+447846729203"), "Phone Call");
+  assert.equal(clickEventName("mailto:callum@lymeplumbing.co.uk"), "Email Click");
   assert.equal(clickEventName("sms:+447846729203?&body=Hi"), "Text Click");
+  assert.equal(clickEventName("https://wa.me/447846729203"), "");
   assert.equal(clickEventName("https://lymeplumbing.co.uk/contact/"), "");
   assert.equal(locationFromClassNames(["btn btn--call", "callbar"]), "call bar");
   assert.equal(locationFromClassNames(["bar__num", "bar__right", "bar"]), "header");
@@ -70,10 +83,21 @@ test("call and text clicks are named from the link, and quote success waits for 
   assert.equal(quoteEventFromRecord(null, "/thanks/"), null);
   assert.equal(quoteEventFromRecord(quoteRecord("/contact/"), "/contact/"), null);
   assert.deepEqual(quoteEventFromRecord(quoteRecord("/contact"), "/thanks/"), {
-    name: "Quote Form Submit",
+    name: "Quote Request",
     props: { page: "/contact/", location: "quote form" },
   });
   assert.equal(pagePath("/services/plumbing"), "/services/plumbing/");
+  const widget = readFileSync("public/chat/widget.js", "utf8");
+  assert.equal(widget.includes('window.plausible("Quote Request"'), true);
+  assert.equal(widget.includes("Quote Form Submit"), false);
+  let mailto = 0;
+  for (const file of pages) {
+    const html = readFileSync(file, "utf8");
+    assert.equal(/whatsapp|wa\.me/i.test(html), false, file);
+    mailto += (html.match(/href="mailto:/g) || []).length;
+    assert.equal((html.match(/href="tel:/g) || []).length > 0, true, file);
+  }
+  assert.equal(mailto > 0, true);
 });
 
 test("the quote error page carries the same snippet and does not count as success", () => {
