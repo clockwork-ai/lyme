@@ -138,7 +138,7 @@ html.menu-open { overflow: hidden; }
 .big-ctas .btn--ghost { color: #fff; }
 
 /* ------------------------------------------------------------ content */
-.svc-list, .area-list, .near, .ticks, .steps, .key { list-style: none; padding: 0; margin: 0; }
+.svc-list, .area-list, .near, .ticks, .steps, .key, .rates { list-style: none; padding: 0; margin: 0; }
 .svc-list { display: grid; gap: 0; border-top: 1px solid var(--sc-hairline); }
 .svc-list a { display: grid; grid-template-columns: 2.4rem minmax(0, 15rem) minmax(0, 1fr) 1.4rem; align-items: center; gap: 1rem; padding: 1.05rem 0.4rem; border-bottom: 1px solid var(--sc-hairline); text-decoration: none; transition: background-color 160ms var(--sc-ease-out); }
 .svc-list a:hover { background: color-mix(in oklab, var(--sc-accent) 7%, transparent); }
@@ -223,7 +223,15 @@ html.menu-open { overflow: hidden; }
 .pay { display: flex; align-items: flex-start; gap: 0.45rem; margin: 0.85rem 0 0; font-size: var(--sc-t-sm); line-height: 1.4; }
 .pay svg { width: 1.2rem; height: 1.2rem; flex: none; margin-top: 0.15rem; color: var(--sc-accent); }
 .pay span { min-width: 0; }
+.pay__next { display: block; margin-top: 0.2rem; }
 .form-note.pay { margin: 0; }
+.rates { margin-top: 1.35rem; border-top: 1px solid var(--sc-hairline); max-width: 44rem; }
+.rates li { display: grid; gap: 0.2rem; padding: 0.95rem 0; border-bottom: 1px solid var(--sc-hairline); }
+.rates b { font-family: var(--sc-font-display); font-stretch: 108%; font-weight: 720; font-size: var(--sc-t-lg); letter-spacing: -0.02em; }
+.rates span { color: var(--sc-ink-soft); max-width: 62ch; }
+.rates + p { margin-top: 1.25rem; }
+#call-out p { max-width: 62ch; }
+#call-out .h3 { margin-top: 2.2rem; }
 .cta-band .pay, .close .pay, .phead .pay { color: #dbe5ea; }
 .form-err { grid-column: 1 / -1; margin: 0; padding: 0.7rem 0.9rem; border-radius: 8px; background: #fdecea; color: #8a1c12; font-weight: 600; }
 

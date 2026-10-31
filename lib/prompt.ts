@@ -18,8 +18,15 @@ export function buildInstructions(config: BusinessConfig, page?: string): string
       "If they are only asking a question, answer it. Do not demand their details first.",
       `Phone: ${config.links.phone}. You may write that number. Do not write a web address.`,
     ].join(" "),
-    `If a price slips out, it will be replaced with: "${config.priceStandIn}". Prefer to say that yourself, with no number.`,
+    priceInstruction(config),
   ].join("\n\n");
+}
+
+function priceInstruction(config: BusinessConfig): string {
+  if (config.allowedPrices.length === 0) {
+    return `If a price slips out, it will be replaced with: "${config.priceStandIn}". Prefer to say that yourself, with no number.`;
+  }
+  return `The only prices you may write are these, copied exactly: ${config.allowedPrices.join(", ")}. Any other price, in digits or in words, is replaced with: "${config.priceStandIn}". Do not invent a price for a particular job.`;
 }
 
 function pageLabel(page: string): string {

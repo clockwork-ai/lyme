@@ -23,11 +23,18 @@ test("water from the boiler still says turn the stop tap off", () => {
   assert.match(text || "", /Gas Safe/);
 });
 
-test("a quote opens the form, and a price is not a number", () => {
+test("a quote opens the form, and a price is the published call-out rate", () => {
   assert.match(fixedReply("Can I get a quote?", business) || "", /your name/);
   const price = fixedReply("How much is a new tap?", business) || "";
-  assert.match(price, /isn't a price list/);
-  assert.equal(price.includes("£"), false);
+  assert.match(price, /£60/);
+  assert.match(price, /£90/);
+  assert.match(price, /£135/);
+  assert.match(price, /6pm to 10pm/);
+  assert.match(price, /10pm to 7am/);
+  assert.match(price, /Saturday after 1pm/);
+  assert.match(price, /paid before Callum sets off/);
+  assert.match(price, /emergency call-outs only/);
+  assert.doesNotMatch(price, /VAT|8am to 10pm|7am to 8am/i);
 });
 
 test("qualifications, refrigerant and the guarantee stay inside the site", () => {
@@ -42,12 +49,15 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
 
 test("paying by card is on completion, with no other method named", () => {
   const text = fixedReply("Can I pay by card?", business) || "";
-  assert.match(text, /Payment on completion\. Card payments accepted\./);
+  assert.match(text, /Booked weekday visits: Payment on completion\. Card payments accepted\. For emergency and same-day call-outs, the first hour is paid before Callum sets off/);
+  assert.match(text, /Small same-day jobs have no materials deposit/);
+  assert.equal(text.includes("£"), false);
   assert.equal(fixedReply("How do I pay?", business), text);
   assert.equal(fixedReply("Do you take cards?", business), text);
+  assert.equal(fixedReply("Do you take a deposit?", business), text);
   assert.doesNotMatch(text, /sumup|cash|bank transfer/i);
   assert.match(fixedReply("Can I get a quote?", business) || "", /your name/);
-  assert.match(fixedReply("How much is a new tap?", business) || "", /isn't a price list/);
+  assert.match(fixedReply("How much is a new tap?", business) || "", /£60/);
 });
 
 test("fixed replies have no dash characters and no addresses", () => {
