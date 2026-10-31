@@ -199,6 +199,12 @@ html.menu-open { overflow: hidden; }
 .todo { margin-top: var(--sc-5); padding: 0.8rem 1rem; border-radius: 8px; background: #fff4d6; color: #3b2c00; border: 1.5px dashed #b88a00; font-size: var(--sc-t-sm); max-width: 62ch; }
 .todo code { font-size: 0.95em; }
 .reviews-list:empty { display: none; }
+.reviews-list { display: grid; grid-template-columns: minmax(0, 40rem); margin-top: 1.4rem; }
+.review { margin: 0; padding: 1.25rem 1.35rem 1.15rem; background: #fff; color: var(--paper-ink); border-radius: calc(var(--r) + 4px); box-shadow: var(--sc-e2); }
+.review p { margin: 0.7rem 0 0; max-width: 58ch; }
+.review__stars { margin: 0; color: var(--copper-deep); letter-spacing: 0.14em; font-size: 1.05rem; line-height: 1; }
+.review__who { margin-top: 0.95rem; color: var(--paper-soft); font-size: var(--sc-t-sm); }
+.reviews__links { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-top: 1.25rem; }
 
 /* --------------------------------------------------------------- form */
 .form { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
