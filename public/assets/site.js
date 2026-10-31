@@ -3,7 +3,7 @@
    and the footer, and to show the home page Reviews section. The page file stays at
    public/reviews/index.html either way. When you turn it on, add the reviews address
    back to public/sitemap.xml as well. */
-var SHOW_REVIEWS = false;
+var SHOW_REVIEWS = true;
 
 (function () {
   var cfg = window.LYME || {};
@@ -49,7 +49,7 @@ var SHOW_REVIEWS = false;
           section.id = "reviews";
           section.className = "ground-light-2 section";
           section.setAttribute("aria-labelledby", "rev-h");
-          section.innerHTML = '<div class="wrap reviews swipe"><h2 id="rev-h" class="h2">Reviews</h2><p class="lede">I\'m building my reviews up. If I\'ve done a job for you, I\'d appreciate a Google review.</p></div>';
+          section.innerHTML = '<div class="wrap reviews"><h2 id="rev-h" class="h2">Reviews</h2><div class="reviews-list"><blockquote class="review"><p class="review__stars" aria-label="5 stars"><span aria-hidden="true">★★★★★</span></p><p>5 * service<br>Callum is always quick to respond and is very professional, friendly. No job to small/too big, he is always happy to help, highly recommend .</p><p class="review__who">Louise K. Google review.</p></blockquote></div><p class="reviews__links"><a class="more" href="https://www.google.com/maps?cid=18273910283615300956">Read our reviews on Google</a><a class="more" href="https://g.page/r/CVxtP2iV-Jn9EBM/review">Leave a review</a></p></div>';
           close.before(section);
         }
       }

@@ -250,7 +250,7 @@ export function scrubPrices(text: string, allowed: readonly string[], standIn: s
   const phrases = [...allowed].filter(Boolean).sort((a, b) => b.length - a.length);
   for (const phrase of phrases) {
     const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const exact = new RegExp(`${escaped}(?![\\d,.])`, "g");
+    const exact = new RegExp(`${escaped}(?!\\d|,\\d|\\.\\d)`, "g");
     safe = safe.replace(exact, (match) => {
       const index = slots.push(match) - 1;
       return `\u0000${index}\u0000`;
