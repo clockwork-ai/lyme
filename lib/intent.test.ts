@@ -12,7 +12,8 @@ test("a leak tells them to turn the stop tap off and ring", () => {
 
 test("a boiler question is declined", () => {
   const text = fixedReply("Do you do boilers?", business);
-  assert.match(text || "", /Gas Safe/);
+  assert.match(text || "", /gas engineer/);
+  assert.doesNotMatch(text || "", /Gas Safe/);
   assert.match(text || "", /doesn't do boiler or gas work/i);
   assert.equal(fixedReply("Do you do boilers?", business) === business.fixed.emergency, false);
 });
@@ -20,7 +21,8 @@ test("a boiler question is declined", () => {
 test("water from the boiler still says turn the stop tap off", () => {
   const text = fixedReply("My boiler is leaking", business);
   assert.match(text || "", /stop tap/i);
-  assert.match(text || "", /Gas Safe/);
+  assert.match(text || "", /gas engineer/);
+  assert.doesNotMatch(text || "", /Gas Safe/);
 });
 
 test("a quote opens the form, and a price is the published call-out rate", () => {
@@ -38,7 +40,10 @@ test("a quote opens the form, and a price is the published call-out rate", () =>
 });
 
 test("qualifications, refrigerant and the guarantee stay inside the site", () => {
-  assert.match(fixedReply("Are you Gas Safe?", business) || "", /doesn't list Gas Safe/);
+  const gas = fixedReply("Are you Gas Safe?", business) || "";
+  assert.match(gas, /doesn't list that/);
+  assert.match(gas, /gas engineer/);
+  assert.doesNotMatch(gas, /Gas Safe/);
   assert.equal((fixedReply("Are you Gas Safe?", business) || "").includes("BPEC"), false);
   assert.match(fixedReply("What qualifications do you have?", business) || "", /City & Guilds qualified/);
   assert.match(fixedReply("What qualifications do you have?", business) || "", /BPEC Level 3 Award/);
