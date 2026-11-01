@@ -33,7 +33,7 @@ test("every page says payment is on completion and cards are accepted", () => {
     assert.equal(footer.includes(line), true, file);
     assert.equal(footer.includes(deposit), true, file);
     assert.equal(footer.includes(before), true, file);
-    assert.equal(footer.includes("Booked weekday visits: " + line), true, file);
+    assert.equal(footer.includes("Booked weekday and Saturday morning visits: " + line), true, file);
     assert.equal(footer.includes('class="pay__next"'), true, file);
     assert.equal(footer.includes("£"), false, file);
     assert.equal(footer.includes(icon), true, file);
@@ -62,7 +62,7 @@ test("the note sits with the quote buttons and the payment line", () => {
   const about = readFileSync("public/about/index.html", "utf8");
   assert.equal(slice(about, "cta-band", "</section>").includes(line), true);
 
-  assert.match(business.knowledge, /Booked weekday visits: Payment on completion\. Card payments accepted\. For emergency and same-day call-outs, the first hour is paid before he sets off/);
+  assert.match(business.knowledge, /Booked weekday and Saturday morning visits: Payment on completion\. Card payments accepted\. For emergency and same-day call-outs, the first hour is paid before he sets off/);
   assert.match(business.fixed.payment, /Small same-day jobs have no materials deposit/);
   assert.match(business.fixed.payment, /paid before Callum sets off/);
   assert.doesNotMatch(business.knowledge, /sumup|cash|bank transfer/i);

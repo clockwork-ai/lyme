@@ -35,8 +35,10 @@ test("a quote opens the form, and a price is the published call-out rate", () =>
   assert.match(price, /10pm to 7am/);
   assert.match(price, /Saturday after 1pm/);
   assert.match(price, /paid before Callum sets off/);
-  assert.match(price, /emergency call-outs only/);
-  assert.doesNotMatch(price, /VAT|8am to 10pm|7am to 8am/i);
+  assert.match(price, /Sunday emergencies are 8am to 10pm only/);
+  assert.match(price, /Saturday morning/);
+  assert.match(price, /Materials are extra/);
+  assert.doesNotMatch(price, /VAT|7am to 8am/i);
 });
 
 test("qualifications, refrigerant and the guarantee stay inside the site", () => {
@@ -54,7 +56,7 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
 
 test("paying by card is on completion, with no other method named", () => {
   const text = fixedReply("Can I pay by card?", business) || "";
-  assert.match(text, /Booked weekday visits: Payment on completion\. Card payments accepted\. For emergency and same-day call-outs, the first hour is paid before Callum sets off/);
+  assert.match(text, /Booked weekday and Saturday morning visits: Payment on completion\. Card payments accepted\. For emergency and same-day call-outs, the first hour is paid before Callum sets off/);
   assert.match(text, /Small same-day jobs have no materials deposit/);
   assert.equal(text.includes("£"), false);
   assert.equal(fixedReply("How do I pay?", business), text);

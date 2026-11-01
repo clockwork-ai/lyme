@@ -15,7 +15,7 @@ function htmlFiles(dir: string): string[] {
 const pages = htmlFiles("public");
 
 const banned =
-  /[\u2013\u2014]|\b(MCS|F-gas|Benchmark|NICEIC|accredited|certified|approved installer)\b|\bG3\b|plus VAT|inc VAT|including VAT|excluding VAT|\bVAT\b|8am to 10pm|7am to 8am|Monday to Saturday|Timmins|GasXpress|Checkatrade|JustFix/i;
+  /[\u2013\u2014]|\b(MCS|F-gas|Benchmark|NICEIC|accredited|certified|approved installer)\b|\bG3\b|plus VAT|inc VAT|including VAT|excluding VAT|\bVAT\b|7am to 8am|Monday to Saturday|Timmins|GasXpress|Checkatrade|JustFix|Gas Safe/i;
 
 function slice(html: string, start: string, end: string): string {
   const from = html.indexOf(start);
@@ -35,8 +35,9 @@ test("published pages keep the call-out rates and leave the open points out", ()
   assert.match(callout, /6pm to 10pm/);
   assert.match(callout, /10pm to 7am/);
   assert.match(callout, /Saturday after 1pm counts as the weekend/);
-  assert.match(callout, /at this rate at any hour/);
-  assert.match(callout, /Sunday is emergency call-outs only/);
+  assert.match(callout, /Sunday emergencies are 8am to 10pm only/);
+  assert.match(callout, /Saturday morning/);
+  assert.match(callout, /Materials are extra/);
   assert.match(callout, /Bank holidays are this rate too/);
   assert.match(callout, /paid before I set off/);
   assert.match(callout, /first hour is charged/);
@@ -69,7 +70,7 @@ test("published pages keep the call-out rates and leave the open points out", ()
   assert.match(cost, /£135/);
   assert.match(cost, /6pm to 10pm/);
   assert.match(cost, /10pm to 7am/);
-  assert.match(cost, /Sunday is emergency call-outs only/);
+  assert.match(cost, /Sunday emergencies are 8am to 10pm only/);
   assert.match(cost, /paid before I set off/);
   assert.match(cost, /first hour is charged/);
   assert.doesNotMatch(cost, banned);
@@ -103,20 +104,24 @@ test("the chat may repeat only the published rates", () => {
   assert.deepEqual(business.allowedPrices, ["£135", "£90", "£60"]);
   assert.match(business.knowledge, /£60/);
   assert.match(business.knowledge, /£135/);
-  assert.match(business.knowledge, /Sunday, emergency call-outs only/);
+  assert.match(business.knowledge, /Sunday, emergencies only, 8am to 10pm/);
   assert.match(business.knowledge, /6pm to 10pm/);
   assert.match(business.knowledge, /10pm to 7am/);
   assert.match(business.knowledge, /Saturday after 1pm counts as the weekend/);
-  assert.match(business.knowledge, /at that rate at any hour/);
+  assert.match(business.knowledge, /Sunday emergencies are 8am to 10pm only/);
+  assert.match(business.knowledge, /Saturday morning/);
+  assert.match(business.knowledge, /Materials are extra/);
   assert.match(business.knowledge, /paid before he sets off/);
   assert.match(business.knowledge, /first hour is charged/);
   assert.match(business.knowledge, /does not fit parts the customer has bought/);
   assert.match(business.knowledge, /does not fit a radiator the customer has bought/);
   assert.doesNotMatch(business.knowledge, /Sunday, closed/);
-  assert.doesNotMatch(business.knowledge, /plus VAT|inc VAT|\bVAT\b|8am to 10pm|7am to 8am/);
+  assert.doesNotMatch(business.knowledge, /plus VAT|inc VAT|\bVAT\b|7am to 8am/);
   assert.match(business.fixed.payment, /paid before Callum sets off/);
-  assert.match(business.fixed.payment, /Booked weekday visits: Payment on completion\. Card payments accepted\./);
-  assert.doesNotMatch(business.fixed.price, /[\u2013\u2014]|VAT|8am to 10pm/);
+  assert.match(business.fixed.payment, /Booked weekday and Saturday morning visits: Payment on completion\. Card payments accepted\./);
+  assert.match(business.fixed.price, /Sunday emergencies are 8am to 10pm only/);
+  assert.match(business.fixed.price, /Materials are extra/);
+  assert.doesNotMatch(business.fixed.price, /[\u2013\u2014]|VAT|7am to 8am/);
   const kept = scrubPrices(
     "A booked visit is £60 for the first hour. Same-day is £90, including the first hour. An evening is £135. A bathroom is £2,400.",
     business.allowedPrices,
