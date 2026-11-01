@@ -55,7 +55,8 @@ test("a boiler question is a polite no", async () => {
   resetRateLimits();
   const response = await handleChat(post({ messages: [{ role: "user", content: "Do you do boilers?" }] }), env());
   const text = await response.text();
-  assert.match(text, /Gas Safe/);
+  assert.match(text, /gas engineer/);
+  assert.doesNotMatch(text, /Gas Safe/);
   assert.equal(text.includes("£"), false);
 });
 

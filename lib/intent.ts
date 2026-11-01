@@ -7,7 +7,9 @@ const BOILER = /\b(boilers?|combi|gas fire|gas hob|gas cooker|gas leak|gas work)
 const REFRIGERANT = /\b(refrigerants?|f-?gas|regas|re-gas|gas charge)\b/i;
 const GUARANTEE = /\b(guarantee|warranty|handover|service reminders?)\b/i;
 const REVIEWS = /\b(reviews?|testimonials?|star ratings?|rated)\b/i;
-const PRICE = /\b(how much|what(?:'s| is) the (?:price|cost)|price list|what do you charge|how much do you charge)\b|£\s?\d/i;
+const PRICE =
+  /\b(how much|what(?:'s| is) the (?:price|cost|charge|rate|fee)|price list|call-?out|hourly rate|what do you charge|how (?:do|does) (?:you|he|callum) charge)\b|£\s?\d/i;
+const DEPOSIT = /\bdeposits?\b/i;
 const QUOTE = /\b(get a quote|quote for|want a quote|like a quote|can i get a quote)\b/i;
 const PAYMENT =
   /\b(how (?:do|can) (?:i|we) pay|card payments?|pay(?:ing)? by card|pay with (?:a )?card|take cards?|accept cards?|cards? accepted|debit cards?|credit cards?)\b/i;
@@ -31,6 +33,7 @@ export function fixedReply(text: string, config: BusinessConfig): string | null 
   if (boiler || /\bgas safe\b/i.test(text)) return config.fixed.boiler;
   if (GUARANTEE.test(text)) return config.fixed.guarantee;
   if (REVIEWS.test(text)) return config.fixed.reviews;
+  if (DEPOSIT.test(text)) return config.fixed.payment;
   if (PRICE.test(text)) return config.fixed.price;
   if (QUOTE.test(text)) return config.fixed.quote;
   if (PAYMENT.test(text)) return config.fixed.payment;

@@ -86,7 +86,9 @@ test("the chat names that qualification and still refuses the ones not listed", 
   assert.equal(city.includes("NVQ"), false);
 
   const gasSafe = fixedReply("Are you Gas Safe?", business) || "";
-  assert.match(gasSafe, /doesn't list Gas Safe/);
+  assert.match(gasSafe, /doesn't list that/);
+  assert.match(gasSafe, /gas engineer/);
+  assert.doesNotMatch(gasSafe, /Gas Safe/);
   assert.equal(gasSafe.includes("BPEC"), false);
   assert.match(fixedReply("Are you insured?", business) || "", /doesn't list/);
   assert.match(fixedReply("Is he MCS registered?", business) || "", /doesn't list/);

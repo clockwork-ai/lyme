@@ -108,12 +108,19 @@ test("the quote error page carries the same snippet and does not count as succes
   assert.equal(quoteEventFromRecord(quoteRecord("/contact/"), "/api/quote"), null);
 });
 
-test("Sunday midnight is not listed as opening hours", () => {
-  const sunday = /"dayOfWeek": "Sunday"[\s\S]{0,80}"opens": "00:00"/;
+test("opening hours are 7am, with Sunday emergencies 8am to 10pm", () => {
+  const midnight = /"dayOfWeek": "Sunday"[\s\S]{0,120}"opens": "00:00"/;
   for (const file of pages) {
     const html = readFileSync(file, "utf8");
-    assert.equal(sunday.test(html), false, file);
-    assert.match(html, /Sunday, closed/);
-    assert.match(html, /"dayOfWeek": "Saturday"[\s\S]{0,40}"opens": "08:00"/);
+    assert.equal(midnight.test(html), false, file);
+    assert.equal(html.includes("Sunday, closed"), false, file);
+    assert.equal(html.includes("8am to 6pm"), false, file);
+    assert.match(html, /Sunday, emergencies only, 8am to 10pm/);
+    assert.match(html, /"dayOfWeek": "Sunday"[\s\S]{0,80}"opens": "08:00"/);
+    assert.match(html, /"closes": "22:00"/);
+    assert.match(html, /"dayOfWeek": \["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"\][\s\S]{0,40}"opens": "07:00"/);
+    assert.match(html, /"dayOfWeek": "Saturday"[\s\S]{0,40}"opens": "07:00"/);
+    assert.match(html, /"closes": "13:00"/);
+    assert.match(html, /"closes": "18:00"/);
   }
 });
