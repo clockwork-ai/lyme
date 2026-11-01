@@ -168,6 +168,8 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
     "/projects/alderley-edge/",
     "/projects/alderley-edge-maintenance/",
     "/reviews/",
+    "/guides/",
+    "/guides/radiators-cold-top-or-bottom/",
     "/services/",
     "/services/bathrooms/",
     "/services/emergency-plumber/",

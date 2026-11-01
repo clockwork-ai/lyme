@@ -133,3 +133,31 @@ test("the chat may repeat only the published rates", () => {
   assert.match(kept, /a price Callum gives after he has seen the job/);
   assert.equal(kept.includes("£2,400"), false);
 });
+
+test("the radiator guide uses the approved copy", () => {
+  const guide = readFileSync("public/guides/radiators-cold-top-or-bottom/index.html", "utf8");
+  assert.match(guide, /<title>Radiator Cold at Top or Bottom\? What to Do \| Lyme<\/title>/);
+  assert.match(guide, /Radiator cold at the top, bottom or middle\? How to bleed it, when it needs a flush or balancing, and when to call a plumber\. From Callum in High Lane\./);
+  assert.match(guide, /Radiators cold at the top or the bottom: bleeding, balancing or something else\?/);
+  assert.match(guide, /City &amp; Guilds qualified plumber/);
+  assert.match(guide, /BPEC Level 3 heat pump qualified/);
+  assert.match(guide, /A booked visit is £60 for the first hour, with no call-out fee\. Bigger jobs get a free quote\./);
+  assert.match(guide, /"@type": "Article"/);
+  assert.match(guide, /"@type": "FAQPage"/);
+  assert.match(guide, /Why is my radiator cold at the top but hot at the bottom\?/);
+  assert.match(guide, /Do heat pump radiators feel cooler than boiler radiators\?/);
+  assert.match(guide, /href="\.\.\/\.\.\/services\/heating-faults\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/services\/radiators\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/services\/heat-pumps\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/services\/heating-controls\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/areas\/stockport\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/areas\/high-lane\/"/);
+  assert.match(guide, /href="\.\.\/\.\.\/contact\/"/);
+  assert.doesNotMatch(guide, /[\u2013\u2014]/);
+  assert.equal(guide.includes("Gas Safe"), false);
+  const index = readFileSync("public/guides/index.html", "utf8");
+  assert.match(index, /href="\.\.\/guides\/radiators-cold-top-or-bottom\/"/);
+  const home = readFileSync("public/index.html", "utf8");
+  assert.match(home, /<a href="guides\/">Guides<\/a>/);
+  assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/guides/radiators-cold-top-or-bottom/"), true);
+});
