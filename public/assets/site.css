@@ -204,6 +204,12 @@ html.menu-open { overflow: hidden; }
 .review p { margin: 0.7rem 0 0; max-width: 58ch; }
 .review__stars { margin: 0; color: var(--copper-deep); letter-spacing: 0.14em; font-size: 1.05rem; line-height: 1; }
 .review__who { margin-top: 0.95rem; color: var(--paper-soft); font-size: var(--sc-t-sm); }
+/* Live reviews block: the host page's own colours feed the card. Space is reserved so nothing jumps
+   when the cards arrive; the static review stays in place until then, and if they never arrive. */
+.reviews-live { --reviews-ink: var(--paper-ink); --reviews-muted: var(--paper-soft); --reviews-accent: var(--copper-deep); --reviews-card-bg: #fff; --reviews-card-ink: var(--paper-ink); --reviews-radius: calc(var(--r) + 4px); --reviews-shadow: var(--sc-e2); --reviews-attr: #5e5e5e; margin-top: 1.4rem; min-height: 15rem; }
+.reviews-live .reviews-list { margin-top: 0; }
+.reviews-live[data-reviews-state="loading"] .review { opacity: 0.55; transition: opacity 200ms; }
+@media (min-width: 48rem) { .reviews-live { min-height: 13rem; } }
 .reviews__links { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-top: 1.25rem; }
 
 /* --------------------------------------------------------------- form */

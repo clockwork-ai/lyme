@@ -24,6 +24,12 @@ run_worker_first = [ "/api/*" ]
 name = "EMAIL"
 destination_address = "lymeplumbingandheating@gmail.com"
 
+# Live Google reviews. The Worker answers /api/reviews/lyme on this site's own address and asks
+# this service for the data, so visitors only ever talk to lymeplumbing.co.uk. Not a secret.
+# Until the reviews service is live, the route answers 503 and the pages keep their static review.
+[vars]
+REVIEWS_UPSTREAM = "https://clockwork-ai-jobflow.vercel.app"
+
 # Workers AI. No API key. The binding name is AI, which the chat route reads.
 # If this binding is missing, Ask Lyme stays hidden.
 [ai]
