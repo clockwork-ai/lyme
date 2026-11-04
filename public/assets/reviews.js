@@ -24,6 +24,7 @@
     ".rv__note{margin:0;color:var(--reviews-muted,inherit);opacity:.85}" +
     ".rv__attr{font-family:Roboto,Arial,sans-serif;font-weight:400;font-size:13px;color:var(--reviews-attr,#5e5e5e);white-space:nowrap}" +
     ".rv__all{font-weight:600;color:inherit}" +
+    ".rv__name,.rv__link,.rv__all{display:inline-block;padding:.65rem 0;margin:-.65rem 0}.rv__link{margin-top:.05rem}" +
     ".rv__example{margin:0 0 .8rem;padding:.5rem .8rem;border-radius:8px;background:#fff3cd;color:#5c4400;font-size:.9em}";
 
   function esc(s) {

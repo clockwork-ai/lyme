@@ -210,6 +210,8 @@ html.menu-open { overflow: hidden; }
 .reviews-live .reviews-list { margin-top: 0; }
 .reviews-live[data-reviews-state="loading"] .review { opacity: 0.55; transition: opacity 200ms; }
 @media (min-width: 48rem) { .reviews-live { min-height: 13rem; } }
+.reviews__links .more, .foot__links a { display: inline-flex; align-items: center; min-height: 44px; }
+.bar__right .btn { min-height: 44px; }
 .reviews__links { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin-top: 1.25rem; }
 
 /* --------------------------------------------------------------- form */
