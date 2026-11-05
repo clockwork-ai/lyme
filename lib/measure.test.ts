@@ -25,7 +25,8 @@ function htmlFiles(dir: string): string[] {
   });
 }
 
-const pages = htmlFiles("public");
+// /photo-frame/ is a private on-phone tool, not a public page.
+const pages = htmlFiles("public").filter((file) => !file.includes("/photo-frame/"));
 const snippet = headSnippet();
 const exactSnippet = `<!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-koUHcizG62rO_S0gqTqbm.js"></script>

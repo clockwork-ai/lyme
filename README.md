@@ -98,6 +98,10 @@ A click on Call, Email or Text does not wait for Plausible. A quote is counted o
 
 Paths to CSS, scripts and other pages are relative. Serve the `public/` folder for a root-domain preview of the pages. The quote form itself only works through `npx wrangler dev` or the deployed Worker, because `POST /api/quote` is handled by `src/worker.js`.
 
+## Photo frame
+
+`/photo-frame/` is a private page for stamping job photos on Callum's phone before a Facebook or Instagram post. It is not in the menu, not in the sitemap, and disallowed in `robots.txt`. The page is `noindex`. Photos are framed in the browser. Nothing is uploaded, and the framed copy does not keep the camera location. Share and Save stay off until he ticks that the photos show no house numbers, car number plates or faces. The town line is optional and is town only.
+
 ## Fonts
 
 Archivo and Geist are in `public/assets/fonts/`. The site does not call Google Fonts.

@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /photo-frame/
 
 Sitemap: https://lymeplumbing.co.uk/sitemap.xml
