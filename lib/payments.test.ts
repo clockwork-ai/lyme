@@ -25,7 +25,8 @@ function slice(html: string, start: string, end: string): string {
 }
 
 test("every page says payment is on completion and cards are accepted", () => {
-  const pages = files("public");
+  // /photo-frame/ is a private on-phone tool, not a public page.
+  const pages = files("public").filter((file) => !file.includes("/photo-frame/"));
   assert.equal(pages.length > 30, true);
   for (const file of pages) {
     const html = readFileSync(file, "utf8");
