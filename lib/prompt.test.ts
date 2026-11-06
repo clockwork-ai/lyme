@@ -13,6 +13,10 @@ test("the model is not handed a web address or a page path", () => {
   assert.match(text, /the plumbing page/);
   assert.match(text, /Never write a URL/);
   assert.match(text, /07846 729203/);
+  assert.match(text, /WhatsApp/);
+  assert.doesNotMatch(text, /wa\.me/);
+  assert.doesNotMatch(text, /07359/);
+  assert.doesNotMatch(text, /07985/);
   assert.doesNotMatch(text, /[\u2013\u2014]/);
 });
 
@@ -24,4 +28,10 @@ test("the public widget config stays free of the prompt", () => {
   assert.equal("rules" in widget, false);
   assert.equal("knowledge" in widget, false);
   assert.equal("fixed" in widget, false);
+  assert.equal(widget.phone, "07846 729203");
+  assert.equal(widget.phoneHref, "tel:+447846729203");
+  assert.equal(
+    widget.whatsAppHref,
+    "https://wa.me/447359838866?text=Hi%20Callum%2C%20I%20found%20you%20online.%20The%20job%20is%3A%20",
+  );
 });

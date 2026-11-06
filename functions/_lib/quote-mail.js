@@ -277,6 +277,7 @@ ${headSnippet()}
     <div class="cta-row">
       <a class="btn btn--call" href="tel:+447846729203">Call 07846 729203</a>
       <a class="btn btn--ghost" href="sms:+447846729203">Text</a>
+      <a class="btn btn--wa" href="https://wa.me/447359838866?text=Hi%20Callum%2C%20I%20found%20you%20online.%20The%20job%20is%3A%20">WhatsApp</a>
       <a class="btn btn--quote" href="/contact/">Back to the form</a>
     </div>
   </div>

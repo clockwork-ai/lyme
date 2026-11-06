@@ -16,7 +16,7 @@ export function buildInstructions(config: BusinessConfig, page?: string): string
       "Say the form asks for their name, phone, postcode and what is happening. Do not ask them to type all of that in the chat.",
       "Do not say Callum has their details. The form emails him when they send it.",
       "If they are only asking a question, answer it. Do not demand their details first.",
-      `Phone: ${config.links.phone}. You may write that number. Do not write a web address.`,
+      `Phone: ${config.links.phone}. You may write that number. Do not write a web address. WhatsApp is a button, not a second number you write out.`,
     ].join(" "),
     priceInstruction(config),
   ].join("\n\n");
@@ -49,6 +49,7 @@ export function publicWidget(config: BusinessConfig) {
     quoteLabel: config.links.quoteLabel,
     phoneHref: config.links.phoneHref,
     phone: config.links.phone,
+    whatsAppHref: config.links.whatsAppHref,
     nudge: config.nudge,
   };
 }

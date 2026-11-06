@@ -44,6 +44,7 @@
         <button class="cw-send" type="submit">Send</button>
       </form>
       <div class="cw-more">
+        <a class="cw-wa" href="https://wa.me/447359838866?text=Hi%20Callum%2C%20I%20found%20you%20online.%20The%20job%20is%3A%20">WhatsApp</a>
         <button class="cw-details" type="button" aria-expanded="false">Get a quote</button>
       </div>
     </section>
@@ -58,6 +59,7 @@
   const log = root.querySelector(".cw-log");
   const chips = root.querySelector(".cw-chips");
   const details = root.querySelector(".cw-details");
+  const whatsAppLink = root.querySelector(".cw-wa");
   const form = root.querySelector(".cw-form");
   const composer = root.querySelector(".cw-composer");
   const input = root.querySelector(".cw-input");
@@ -129,6 +131,10 @@
     return (config && config.phoneHref) || "tel:+447846729203";
   }
 
+  function whatsAppHref() {
+    return (config && config.whatsAppHref) || "https://wa.me/447359838866?text=Hi%20Callum%2C%20I%20found%20you%20online.%20The%20job%20is%3A%20";
+  }
+
   function actionsFor(text) {
     const actions = [];
     if (/get a quote|use the form|quote form/i.test(text)) actions.push({ label: "Get a quote", quote: true });
@@ -136,6 +142,7 @@
     if (String(text).replace(/\s+/g, "").includes(phone) || /\+447846729203/.test(String(text).replace(/\s+/g, ""))) {
       actions.push({ label: "Call", href: phoneHref() });
     }
+    if (/\bwhatsapp\b/i.test(text)) actions.push({ label: "WhatsApp", href: whatsAppHref() });
     return actions;
   }
 
@@ -166,8 +173,8 @@
         return;
       }
       const link = document.createElement("a");
-      link.className = "cw-action";
-      link.href = safeHref(action.href, phoneHref());
+      link.className = action.label === "WhatsApp" ? "cw-action cw-action--wa" : "cw-action";
+      link.href = safeHref(action.href, action.label === "WhatsApp" ? whatsAppHref() : phoneHref());
       link.textContent = action.label;
       row.appendChild(link);
     });
@@ -216,6 +223,7 @@
     form.querySelector("button").textContent = next.formSubmit || "Send to Callum";
     formTitle.textContent = next.formTitle || "Get a quote";
     details.textContent = next.quoteLabel || "Get a quote";
+    if (whatsAppLink) whatsAppLink.href = whatsAppHref();
     fillSelect(job, next.jobs, "Which job?");
     fillSelect(bestTime, next.times && next.times.length ? next.times : ["Any time", "Morning", "Afternoon", "Evening"]);
     if (next.nudge && next.nudge.text) nudgeOpen.textContent = next.nudge.text;

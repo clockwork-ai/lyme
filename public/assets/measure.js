@@ -65,6 +65,7 @@ export function clickEventName(href) {
   if (value.startsWith("tel:")) return "Phone Call";
   if (value.startsWith("mailto:")) return "Email Click";
   if (value.startsWith("sms:")) return "Text Click";
+  if (value.startsWith("https://wa.me/") || value.startsWith("http://wa.me/")) return "WhatsApp Click";
   return "";
 }
 

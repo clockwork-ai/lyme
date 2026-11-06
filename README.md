@@ -1,6 +1,6 @@
 # Lyme Plumbing & Heating
 
-Static site for Callum Broadfoot, sole trader, based in High Lane (SK6). Phone 07846 729203.
+Static site for Callum Broadfoot, sole trader, based in High Lane (SK6). Phone 07846 729203. WhatsApp is a separate chat: https://wa.me/447359838866.
 
 The public site is [https://lymeplumbing.co.uk](https://lymeplumbing.co.uk). Page addresses have no `.html`. Canonical links, Open Graph URLs, the sitemap and the business schema all use that domain.
 
@@ -61,7 +61,7 @@ The home page trust strip and the heat pump page wording live in `lib/qualificat
 
 Reviews are on. `SHOW_REVIEWS` at the top of `public/assets/site.js` is true, so the nav, menu and footer link to `/reviews/`, and the home page has a Reviews section. The only published review is Louise K. on Google, word for word. Set the flag to false, and take the reviews address out of `public/sitemap.xml`, to hide it again.
 
-The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote and Call. There is no WhatsApp link on the site, so the chat does not offer one.
+The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote, Call and, when the reply mentions it, WhatsApp. The chat panel also has a WhatsApp button. That opens https://wa.me/447359838866. It is not the call or text number. The call and text number stays 07846 729203.
 
 ### How a reply is written
 
@@ -90,6 +90,7 @@ Page views load from that script in the `<head>`. Custom events use `window.plau
 | Phone Call | A `tel:` link is clicked | `page`, `location` (header, menu, call bar, banner, and so on), `button` |
 | Email Click | A `mailto:` link is clicked | same |
 | Text Click | An `sms:` link is clicked | same |
+| WhatsApp Click | A `wa.me` link is clicked | same |
 | Quote Request | The contact form is accepted and the thanks page opens, or the chat quote form gets a thanks response | `page`, `location` (`quote form` or `chat`) |
 
 A click on Call, Email or Text does not wait for Plausible. A quote is counted only after a real success, not when the button is pressed and not when the form is rejected. The script may also record outbound links and file downloads on its own.

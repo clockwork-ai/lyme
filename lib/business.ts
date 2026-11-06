@@ -25,6 +25,8 @@ export type BusinessConfig = {
     quoteLabel: string;
     phone: string;
     phoneHref: string;
+    /** Direct WhatsApp chat. Separate from the call and text number. */
+    whatsAppHref: string;
     email: string;
     hosts: string[];
   };
@@ -67,6 +69,8 @@ export type BusinessConfig = {
 };
 
 const phone = "07846 729203";
+const whatsAppHref =
+  "https://wa.me/447359838866?text=" + encodeURIComponent("Hi Callum, I found you online. The job is: ");
 
 export const business: BusinessConfig = {
   name: "Lyme Plumbing & Heating",
@@ -82,7 +86,7 @@ export const business: BusinessConfig = {
     "No gas or boiler work. Say so politely and suggest a gas engineer. Do not name a gas registration scheme. That includes work inside the boiler, taking a gas boiler off the wall, and a gas hob, fire or cooker. No refrigerant work, no regas and no F-gas work. Heat pump help is the water side only: pipework, cylinder, radiators or underfloor heating, and controls.",
     "Emergencies where water is leaking: tell them to turn the water off at the stop tap, keep the water away from sockets and lights, and ring Callum straight away. For a leak, ring rather than use the form.",
     "The site does not describe a 12 month labour guarantee or a handover pack with service reminders. If they ask, say that is not written on the site and Callum can talk it through when he quotes. Do not invent either.",
-    "There is no WhatsApp link on the site. Do not offer WhatsApp. They can call or text the phone number, or use Get a quote.",
+    "WhatsApp is a button on the site, separate from calls and texts. If they ask for WhatsApp, tell them to tap WhatsApp. Do not write a web address. Do not give a second phone number. The only phone number you may write is " + phone + ", and that number is for calls and texts.",
     "Do not claim a lead was sent. The quote form emails Callum. You may say it is with him only after they have sent that form.",
     "Never use an em dash or an en dash. Use a full stop, a comma or a colon. Write a range with the word to.",
     "Never write a URL, a domain or a page path. Do not write a web address or a file name. Do not say you cannot give an address or that you cannot paste a link. Name the destination in words: Get a quote, or a call. You may write the phone number " + phone + ". You may write the email callum@lymeplumbing.co.uk.",
@@ -120,7 +124,7 @@ What he does not do. Boiler or gas work. Refrigerant work. He does not advertise
 
 Reviews. The only written review on the site is from Louise K. on Google, 5 stars. Copy it exactly, including the space before the last full stop: 5 * service. Callum is always quick to respond and is very professional, friendly. No job to small/too big, he is always happy to help, highly recommend . Do not change those words and do not add another review. There is no review count and no average rating. People can read the reviews on Google. If he has done a job for someone, he would appreciate a Google review. Do not offer anything in return.
 
-Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a quote. The form asks for name, phone, email if they want, postcode, which job, what is happening, optional photos, the best time to call, and a tick to say he can contact them. A photo helps him quote. For a leak, ring rather than send the form.
+Contact. Ring or text ${phone}, tap WhatsApp, email callum@lymeplumbing.co.uk, or use Get a quote. WhatsApp is not the call number. The form asks for name, phone, email if they want, postcode, which job, what is happening, optional photos, the best time to call, and a tick to say he can contact them. A photo helps him quote. For a leak, ring rather than send the form.
 `.trim(),
   allowedPrices: ["£135", "£90", "£60"],
   priceStandIn: "a price Callum gives after he has seen the job",
@@ -129,6 +133,7 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
     quoteLabel: "Get a quote",
     phone,
     phoneHref: "tel:+447846729203",
+    whatsAppHref,
     email: "callum@lymeplumbing.co.uk",
     hosts: ["lymeplumbing.co.uk", "lymeplumbing.uk"],
   },
@@ -220,6 +225,6 @@ Contact. Ring or text ${phone}, email callum@lymeplumbing.co.uk, or use Get a qu
     payment:
       "Booked weekday and Saturday morning visits: Payment on completion. Card payments accepted. For emergency and same-day call-outs, the first hour is paid before Callum sets off, and the rest when the job's done. Card payments accepted. On a quoted job, a deposit equal to the materials is taken to book, and the balance is due on completion. Small same-day jobs have no materials deposit. Ring Callum on 07846 729203, or use Get a quote.",
     quote:
-      "Yes. Use the form for a quote. It asks for your name, phone, postcode and what's happening. Callum quotes after he has seen the job. You can also ring him on 07846 729203.",
+      "Yes. Use the form for a quote. It asks for your name, phone, postcode and what's happening. Callum quotes after he has seen the job. You can also ring him on 07846 729203, or tap WhatsApp.",
   },
 };

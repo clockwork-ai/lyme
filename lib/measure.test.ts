@@ -69,7 +69,8 @@ test("call, email and text clicks are named from the link, and quote success wai
   assert.equal(clickEventName("tel:+447846729203"), "Phone Call");
   assert.equal(clickEventName("mailto:callum@lymeplumbing.co.uk"), "Email Click");
   assert.equal(clickEventName("sms:+447846729203?&body=Hi"), "Text Click");
-  assert.equal(clickEventName("https://wa.me/447846729203"), "");
+  assert.equal(clickEventName("https://wa.me/447359838866"), "WhatsApp Click");
+  assert.equal(clickEventName("https://wa.me/447359838866?text=Hi%20Callum"), "WhatsApp Click");
   assert.equal(clickEventName("https://lymeplumbing.co.uk/contact/"), "");
   assert.equal(locationFromClassNames(["btn btn--call", "callbar"]), "call bar");
   assert.equal(locationFromClassNames(["bar__num", "bar__right", "bar"]), "header");
@@ -94,11 +95,23 @@ test("call, email and text clicks are named from the link, and quote success wai
   let mailto = 0;
   for (const file of pages) {
     const html = readFileSync(file, "utf8");
-    assert.equal(/whatsapp|wa\.me/i.test(html), false, file);
+    const waLinks = html.match(/https:\/\/wa\.me\/[^"'\s]*/g) || [];
+    assert.equal(waLinks.length > 0, true, file);
+    for (const link of waLinks) {
+      assert.match(link, /^https:\/\/wa\.me\/447359838866(?:\?|$)/, `${file} ${link}`);
+      assert.equal(/447846729203|447985379605|07846|07985|07359/.test(link), false, `${file} ${link}`);
+    }
+    assert.equal(html.includes("07359"), false, file);
+    assert.equal(html.includes("07985"), false, file);
+    assert.match(html, /07846 729203/, file);
+    const tels = html.match(/href="tel:[^"]*"/g) || [];
+    assert.equal(tels.length > 0, true, file);
+    for (const tel of tels) assert.equal(tel, 'href="tel:+447846729203"', `${file} ${tel}`);
     mailto += (html.match(/href="mailto:/g) || []).length;
-    assert.equal((html.match(/href="tel:/g) || []).length > 0, true, file);
   }
   assert.equal(mailto > 0, true);
+  assert.match(widget, /https:\/\/wa\.me\/447359838866/);
+  assert.equal(/wa\.me\/(?!447359838866)/.test(widget), false);
 });
 
 test("the quote error page carries the same snippet and does not count as success", () => {
@@ -107,6 +120,10 @@ test("the quote error page carries the same snippet and does not count as succes
   assert.match(html, /src="\/assets\/measure\.js"/);
   assert.equal(html.includes("google-site-verification"), false);
   assert.equal(quoteEventFromRecord(quoteRecord("/contact/"), "/api/quote"), null);
+  assert.match(html, /https:\/\/wa\.me\/447359838866/);
+  assert.match(html, /href="tel:\+447846729203"/);
+  assert.equal(html.includes("07359"), false);
+  assert.equal(html.includes("07985"), false);
 });
 
 test("opening hours are 7am, with Sunday emergencies 8am to 10pm", () => {
