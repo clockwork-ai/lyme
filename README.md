@@ -4,6 +4,14 @@ Static site for Callum Broadfoot, sole trader, based in High Lane (SK6). Phone 0
 
 The public site is [https://lymeplumbing.co.uk](https://lymeplumbing.co.uk). Page addresses have no `.html`. Canonical links, Open Graph URLs, the sitemap and the business schema all use that domain.
 
+## GitHub Pages
+
+Keep GitHub Pages unpublished on this repository. The customer site is the Cloudflare Worker `lyme-plumbing` at https://lymeplumbing.co.uk. DNS for that domain is on Cloudflare. https://clockwork-ai.github.io/lyme/ is unused.
+
+In repository Settings → Pages → Build and deployment, the source stays **None**. A branch source on `main` makes GitHub run the managed "pages build and deployment" workflow on every push to `main` and email when the deploy fails. The customer site stays on the Worker.
+
+`.github/workflows/unpublish-github-pages.yml` removes the Pages site when that file changes. Workers Builds keeps deploying the Worker.
+
 ## Cloudflare Workers
 
 Host this as a Worker with static assets, using Workers Builds (Git-connected). A Pages project cannot use the `send_email` binding.
