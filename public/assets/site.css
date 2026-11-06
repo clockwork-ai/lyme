@@ -67,6 +67,8 @@ a { text-underline-offset: 0.22em; }
 .btn--quote:hover { background: color-mix(in oklab, var(--sc-ink) 86%, var(--sc-accent)); }
 .btn--ghost { background: transparent; color: inherit; border-color: color-mix(in oklab, currentColor 45%, transparent); }
 .btn--ghost:hover { background: color-mix(in oklab, currentColor 9%, transparent); border-color: currentColor; }
+.btn--wa { background: #25d366; color: #06240f; box-shadow: var(--sc-e2), inset 0 1px 0 #ffffff40; }
+.btn--wa:hover { background: color-mix(in oklab, #25d366 88%, #fff); }
 .btn--sm { min-height: 2.6rem; padding: 0 0.95rem; font-size: var(--sc-t-sm); }
 .btn--xl { min-height: 3.6rem; font-size: var(--sc-t-lg); padding: 0 1.6rem; }
 .btn.is-placeholder { background: transparent; border: 1.5px dashed currentColor; color: inherit; opacity: 0.7; cursor: default; }
@@ -105,9 +107,12 @@ a { text-underline-offset: 0.22em; }
 .bar__nav a:hover { background: #ffffff10; color: #fff; }
 .bar__nav a[aria-current="page"] { color: #fff; box-shadow: inset 0 -2px 0 var(--copper); border-radius: 8px 8px 0 0; }
 .bar__right { display: flex; align-items: center; gap: 0.6rem; }
-.bar__num { display: inline-flex; align-items: center; gap: 0.45rem; color: #fff; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; padding: 0.4rem 0.5rem; border-radius: 8px; }
-.bar__num svg { width: 1rem; height: 1rem; color: var(--copper); }
-.bar__num:hover { background: #ffffff10; }
+.bar__num, .bar__wa { display: inline-flex; align-items: center; gap: 0.45rem; color: #fff; font-weight: 600; text-decoration: none; padding: 0.4rem 0.5rem; border-radius: 8px; white-space: nowrap; }
+.bar__num { font-variant-numeric: tabular-nums; }
+.bar__num svg, .bar__wa svg { width: 1rem; height: 1rem; }
+.bar__num svg { color: var(--copper); }
+.bar__wa svg { color: #25d366; }
+.bar__num:hover, .bar__wa:hover { background: #ffffff10; }
 .bar .btn--quote { background: var(--sc-ink); color: var(--sc-canvas); }
 .bar__menu { display: none; color: #fff; }
 
@@ -123,6 +128,7 @@ a { text-underline-offset: 0.22em; }
 .menu__ctas .btn { width: 100%; }
 .menu__ctas .btn--quote { background: var(--sc-ink); color: var(--sc-canvas); }
 .menu__ctas .btn--ghost { color: #fff; }
+.menu__ctas .btn--wa { color: #06240f; }
 html.menu-open { overflow: hidden; }
 
 /* ------------------------------------------------------- inner page head */
@@ -274,7 +280,7 @@ html.menu-open { overflow: hidden; }
 @media (max-width: 860px) {
   :root { --bar-h: 3.75rem; }
   .bar { gap: 0.6rem; }
-  .bar__num { display: none; }
+  .bar__num, .bar__wa { display: none; }
   .wordmark b { font-size: 1.25rem; }
   .wordmark span { font-size: 0.6rem; }
   .two { grid-template-columns: 1fr; }
@@ -290,12 +296,14 @@ html.menu-open { overflow: hidden; }
   .cta-row .cot summary { width: 100%; }
   .cot__pop { top: auto; bottom: calc(100% + 0.5rem); transform-origin: 0 100%; }
   .big-ctas .btn { flex: 1 1 100%; }
-  .callbar { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; position: fixed; inset: auto 0 0 0; z-index: 55; padding: 0.6rem var(--sc-gutter) calc(0.6rem + env(safe-area-inset-bottom)); background: #0b151cf2; border-top: 1px solid #ffffff1a; color: #fff;
+  .callbar { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.4rem; position: fixed; inset: auto 0 0 0; z-index: 55; padding: 0.6rem var(--sc-gutter) calc(0.6rem + env(safe-area-inset-bottom)); background: #0b151cf2; border-top: 1px solid #ffffff1a; color: #fff;
     --sc-accent: var(--copper); --sc-accent-ink: #1a0f08; }
-  .callbar .btn { min-height: 3.1rem; }
+  .callbar .btn { min-height: 3.1rem; padding-inline: 0.55rem; gap: 0.35rem; }
+  .callbar .btn--wa { color: #06240f; padding-inline: 0.7rem; }
   .foot { padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)); }
   .phead::after { width: 70vw; opacity: 0.1; }
 }
+@media (max-width: 1220px) { .bar__wa { display: none; } }
 @media (max-width: 520px) { .foot__grid { grid-template-columns: 1fr; } .bar .btn--quote svg { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {

@@ -17,7 +17,7 @@
   color: var(--cw-ink);
   letter-spacing: 0;
 }
-.cw-launch, .cw-panel, .cw-form, .cw-send, .cw-chip, .cw-close, .cw-details, .cw-input, .cw-field, .cw-action {
+.cw-launch, .cw-panel, .cw-form, .cw-send, .cw-chip, .cw-close, .cw-details, .cw-wa, .cw-input, .cw-field, .cw-action {
   font-family: inherit;
 }
 .cw-launch {
@@ -38,7 +38,7 @@
 .cw-launch svg { width: 22px; height: 22px; }
 .cw-launch__label { font-family: var(--cw-display); font-stretch: 108%; font-size: 1.05rem; letter-spacing: -0.02em; }
 .cw-chat .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.cw-launch:focus-visible, .cw-close:focus-visible, .cw-send:focus-visible, .cw-chip:focus-visible, .cw-action:focus-visible, .cw-details:focus-visible, .cw-input:focus-visible, .cw-field:focus-visible, .cw-nudge__open:focus-visible, .cw-nudge__dismiss:focus-visible {
+.cw-launch:focus-visible, .cw-close:focus-visible, .cw-send:focus-visible, .cw-chip:focus-visible, .cw-action:focus-visible, .cw-details:focus-visible, .cw-wa:focus-visible, .cw-input:focus-visible, .cw-field:focus-visible, .cw-nudge__open:focus-visible, .cw-nudge__dismiss:focus-visible {
   outline: 2px solid var(--cw-accent);
   outline-offset: 3px;
 }
@@ -183,6 +183,10 @@
   text-decoration: none;
   cursor: pointer;
 }
+.cw-action--wa {
+  background: #25d366;
+  color: #06240f;
+}
 .cw-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 8px; }
 .cw-chips:empty { display: none; padding: 0; }
 .cw-chip, .cw-send {
@@ -251,9 +255,23 @@
 .cw-send:disabled { opacity: 0.55; cursor: default; }
 .cw-more {
   display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 0 14px 12px;
   font-size: 0.8rem;
 }
+.cw-wa {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #06240f;
+  font-weight: 700;
+  text-decoration: none;
+}
+.cw-wa:hover { background: #3dde78; }
 .cw-details {
   margin: 0;
   padding: 0;
