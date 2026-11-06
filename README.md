@@ -6,11 +6,9 @@ The public site is [https://lymeplumbing.co.uk](https://lymeplumbing.co.uk). Pag
 
 ## GitHub Pages
 
-Keep GitHub Pages unpublished on this repository. The customer site is the Cloudflare Worker `lyme-plumbing` at https://lymeplumbing.co.uk. DNS for that domain is on Cloudflare. https://clockwork-ai.github.io/lyme/ is unused.
+The customer site is the Cloudflare Worker `lyme-plumbing` at https://lymeplumbing.co.uk. DNS for that domain is on Cloudflare. https://clockwork-ai.github.io/lyme/ is unused.
 
-In repository Settings → Pages → Build and deployment, the source stays **None**. A branch source on `main` makes GitHub run the managed "pages build and deployment" workflow on every push to `main` and email when the deploy fails. The customer site stays on the Worker.
-
-`.github/workflows/unpublish-github-pages.yml` removes the Pages site when that file changes. Workers Builds keeps deploying the Worker.
+Turn GitHub Pages off: repository **Settings → Pages → Build and deployment → Source → None**, then save. While the source is the `main` branch (`/` ), GitHub runs the managed "pages build and deployment" workflow (`dynamic/pages/pages-build-deployment`) on every push to `main` and emails when the deploy fails. That workflow is not a file in this repository. GitHub refuses to disable it while a branch source is set. Deleting the Pages site needs a repository admin. The customer site stays on the Worker.
 
 ## Cloudflare Workers
 
