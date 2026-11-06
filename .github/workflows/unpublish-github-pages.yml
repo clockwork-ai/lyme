@@ -17,6 +17,7 @@ on:
 
 permissions:
   pages: write
+  actions: write
 
 concurrency:
   group: unpublish-github-pages
@@ -114,13 +115,51 @@ jobs:
               print("Branch source is still set. Restoring the previous Pages source.")
               request("PUT", api, original)
 
-          print("GitHub Pages is still set to publish this repository from a branch.")
+          print("Pages settings are unchanged. Disabling the managed workflow.")
           if payload:
               print(json.dumps({
                   "build_type": payload.get("build_type"),
                   "source": payload.get("source"),
                   "html_url": payload.get("html_url"),
               }))
+
+          workflows_url = f"https://api.github.com/repos/{repo}/actions/workflows?per_page=100"
+          status, raw = request("GET", workflows_url)
+          workflow_id = None
+          if status == 200:
+              try:
+                  listed = json.loads(raw).get("workflows") or []
+              except json.JSONDecodeError:
+                  listed = []
+              for item in listed:
+                  path = item.get("path") or ""
+                  if path.endswith("pages-build-deployment"):
+                      workflow_id = item.get("id")
+                      print(f"Found {path} id={workflow_id} state={item.get('state')}")
+                      break
+          if not workflow_id:
+              print("Could not find the pages-build-deployment workflow.")
+              raise SystemExit(1)
+
+          disable_url = (
+              f"https://api.github.com/repos/{repo}/actions/workflows/{workflow_id}/disable"
+          )
+          status, _raw = request("PUT", disable_url)
+          status, raw = request(
+              "GET",
+              f"https://api.github.com/repos/{repo}/actions/workflows/{workflow_id}",
+          )
+          state_name = ""
+          if status == 200:
+              try:
+                  state_name = json.loads(raw).get("state") or ""
+              except json.JSONDecodeError:
+                  state_name = ""
+          print(f"pages-build-deployment state: {state_name}")
+          if state_name.startswith("disabled"):
+              print("Managed Pages workflow is disabled. Pushes to main will not run it.")
+              raise SystemExit(0)
+
           print(
               "A repository admin needs to open Settings → Pages → "
               "Build and deployment and set Source to None."
