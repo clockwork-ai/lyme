@@ -8,7 +8,7 @@ The public site is [https://lymeplumbing.co.uk](https://lymeplumbing.co.uk). Pag
 
 The customer site is the Cloudflare Worker `lyme-plumbing` at https://lymeplumbing.co.uk. DNS for that domain is on Cloudflare. https://clockwork-ai.github.io/lyme/ is unused.
 
-Turn GitHub Pages off: repository **Settings → Pages → Build and deployment → Source → None**, then save. While the source is the `main` branch (`/` ), GitHub runs the managed "pages build and deployment" workflow (`dynamic/pages/pages-build-deployment`) on every push to `main` and emails when the deploy fails. That workflow is not a file in this repository. GitHub refuses to disable it while a branch source is set. Deleting the Pages site needs a repository admin. The customer site stays on the Worker.
+Turn GitHub Pages off: repository **Settings → Pages → Build and deployment → Source → None**, then save. While Pages publishes from `main` (`/`), GitHub runs the managed "pages build and deployment" workflow (`dynamic/pages/pages-build-deployment`) on every push to `main` and emails when the deploy fails. That workflow is not a file in this repository. GitHub refuses to disable it while a branch source is set. Deleting the Pages site needs a repository admin. The customer site stays on the Worker.
 
 ## Cloudflare Workers
 
