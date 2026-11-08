@@ -5,7 +5,7 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/api/quote" || url.pathname === "/api/quote/") {
-      return handleQuote(request, env);
+      return handleQuote(request, env, ctx);
     }
     if (url.pathname === "/api/chat" || url.pathname === "/api/chat/") {
       return handleChat(request, env);

@@ -8,6 +8,7 @@ import {
   buildRawEmail,
   errorPage,
 } from "../_lib/quote-mail.js";
+import { sendToJobs } from "../_lib/jobs-enquiry.js";
 
 function html(body, status) {
   return new Response(body, {
@@ -25,7 +26,7 @@ function fail(status, message) {
 }
 
 export async function onRequestPost(context) {
-  const { request, env } = context;
+  const { request, env, waitUntil } = context;
 
   if (!originAllowed(request)) {
     return fail(403, "Please use the form on lymeplumbing.co.uk. If you are in a hurry, call or text 07846 729203.");
@@ -62,6 +63,13 @@ export async function onRequestPost(context) {
     return fail(502, "That did not send just now. Please call or text 07846 729203, or try the form again in a few minutes.");
   }
 
+  // Then into Clockwork Jobs. The email above is the backup, so a failure here is only logged.
+  const toJobs = sendToJobs(parsed.fields, env).then((r) => {
+    if (r !== "sent" && r !== "off") console.error("jobs enquiry", r);
+  });
+  if (typeof waitUntil === "function") waitUntil(toJobs);
+  else await toJobs;
+
   return Response.redirect(thanks.toString(), 303);
 }
 
@@ -69,7 +77,7 @@ export async function onRequestGet() {
   return fail(405, "Use the quote form on the contact page to get in touch.");
 }
 
-export async function handleQuote(request, env) {
-  if (request.method === "POST") return onRequestPost({ request, env });
+export async function handleQuote(request, env, ctx) {
+  if (request.method === "POST") return onRequestPost({ request, env, waitUntil: ctx && ctx.waitUntil ? (p) => ctx.waitUntil(p) : undefined });
   return onRequestGet();
 }
