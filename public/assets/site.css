@@ -264,8 +264,11 @@ html.menu-open { overflow: hidden; }
 .foot .wordmark { color: #fff; text-decoration: none; }
 .foot__nap p { margin: 0.9rem 0 0; }
 .foot__links { margin-top: 1rem; display: flex; gap: 0.5rem; }
-.foot__base { margin-top: var(--sc-7); padding-top: var(--sc-5); border-top: 1px solid #ffffff14; font-size: var(--sc-t-sm); color: #8fa1ac; }
+.foot__base { margin-top: var(--sc-7); padding-top: var(--sc-5); border-top: 1px solid #ffffff14; font-size: var(--sc-t-sm); color: #8fa1ac; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 1.5rem; row-gap: 0.4rem; }
 .foot__base p { margin: 0; }
+.foot__base > p:first-child { flex: 1 1 36rem; min-width: min(100%, 36rem); }
+.foot__credit { flex: 0 0 auto; white-space: nowrap; }
+.foot__base a { color: inherit; }
 
 /* ------------------------------------------------------------ call bar */
 .callbar { display: none; }
