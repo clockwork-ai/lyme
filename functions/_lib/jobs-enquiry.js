@@ -15,6 +15,7 @@ export function enquiryPayload(fields) {
     job: fields.job,
     message: fields.message,
     bestTime: fields.bestTime,
+    urgency: fields.urgency || "",
     source: "Website form",
   };
 }

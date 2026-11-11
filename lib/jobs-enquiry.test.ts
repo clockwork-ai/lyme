@@ -21,6 +21,11 @@ test("with a key: posts the enquiry, signed", async () => {
   assert.deepEqual(JSON.parse(String(seen!.init.body)), { ...enquiryPayload(fields), source: "Website form" });
 });
 
+test("the How soon answer goes to the app", () => {
+  assert.equal(enquiryPayload({ ...fields, urgency: "Today, it's urgent" }).urgency, "Today, it's urgent");
+  assert.equal(enquiryPayload(fields).urgency, "");
+});
+
 test("app says no or is down: reported, never thrown", async () => {
   assert.equal(await sendToJobs(fields, { JOBS_ENQUIRY_KEY: "k" }, async () => new Response("{}", { status: 401 })), "failed: 401");
   assert.equal(await sendToJobs(fields, { JOBS_ENQUIRY_KEY: "k" }, async () => { throw new TypeError("fetch failed"); }), "failed: TypeError");

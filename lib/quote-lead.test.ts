@@ -39,3 +39,14 @@ test("the quote form still refuses a workers.dev preview", () => {
   });
   assert.equal(originAllowed(live), true);
 });
+
+test("'How soon do you need someone?' is passed on, checked, and optional for the chat", async () => {
+  const base = () => { const f = new FormData(); for (const [k, v] of Object.entries({ name: "Una Urgent", phone: "07700 900654", postcode: "SK7 1AA", job: "Emergency plumbing", message: "Pipe burst", best_time: "Any time", consent: "yes", hp: "" })) f.set(k, v); return f; };
+  const urgent = base(); urgent.set("urgency", "Today, it's urgent");
+  const a = await parseSubmission(urgent);
+  assert.equal(a.ok && a.fields.urgency, "Today, it's urgent");
+  const none = await parseSubmission(base());
+  assert.equal(none.ok && none.fields.urgency, "");
+  const odd = base(); odd.set("urgency", "Yesterday");
+  assert.equal((await parseSubmission(odd)).ok, false);
+});
