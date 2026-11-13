@@ -1,5 +1,6 @@
 import { handleQuote } from "../functions/api/quote.js";
 import { handleChat } from "../server/chat.ts";
+import { canonicalRedirectTarget } from "../lib/canonical.ts";
 
 export default {
   async fetch(request, env) {
@@ -10,6 +11,17 @@ export default {
     if (url.pathname === "/api/chat" || url.pathname === "/api/chat/") {
       return handleChat(request, env);
     }
-    return env.ASSETS.fetch(request);
+
+    const assetResponse = await env.ASSETS.fetch(request);
+    const target = canonicalRedirectTarget(
+      request.url,
+      request.method,
+      assetResponse.status,
+      assetResponse.headers.get("Location"),
+    );
+    if (!target) return assetResponse;
+
+    await assetResponse.body?.cancel();
+    return Response.redirect(target, 301);
   },
 };

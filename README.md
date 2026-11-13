@@ -22,6 +22,8 @@ Do not set a Pages build output directory. `wrangler.toml` serves `public/` as s
 
 Add the custom domains on the Worker: `lymeplumbing.co.uk` and `www.lymeplumbing.co.uk`. Add `lymeplumbing.uk` and `www.lymeplumbing.uk` the same way if those hostnames should open the site. This repository does not change DNS, MX or Email Routing records.
 
+`www.lymeplumbing.co.uk` stays attached to the Worker. The Worker answers it with one 301 to the same path on `https://lymeplumbing.co.uk`, and the query string is kept. A path without a trailing slash, such as `/services`, is a 301 to the slashed path. When both apply, that is one hop to the slashed apex address. `lymeplumbing.uk` is unchanged.
+
 `public/_redirects` is the Workers static-asset redirect file (same line format as Pages). There is no `_headers` file.
 
 ### Email binding
@@ -34,7 +36,7 @@ The quote form sends mail with Cloudflare Email Sending (`send_email`). The dest
 | --- | --- | --- |
 | Send Email (`send_email`) | `EMAIL` | `lymeplumbingandheating@gmail.com` |
 
-`src/worker.js` handles `POST /api/quote` and reads `env.EMAIL`. Everything else is passed to the assets binding. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
+`src/worker.js` runs for every request. It handles `POST /api/quote` and reads `env.EMAIL`. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
 
 ### Quote form
 
