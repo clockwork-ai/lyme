@@ -30,7 +30,7 @@ export async function sendToJobs(fields, env, fetchImpl = fetch) {
       method: "POST",
       headers: { "content-type": "application/json", authorization: "Bearer " + key },
       body: JSON.stringify(enquiryPayload(fields)),
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(10000), // the app can take a few seconds to wake up
     });
     if (!res.ok) return "failed: " + res.status;
     return "sent";

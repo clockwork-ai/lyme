@@ -54,21 +54,20 @@ export async function onRequestPost(context) {
     return fail(500, "The quote form is not switched on yet. Please call or text 07846 729203 and Callum will take the details.");
   }
 
+  // Into Clockwork Jobs first (capped at ten seconds), so the email can say how it went.
+  // The email is the backup: whatever happens here, the visitor gets the thank-you page.
+  const jobsStatus = await sendToJobs(parsed.fields, env);
+  if (jobsStatus !== "sent" && jobsStatus !== "off") console.error("jobs enquiry", jobsStatus);
+
   try {
-    const raw = buildRawEmail(parsed.fields, parsed.files);
+    const raw = buildRawEmail(parsed.fields, parsed.files, jobsStatus);
     const message = new EmailMessage(FROM, TO, raw);
     await env.EMAIL.send(message);
   } catch (err) {
     console.error("quote email failed", err && err.message ? err.message : "unknown");
     return fail(502, "That did not send just now. Please call or text 07846 729203, or try the form again in a few minutes.");
   }
-
-  // Then into Clockwork Jobs. The email above is the backup, so a failure here is only logged.
-  const toJobs = sendToJobs(parsed.fields, env).then((r) => {
-    if (r !== "sent" && r !== "off") console.error("jobs enquiry", r);
-  });
-  if (typeof waitUntil === "function") waitUntil(toJobs);
-  else await toJobs;
+  void waitUntil;
 
   return Response.redirect(thanks.toString(), 303);
 }

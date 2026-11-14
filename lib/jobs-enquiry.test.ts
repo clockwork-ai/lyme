@@ -30,3 +30,15 @@ test("app says no or is down: reported, never thrown", async () => {
   assert.equal(await sendToJobs(fields, { JOBS_ENQUIRY_KEY: "k" }, async () => new Response("{}", { status: 401 })), "failed: 401");
   assert.equal(await sendToJobs(fields, { JOBS_ENQUIRY_KEY: "k" }, async () => { throw new TypeError("fetch failed"); }), "failed: TypeError");
 });
+
+test("the enquiry email says how the hand-off went, in plain words", async () => {
+  const { jobsStatusLine, buildRawEmail } = await import("../functions/_lib/quote-mail.js");
+  assert.equal(jobsStatusLine("sent"), "Job app: in, as a new enquiry");
+  assert.match(jobsStatusLine("off"), /not connected/);
+  assert.match(jobsStatusLine("failed: 401"), /refused the key/);
+  assert.match(jobsStatusLine("failed: TimeoutError"), /too slow/);
+  // The body is base64 in the raw email, so decode the text part before looking.
+  const raw = buildRawEmail({ ...fields, bestTime: "Any time" }, [], "sent");
+  const b64 = raw.split("Content-Transfer-Encoding: base64\r\n\r\n")[1].split("\r\n--")[0].replace(/\r\n/g, "");
+  assert.match(Buffer.from(b64, "base64").toString("utf8"), /Job app: in, as a new enquiry/);
+});

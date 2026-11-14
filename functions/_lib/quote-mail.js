@@ -208,7 +208,16 @@ export async function parseSubmission(formData) {
   };
 }
 
-export function buildRawEmail(fields, files) {
+/** How the hand-off to Clockwork Jobs reads in the email, so Callum can see it without any dashboard. */
+export function jobsStatusLine(status) {
+  if (!status || status === "off") return "Job app: not connected (no key on the website)";
+  if (status === "sent") return "Job app: in, as a new enquiry";
+  if (status === "failed: 401") return "Job app: refused the key (make a new key in the app and put it on the website)";
+  if (/Timeout/i.test(status)) return "Job app: too slow to answer, not in. Add it by hand";
+  return "Job app: not in (" + status + "). Add it by hand";
+}
+
+export function buildRawEmail(fields, files, jobsStatus) {
   const boundary = "lyme-" + crypto.randomUUID().replace(/-/g, "");
   const lines = [
     "From: " + FROM_HEADER,
@@ -229,6 +238,7 @@ export function buildRawEmail(fields, files) {
     "Postcode: " + fields.postcode,
     "Job: " + fields.job,
     "How soon: " + (fields.urgency || "(not asked)"),
+    jobsStatusLine(jobsStatus),
     "Best time to call: " + fields.bestTime,
     "",
     "Message:",
