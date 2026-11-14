@@ -2,3 +2,16 @@
 /services/hot-water-tanks/ /services/unvented-cylinders/ 301
 /services/heating-design /services/ 301
 /services/heating-design/ /services/ 301
+/services/heat-pump /services/heat-pumps/ 301
+/services/heat-pump/ /services/heat-pumps/ 301
+/services/unvented-cylinder /services/unvented-cylinders/ 301
+/services/unvented-cylinder/ /services/unvented-cylinders/ 301
+/services/underfloor /services/underfloor-heating/ 301
+/services/underfloor/ /services/underfloor-heating/ 301
+/about-us /about/ 301
+/about-us/ /about/ 301
+/contact-us /contact/ 301
+/contact-us/ /contact/ 301
+/high-lane /areas/high-lane/ 301
+/high-lane/ /areas/high-lane/ 301
+/favicon.ico /favicon.svg 200

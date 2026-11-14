@@ -12,10 +12,13 @@ directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
 html_handling = "auto-trailing-slash"
-# A quote form POST is a navigation request. From compatibility date 2025-04-01
-# those skip the Worker unless the route runs first. Other paths stay on the
-# asset layer so public/_redirects, extensionless URLs and /404.html still apply.
-run_worker_first = [ "/api/*" ]
+# The Worker runs first on every path. It sends www.lymeplumbing.co.uk to the
+# apex, and turns the asset layer's temporary trailing-slash redirect into a
+# permanent one. /api/* is handled in src/worker.js, so a quote form POST is
+# not redirected. From compatibility date 2025-04-01 a navigation POST skips
+# the Worker unless it runs first. Other requests are passed to the assets
+# binding, so public/_redirects, extensionless URLs and /404.html still apply.
+run_worker_first = true
 
 # Email Sending. Variable name EMAIL is what the quote handler reads.
 # destination_address locks every message to the address already verified

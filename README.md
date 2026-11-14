@@ -22,6 +22,8 @@ Do not set a Pages build output directory. `wrangler.toml` serves `public/` as s
 
 Add the custom domains on the Worker: `lymeplumbing.co.uk` and `www.lymeplumbing.co.uk`. Add `lymeplumbing.uk` and `www.lymeplumbing.uk` the same way if those hostnames should open the site. This repository does not change DNS, MX or Email Routing records.
 
+`www.lymeplumbing.co.uk` stays attached to the Worker. The Worker answers it with one 301 to the same path on `https://lymeplumbing.co.uk`, and the query string is kept. A path without a trailing slash, such as `/services`, is a 301 to the slashed path. When both apply, that is one hop to the slashed apex address. `lymeplumbing.uk` is unchanged.
+
 `public/_redirects` is the Workers static-asset redirect file (same line format as Pages). There is no `_headers` file.
 
 ### Email binding
@@ -34,7 +36,7 @@ The quote form sends mail with Cloudflare Email Sending (`send_email`). The dest
 | --- | --- | --- |
 | Send Email (`send_email`) | `EMAIL` | `lymeplumbingandheating@gmail.com` |
 
-`src/worker.js` handles `POST /api/quote` and reads `env.EMAIL`. Everything else is passed to the assets binding. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
+`src/worker.js` runs for every request. It handles `POST /api/quote` and reads `env.EMAIL`. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
 
 ### Quote form
 
@@ -59,7 +61,7 @@ It can repeat the call-out rates published on the site, and it will not invent a
 
 The home page trust strip and the heat pump page wording live in `lib/qualifications.ts` (`homeTrustStrip` and `heatPumpLine`). The home strip is "City & Guilds qualified plumber · BPEC Level 3 heat pump qualified · Local to High Lane". The heat pump page says he installs air source heat pumps, and services, repairs and maintains them, whoever fitted them, on the plumbing side, and that he is BPEC Level 3 heat pump qualified. The About page still lists City & Guilds qualified, and the BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits), Ofqual regulated. The chat names those and no others. It does not say accredited, certified, approved installer, MCS, grant or BUS, and it does not claim F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance.
 
-Reviews are on. `SHOW_REVIEWS` at the top of `public/assets/site.js` is true, so the nav, menu and footer link to `/reviews/`, and the home page has a Reviews section. The only published review is Louise K. on Google, word for word. Set the flag to false, and take the reviews address out of `public/sitemap.xml`, to hide it again.
+Reviews are on. `SHOW_REVIEWS` at the top of `public/assets/site.js` is true, so the nav, menu and footer link to `/reviews/`, and the home page has a Reviews section. The published reviews are Louise K., Richard N., Katherine C. and D M. on Google, word for word. Set the flag to false, and take the reviews address out of `public/sitemap.xml`, to hide it again.
 
 The widget shows three suggestion chips, and only before the first message. On a phone, the panel follows the visible viewport, so the close button and the input stay on screen when the keyboard is open. Replies do not contain a web address. Buttons under a reply are Get a quote, Call and, when the reply mentions it, WhatsApp. The chat panel also has a WhatsApp button. That opens https://wa.me/447359838866. It is not the call or text number. The call and text number stays 07846 729203.
 
