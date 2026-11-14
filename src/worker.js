@@ -3,7 +3,7 @@ import { handleChat } from "../server/chat.ts";
 import { canonicalRedirectTarget } from "../lib/canonical.ts";
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === "/api/quote" || url.pathname === "/api/quote/") {
       return handleQuote(request, env, ctx);
