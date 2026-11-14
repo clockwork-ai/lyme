@@ -215,6 +215,8 @@ html.menu-open { overflow: hidden; }
 /* --------------------------------------------------------------- form */
 .form { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: calc(var(--r) + 4px); background: #fff; box-shadow: var(--sc-e2); }
 .hp { position: absolute; left: -10000px; top: 0; width: 1px; height: 1px; overflow: hidden; }
+.form input[type="hidden"] { display: none; }
+.form [hidden] { display: none !important; }
 .hours { margin: 0.7rem 0 0; font-size: var(--sc-t-sm); line-height: 1.45; }
 .hours-line { margin: 0.85rem 0 0; max-width: 48ch; }
 .hours-line a, .side__card .hours + p a { text-underline-offset: 0.18em; }
@@ -246,6 +248,19 @@ html.menu-open { overflow: hidden; }
 #call-out .h3 { margin-top: 2.2rem; }
 .cta-band .pay, .close .pay, .phead .pay { color: #dbe5ea; }
 .form-err { grid-column: 1 / -1; margin: 0; padding: 0.7rem 0.9rem; border-radius: 8px; background: #fdecea; color: #8a1c12; font-weight: 600; }
+.form-ok { margin: 0; padding: 0.9rem 1rem; border-radius: 8px; background: #e7f6ee; color: #145c32; font-weight: 600; }
+.form-ok:focus-visible { outline: 2px solid var(--copper-deep); outline-offset: 3px; }
+.form.form--guide { grid-template-columns: 1fr 1.15fr; max-width: 36rem; }
+.form.form--guide .field--full,
+.form.form--guide .form-note,
+.form.form--guide .form-err,
+.form.form--guide .form-ok { grid-column: 1 / -1; }
+.form.form--compact { grid-template-columns: 1fr; max-width: none; }
+.guide-band { padding-block: clamp(2.2rem, 5vw, 4rem); }
+.guide-band .form,
+.guide-signup .form { margin-top: 1.15rem; }
+.prose .guide-signup { margin-top: var(--sc-7); }
+.guide-signup > p { margin: 0.65rem 0 0; max-width: 46ch; }
 
 /* ---------------------------------------------------------------- CTA band */
 .cta-band { padding-block: clamp(3rem, 6vw, 5rem); }
@@ -294,7 +309,7 @@ html.menu-open { overflow: hidden; }
   .svc-list span:not(.svc-list__ico) { grid-column: 2; grid-row: 2; font-size: var(--sc-t-sm); }
   .svc-list__ico { grid-row: 1 / span 2; }
   .svc-list > li > a > svg { grid-column: 3; grid-row: 1 / span 2; }
-  .form { grid-template-columns: 1fr; }
+  .form, .form.form--guide { grid-template-columns: 1fr; max-width: none; }
   .cta-row .btn, .cta-row .cot { flex: 1 1 auto; }
   .cta-row .cot summary { width: 100%; }
   .cot__pop { top: auto; bottom: calc(100% + 0.5rem); transform-origin: 0 100%; }

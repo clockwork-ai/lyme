@@ -36,7 +36,7 @@ The quote form sends mail with Cloudflare Email Sending (`send_email`). The dest
 | --- | --- | --- |
 | Send Email (`send_email`) | `EMAIL` | `lymeplumbingandheating@gmail.com` |
 
-`src/worker.js` runs for every request. It handles `POST /api/quote` and reads `env.EMAIL`. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
+`src/worker.js` runs for every request. It handles `POST /api/quote` and `POST /api/guide-signup`, and reads `env.EMAIL` for both. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
 
 ### Quote form
 
@@ -52,6 +52,19 @@ Limits: up to 4 photos, 3MB each, 8MB together. JPG, PNG, WEBP, GIF or HEIC.
 - The email binding missing, or the send failing: an HTML page asking the customer to call or text
 
 The posted Origin must be `https://lymeplumbing.co.uk`, `https://www.lymeplumbing.co.uk`, `https://lymeplumbing.uk` or `https://www.lymeplumbing.uk` (or localhost on port 8787 or 8788 while trying the Worker). Other hostnames, including a `*.workers.dev` preview, are refused until that hostname is added in `functions/_lib/quote-mail.js`.
+
+### Monthly guide signup
+
+`public/guides/index.html` and each guide page post to `/api/guide-signup` as form data. The fields are email (required), first name (optional), a honeypot named `hp`, and the page path. The consent line sits above the button and links to `/privacy/`.
+
+Nobody on the list is emailed. There is no KV, D1 or other store on this Worker, so each signup is an email to the same inbox as the quote form: `lymeplumbingandheating@gmail.com`, from `quotes@lymeplumbing.co.uk`. The subject is `New guide signup`. Callum checks that inbox and searches for that subject. No new binding, secret or env var is required. The existing `EMAIL` binding in `wrangler.toml` is the whole setup.
+
+- Success in the browser: the form is replaced by "You're on the list. I'll send one short guide a month, and nothing else."
+- Success without JavaScript: the same sentence on an HTML page
+- A bad email, or a missing one: the form stays up and says what to fix
+- Honeypot filled: the thank-you is shown and no email is sent
+- The email binding missing, or the send failing: the form says it did not send
+- A preview hostname is refused, same as the quote form, so a pull request preview does not deliver signups
 
 ## Ask Lyme
 

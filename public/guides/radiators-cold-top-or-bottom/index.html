@@ -297,6 +297,28 @@
     <p>I cover Stockport SK1 to SK4, SK6, SK7, SK8, SK12, SK22 and SK23.</p>
     <p><strong>Call or text <a href="tel:+447846729203">07846 729203</a></strong></p>
     <p>More on what I do: <a href="../../services/heating-faults/">heating faults away from the boiler</a>, <a href="../../services/radiators/">radiators and valves</a>, <a href="../../services/heat-pumps/">heat pumps</a> and <a href="../../services/heating-controls/">heating controls</a>. I work across <a href="../../areas/stockport/">Stockport</a> and <a href="../../areas/high-lane/">High Lane</a>, or you can use the <a href="../../contact/">quote form</a>.</p>
+    <div class="guide-signup">
+      <h2 class="h3" id="guide-signup-h">Get the monthly guide</h2>
+      <p>One plain answer a month to the questions homeowners ask me most, from bleeding radiators to getting the best out of a heat pump.</p>
+      <form id="guide-signup" class="form form--guide form--compact" action="/api/guide-signup" method="post" novalidate>
+        <div class="hp" aria-hidden="true">
+          <label for="guide-hp">Leave this blank</label>
+          <input id="guide-hp" name="hp" type="text" tabindex="-1" autocomplete="off" value="">
+        </div>
+        <div class="field field--full">
+          <label for="guide-email">Email</label>
+          <input id="guide-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required maxlength="120">
+        </div>
+        <div class="field field--full">
+          <label for="guide-name">First name <span class="opt">(optional)</span></label>
+          <input id="guide-name" name="name" type="text" autocomplete="given-name" maxlength="40">
+        </div>
+        <p class="form-note field--full" id="guide-consent">One short guide a month from Callum at Lyme. No spam, and you can unsubscribe any time. <a href="../../privacy/">Privacy</a></p>
+        <div class="field--full"><button class="btn btn--quote" type="submit" aria-describedby="guide-consent">Send me the guides</button></div>
+        <p class="form-ok field--full" role="status" tabindex="-1" hidden>You're on the list. I'll send one short guide a month, and nothing else.</p>
+        <input type="hidden" name="page" value="/guides/radiators-cold-top-or-bottom/">
+      </form>
+    </div>
   </div>
   <aside class="side">
     <div class="side__card">

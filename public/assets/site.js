@@ -118,6 +118,86 @@ var SHOW_REVIEWS = true;
     });
   }
 
+  /* ---- monthly guide: check the email, then post to /api/guide-signup ---- */
+  var showGuideThanks = function (form) {
+    var ok = form.querySelector(".form-ok");
+    if (!ok) return;
+    [].slice.call(form.children).forEach(function (el) {
+      el.hidden = el !== ok;
+    });
+    ok.hidden = false;
+    ok.focus();
+  };
+  document.querySelectorAll("form.form--guide").forEach(function (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = form.querySelector('[name="email"]');
+      var name = form.querySelector('[name="name"]');
+      var honey = form.querySelector('[name="hp"]');
+      var btn = form.querySelector('[type="submit"]');
+      form.querySelectorAll("[aria-invalid]").forEach(function (field) { field.removeAttribute("aria-invalid"); });
+      var err = form.querySelector(".form-err");
+      var showErr = function (text) {
+        if (!err) {
+          err = document.createElement("p");
+          err.className = "form-err";
+          err.id = "guide-error";
+          err.setAttribute("role", "alert");
+          form.insertBefore(err, form.firstChild);
+        }
+        err.hidden = false;
+        err.textContent = text;
+      };
+      var busy = function (on) {
+        if (!btn) return;
+        btn.disabled = on;
+        if (on) btn.setAttribute("aria-busy", "true");
+        else btn.removeAttribute("aria-busy");
+      };
+      if (email && !email.checkValidity()) {
+        email.setAttribute("aria-invalid", "true");
+        showErr(email.validity.valueMissing ? "Please add your email address." : "That email address does not look right.");
+        email.focus();
+        return;
+      }
+      if (name && name.value.trim().length > 40) {
+        name.setAttribute("aria-invalid", "true");
+        showErr("Please keep your first name shorter.");
+        name.focus();
+        return;
+      }
+      if (honey && honey.value) {
+        showGuideThanks(form);
+        return;
+      }
+      busy(true);
+      if (err) err.hidden = true;
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+        credentials: "same-origin"
+      }).then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, data: data };
+        }, function () {
+          return { ok: false, data: null };
+        });
+      }).then(function (out) {
+        if (out.ok && out.data && out.data.ok) {
+          showGuideThanks(form);
+          return;
+        }
+        showErr(out.data && out.data.message ? out.data.message : "That did not send just now. Please try again in a few minutes.");
+        if (email) email.focus();
+        busy(false);
+      }).catch(function () {
+        showErr("That did not send just now. Please try again in a few minutes.");
+        busy(false);
+      });
+    });
+  });
+
   /* Muted clips: ask to play, and leave the poster alone when motion is reduced.
      A source with data-src waits until the clip is near the screen. */
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
