@@ -32,6 +32,9 @@ export const JOBS = [
 
 export const TIMES = ["Any time", "Morning", "Afternoon", "Evening"];
 
+/** "How soon do you need someone?" Optional, so older forms and the chat widget still work. */
+export const URGENCY = ["Today, it's urgent", "Book a visit", "A quote for a bigger job"];
+
 const IMAGE_EXT = {
   "image/jpeg": "jpg",
   "image/jpg": "jpg",
@@ -137,6 +140,7 @@ export async function parseSubmission(formData) {
   const job = cleanHeader(field("job"));
   const message = cleanBody(field("message"));
   const bestTime = cleanHeader(field("best_time")) || "Any time";
+  const urgency = cleanHeader(field("urgency"));
   const consent = cleanHeader(field("consent"));
 
   if (!name || name.length > 80 || !phone || phone.length > 30 || !postcode || postcode.length > 10 || !message || message.length > 4000) {
@@ -161,6 +165,9 @@ export async function parseSubmission(formData) {
   }
   if (!TIMES.includes(bestTime)) {
     return { ok: false, status: 400, message: "Please choose a best time to call from the list." };
+  }
+  if (urgency && !URGENCY.includes(urgency)) {
+    return { ok: false, status: 400, message: "Please choose how soon you need someone from the list." };
   }
   if (consent !== "yes" && consent !== "on") {
     return { ok: false, status: 400, message: "Please tick the box to say Callum can contact you about this job." };
@@ -196,7 +203,7 @@ export async function parseSubmission(formData) {
   return {
     ok: true,
     honeypot: false,
-    fields: { name, phone, email, postcode, job, message, bestTime },
+    fields: { name, phone, email, postcode, job, message, bestTime, urgency },
     files,
   };
 }
@@ -221,6 +228,7 @@ export function buildRawEmail(fields, files) {
     "Email: " + (fields.email || "(not given)"),
     "Postcode: " + fields.postcode,
     "Job: " + fields.job,
+    "How soon: " + (fields.urgency || "(not asked)"),
     "Best time to call: " + fields.bestTime,
     "",
     "Message:",
