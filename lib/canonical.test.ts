@@ -100,7 +100,7 @@ test("robots.txt disallows /api/ and the sitemap is unchanged", () => {
   assert.match(robots, /Disallow:\s*\/api\/\s*$/m);
   assert.match(robots, /Disallow:\s*\/photo-frame\/?/);
   assert.equal(sitemap.includes("/api/"), false);
-  assert.equal(sitemap.match(/<loc>/g)?.length, 41);
+  assert.equal(sitemap.match(/<loc>/g)?.length, 42);
   const linked = htmlFiles("public").filter((file) => /<a\b[^>]*href=["'][^"']*\/api\//i.test(readFileSync(file, "utf8")));
   assert.deepEqual(linked, []);
   const contact = readFileSync("public/contact/index.html", "utf8");

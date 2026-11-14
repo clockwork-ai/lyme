@@ -51,7 +51,8 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
   assert.match(fixedReply("What qualifications do you have?", business) || "", /BPEC Level 3 Award/);
   assert.equal((fixedReply("Are you City and Guilds?", business) || "").includes("NVQ"), false);
   assert.match(fixedReply("Can you regas the heat pump?", business) || "", /doesn't do refrigerant/);
-  assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /aren't written on the site/);
+  assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /12 month workmanship guarantee/);
+  assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /not written on the site/);
 });
 
 test("paying by card is on completion, with no other method named", () => {
