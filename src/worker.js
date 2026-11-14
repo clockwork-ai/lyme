@@ -1,4 +1,6 @@
+import { EmailMessage } from "cloudflare:email";
 import { handleQuote } from "../functions/api/quote.js";
+import { handleGuideSignup } from "../functions/api/guide-signup.js";
 import { handleChat } from "../server/chat.ts";
 import { canonicalRedirectTarget } from "../lib/canonical.ts";
 
@@ -7,6 +9,9 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === "/api/quote" || url.pathname === "/api/quote/") {
       return handleQuote(request, env);
+    }
+    if (url.pathname === "/api/guide-signup" || url.pathname === "/api/guide-signup/") {
+      return handleGuideSignup(request, env, (from, to, raw) => new EmailMessage(from, to, raw));
     }
     if (url.pathname === "/api/chat" || url.pathname === "/api/chat/") {
       return handleChat(request, env);

@@ -161,3 +161,23 @@ test("the radiator guide uses the approved copy", () => {
   assert.match(home, /<a href="guides\/">Guides<\/a>/);
   assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/guides/radiators-cold-top-or-bottom/"), true);
 });
+
+test("the heat pump servicing page uses the services page rates", () => {
+  const services = readFileSync("public/services/index.html", "utf8");
+  const page = readFileSync("public/services/heat-pump-servicing/index.html", "utf8");
+  const rates = slice(services, '<ul class="rates">', "</ul>");
+  assert.equal(page.includes(rates), true);
+  assert.match(page, /href="\.\.\/\.\.\/services\/#call-out"/);
+  assert.match(page, /07846 729203/);
+  assert.match(page, /wa\.me\/447359838866/);
+  assert.equal(page.includes("07985 379605"), false);
+  assert.match(page, /City &amp; Guilds qualified plumber/);
+  assert.match(page, /BPEC Level 3 heat pump qualified/);
+  assert.match(page, /12 month workmanship guarantee/);
+  assert.doesNotMatch(page, /[\u2013\u2014]/);
+  assert.doesNotMatch(page, banned);
+  assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/services/heat-pump-servicing/"), true);
+  assert.match(services, /href="\.\.\/services\/heat-pump-servicing\/"/);
+  assert.match(readFileSync("public/services/heat-pumps/index.html", "utf8"), /href="\.\.\/\.\.\/services\/heat-pump-servicing\/"/);
+  assert.match(readFileSync("public/guides/radiators-cold-top-or-bottom/index.html", "utf8"), /href="\.\.\/\.\.\/services\/heat-pump-servicing\/"/);
+});
