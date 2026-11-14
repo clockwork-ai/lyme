@@ -14,8 +14,8 @@ const QUOTE = /\b(get a quote|quote for|want a quote|like a quote|can i get a qu
 const PAYMENT =
   /\b(how (?:do|can) (?:i|we) pay|card payments?|pay(?:ing)? by card|pay with (?:a )?card|take cards?|accept cards?|cards? accepted|debit cards?|credit cards?)\b/i;
 const ASKING = /\b(are you|is he|is callum|do you have|does he have|does callum have|have you got|has he got)\b/i;
-const UNLISTED = /\b(gas safe|g3|mcs|f-?gas|niceic|benchmark|insured|insurance)\b/i;
-const QUALIFICATION = /\b(qualifications?|bpec|ofqual|city\s*(?:&|and)\s*guilds)\b/i;
+const UNLISTED = /\b(gas safe|mcs|f-?gas|niceic|benchmark|insured|insurance)\b/i;
+const QUALIFICATION = /\b(qualifications?|bpec|ofqual|city\s*(?:&|and)\s*guilds|g3)\b/i;
 const QUALIFIED = /\b(qualified|certified|certificates?)\b/i;
 
 export function fixedReply(text: string, config: BusinessConfig): string | null {

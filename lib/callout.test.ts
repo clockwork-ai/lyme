@@ -15,7 +15,7 @@ function htmlFiles(dir: string): string[] {
 const pages = htmlFiles("public");
 
 const banned =
-  /[\u2013\u2014]|\b(MCS|F-gas|Benchmark|NICEIC|accredited|certified|approved installer)\b|\bG3\b|plus VAT|inc VAT|including VAT|excluding VAT|\bVAT\b|7am to 8am|Monday to Saturday|Timmins|GasXpress|Checkatrade|JustFix|Gas Safe/i;
+  /[\u2013\u2014]|\b(MCS|F-gas|Benchmark|NICEIC|accredited|certified|approved installer)\b|plus VAT|inc VAT|including VAT|excluding VAT|\bVAT\b|7am to 8am|Monday to Saturday|Timmins|GasXpress|Checkatrade|JustFix|Gas Safe/i;
 
 function slice(html: string, start: string, end: string): string {
   const from = html.indexOf(start);
@@ -180,4 +180,32 @@ test("the heat pump servicing page uses the services page rates", () => {
   assert.match(services, /href="\.\.\/services\/heat-pump-servicing\/"/);
   assert.match(readFileSync("public/services/heat-pumps/index.html", "utf8"), /href="\.\.\/\.\.\/services\/heat-pump-servicing\/"/);
   assert.match(readFileSync("public/guides/radiators-cold-top-or-bottom/index.html", "utf8"), /href="\.\.\/\.\.\/services\/heat-pump-servicing\/"/);
+});
+
+test("power flush is a service page and the heat pump titles stay short", () => {
+  const page = readFileSync("public/services/power-flush/index.html", "utf8");
+  const title = page.match(/<title>([^<]*)<\/title>/)?.[1] || "";
+  assert.equal(title, "Power flush in Stockport and Cheshire | Lyme");
+  assert.ok(title.length <= 65, String(title.length));
+  assert.match(page, /usually sludge, on the jobs I see/);
+  assert.match(page, /magnetic filter/);
+  assert.match(page, /I don't do gas or boiler work/);
+  assert.match(page, /07846 729203/);
+  assert.match(page, /wa\.me\/447359838866/);
+  assert.equal(page.includes("07985 379605"), false);
+  assert.doesNotMatch(page, /[\u2013\u2014]/);
+  assert.doesNotMatch(page, banned);
+  assert.match(page, /"@type": "FAQPage"/);
+  assert.match(page, /"@type": "Service"/);
+  const pumps = readFileSync("public/services/heat-pumps/index.html", "utf8");
+  const servicing = readFileSync("public/services/heat-pump-servicing/index.html", "utf8");
+  const pumpTitle = pumps.match(/<title>([^<]*)<\/title>/)?.[1] || "";
+  const serviceTitle = servicing.match(/<title>([^<]*)<\/title>/)?.[1] || "";
+  assert.equal(pumpTitle, "Heat pump install and repair in Stockport and Cheshire | Lyme");
+  assert.equal(serviceTitle, "Heat pump servicing and repair in Stockport and Cheshire | Lyme");
+  assert.ok(pumpTitle.length <= 65 && serviceTitle.length <= 65);
+  assert.match(readFileSync("public/services/radiators/index.html", "utf8"), /href="\.\.\/\.\.\/services\/power-flush\/"/);
+  assert.match(readFileSync("public/services/heating-faults/index.html", "utf8"), /href="\.\.\/\.\.\/services\/power-flush\/"/);
+  assert.match(readFileSync("public/guides/radiators-cold-top-or-bottom/index.html", "utf8"), /href="\.\.\/\.\.\/services\/power-flush\/"/);
+  assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/services/power-flush/"), true);
 });
