@@ -10,14 +10,16 @@ const bpec =
   "BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits)";
 const summary =
   "It covers installing, commissioning, servicing and maintaining heat pump systems (non-refrigerant circuits).";
-const forbidden = /\b(MCS|F-gas|Gas Safe|NICEIC|Benchmark|insurance|NVQ)\b|\bG3\b/i;
+const forbidden = /\b(MCS|F-gas|Gas Safe|NICEIC|Benchmark|insurance|NVQ)\b/i;
 
 test("the published list is the verified wording", () => {
   assert.deepEqual(
     qualifications.map((item) => item.title),
-    ["City & Guilds qualified", bpec],
+    ["City & Guilds qualified", bpec, "G3 qualified for unvented cylinders"],
   );
   const heatPump = qualifications[1];
+  const g3 = qualifications[2];
+  assert.equal(g3?.summary, "It covers installing and servicing unvented hot water cylinders.");
   assert.equal(heatPump?.label, "Ofqual regulated");
   assert.equal(heatPump?.summary, summary);
   assert.equal(heatPump?.short?.includes("BPEC Level 3"), true);
@@ -78,6 +80,8 @@ test("the chat names that qualification and still refuses the ones not listed", 
   assert.match(reply, /Ofqual regulated/);
   assert.match(reply, /non-refrigerant circuits/);
   assert.match(reply, /only qualifications listed/);
+  assert.match(reply, /G3 qualified for unvented cylinders/);
+  assert.match(fixedReply("Are you G3 qualified?", business) || "", /unvented hot water cylinders/);
   assert.equal(reply.includes("NVQ"), false);
   assert.doesNotMatch(reply, forbidden);
   assert.doesNotMatch(reply, /[\u2013\u2014]/);

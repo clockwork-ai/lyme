@@ -36,7 +36,7 @@ The quote form sends mail with Cloudflare Email Sending (`send_email`). The dest
 | --- | --- | --- |
 | Send Email (`send_email`) | `EMAIL` | `lymeplumbingandheating@gmail.com` |
 
-`src/worker.js` runs for every request. It handles `POST /api/quote` and reads `env.EMAIL`. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
+`src/worker.js` runs for every request. It handles `POST /api/quote` and `POST /api/guide-signup`, and reads `env.EMAIL` for both. `GET` and `POST /api/chat` are handled there too. `/api/*` is not redirected, so the quote form POST still posts. Any other request is fetched from the assets binding, then a `www.lymeplumbing.co.uk` host or a temporary trailing-slash redirect is answered with one 301. `public/_redirects` and the 404 page still come from that asset response. The From address is `quotes@lymeplumbing.co.uk`. That sender has to be allowed on the zone that already has Email Routing. Adding the binding is a Worker setting, not a DNS change.
 
 ### Quote form
 
@@ -53,11 +53,24 @@ Limits: up to 4 photos, 3MB each, 8MB together. JPG, PNG, WEBP, GIF or HEIC.
 
 The posted Origin must be `https://lymeplumbing.co.uk`, `https://www.lymeplumbing.co.uk`, `https://lymeplumbing.uk` or `https://www.lymeplumbing.uk` (or localhost on port 8787 or 8788 while trying the Worker). Other hostnames, including a `*.workers.dev` preview, are refused until that hostname is added in `functions/_lib/quote-mail.js`.
 
+### Monthly guide signup
+
+`public/guides/index.html` and each guide page post to `/api/guide-signup` as form data. The fields are email (required), first name (optional), a honeypot named `hp`, and the page path. The consent line sits above the button and links to `/privacy/`.
+
+Nobody on the list is emailed. There is no KV, D1 or other store on this Worker, so each signup is an email to the same inbox as the quote form: `lymeplumbingandheating@gmail.com`, from `quotes@lymeplumbing.co.uk`. The subject is `New guide signup`. Callum checks that inbox and searches for that subject. No new binding, secret or env var is required. The existing `EMAIL` binding in `wrangler.toml` is the whole setup.
+
+- Success in the browser: the form is replaced by "You're on the list. I'll send one short guide a month, and nothing else."
+- Success without JavaScript: the same sentence on an HTML page
+- A bad email, or a missing one: the form stays up and says what to fix
+- Honeypot filled: the thank-you is shown and no email is sent
+- The email binding missing, or the send failing: the form says it did not send
+- A preview hostname is refused, same as the quote form, so a pull request preview does not deliver signups
+
 ## Ask Lyme
 
 A floating chat button on every page. The script and stylesheet load after the page is idle. The assistant answers from what is published on this site. The system prompt stays on the server, in `lib/business.ts`.
 
-It can repeat the call-out rates published on the site, and it will not invent a price for a job. Callum quotes a larger job after he has seen it. Booked weekday and Saturday morning visits: Payment on completion. Card payments accepted. For emergency and same-day call-outs, the first hour is paid before he sets off, and the rest when the job's done. Card payments accepted. On a quoted job, a deposit equal to the materials is taken to book, and the balance is due on completion. Small same-day jobs have no materials deposit. The chat can say that. It does not say every job is paid only on completion. It does not give the deposit as a pound amount. It does not name a card machine, and it does not add cash or a bank transfer. It will not do boiler, gas or refrigerant work. If water is leaking, it tells the visitor to turn the water off at the stop tap, keep it away from electrics, and ring 07846 729203. The site does not describe a 12 month labour guarantee or a handover pack, so the chat will not invent either.
+It can repeat the call-out rates published on the site, and it will not invent a price for a job. Callum quotes a larger job after he has seen it. Booked weekday and Saturday morning visits: Payment on completion. Card payments accepted. For emergency and same-day call-outs, the first hour is paid before he sets off, and the rest when the job's done. Card payments accepted. On a quoted job, a deposit equal to the materials is taken to book, and the balance is due on completion. Small same-day jobs have no materials deposit. The chat can say that. It does not say every job is paid only on completion. It does not give the deposit as a pound amount. It does not name a card machine, and it does not add cash or a bank transfer. It will not do boiler, gas or refrigerant work. If water is leaking, it tells the visitor to turn the water off at the stop tap, keep it away from electrics, and ring 07846 729203. The heat pump servicing page says the work on a heat pump service or repair has a 12 month workmanship guarantee. The site does not describe a handover pack, so the chat will not invent one.
 
 The home page trust strip and the heat pump page wording live in `lib/qualifications.ts` (`homeTrustStrip` and `heatPumpLine`). The home strip is "City & Guilds qualified plumber · BPEC Level 3 heat pump qualified · Local to High Lane". The heat pump page says he installs air source heat pumps, and services, repairs and maintains them, whoever fitted them, on the plumbing side, and that he is BPEC Level 3 heat pump qualified. The About page still lists City & Guilds qualified, and the BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits), Ofqual regulated. The chat names those and no others. It does not say accredited, certified, approved installer, MCS, grant or BUS, and it does not claim F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance.
 

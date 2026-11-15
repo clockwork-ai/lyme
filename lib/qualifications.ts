@@ -6,7 +6,8 @@
  * line reads `short` and `label`.
  *
  * Do not add dates, certificate numbers, or anything that is not verified.
- * Do not add MCS, F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance.
+ * Do not add MCS, F-gas, Gas Safe, Benchmark, NICEIC or insurance.
+ * G3 is listed, for unvented cylinders only.
  */
 
 export type Qualification = {
@@ -31,6 +32,10 @@ export const qualifications: readonly Qualification[] = [
     summary:
       "It covers installing, commissioning, servicing and maintaining heat pump systems (non-refrigerant circuits).",
     short: "BPEC Level 3 Award in heat pump systems (non-refrigerant circuits)",
+  },
+  {
+    title: "G3 qualified for unvented cylinders",
+    summary: "It covers installing and servicing unvented hot water cylinders.",
   },
 ];
 
@@ -59,7 +64,7 @@ export function qualificationKnowledge(items: readonly Qualification[] = qualifi
   const only = items.length === 1
     ? "That is the only qualification on the site."
     : "Those are the only qualifications on the site.";
-  return `${body} ${only} Do not add an NVQ, a level, a date or a certificate number unless those words are already in the wording above. Do not name any other qualification. Do not say he is insured, G3, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
+  return `${body} ${only} Do not add an NVQ, a level, a date or a certificate number unless those words are already in the wording above. Do not name any other qualification. Do not say he is insured, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
 }
 
 export function qualificationReply(items: readonly Qualification[] = qualifications): string {
