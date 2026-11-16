@@ -209,3 +209,57 @@ test("power flush is a service page and the heat pump titles stay short", () => 
   assert.match(readFileSync("public/guides/radiators-cold-top-or-bottom/index.html", "utf8"), /href="\.\.\/\.\.\/services\/power-flush\/"/);
   assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/services/power-flush/"), true);
 });
+
+test("the leak detection page and the New Mills and Cheadle pages keep the copy rules", () => {
+  const services = readFileSync("public/services/index.html", "utf8");
+  const leak = readFileSync("public/services/leak-detection/index.html", "utf8");
+  const rates = slice(services, '<ul class="rates">', "</ul>");
+  assert.equal(leak.includes(rates), true);
+  assert.equal(
+    leak.match(/<title>([^<]*)<\/title>/)?.[1],
+    "Leak detection in Stockport | Lyme Plumbing &amp; Heating",
+  );
+  assert.match(leak, /<h1 class="h1">Finding and stopping leaks<\/h1>/);
+  assert.match(leak, /cannot see\. Based in High Lane, across Stockport and Cheshire\. I don&#x27;t do boiler or gas work\./);
+  assert.match(leak, /"@type": "FAQPage"/);
+  assert.match(leak, /"@type": "Service"/);
+  assert.equal(leak.includes("acoustic"), false);
+  assert.equal(leak.includes("tracer"), false);
+  assert.equal(/thermal/i.test(leak), false);
+  assert.equal(leak.includes("<img"), false);
+  assert.equal(leak.includes("07985"), false);
+  assert.doesNotMatch(leak, banned);
+  assert.match(leak, /href="\.\.\/\.\.\/services\/emergency-plumber\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/services\/plumbing\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/services\/heating-faults\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/reviews\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/areas\/high-lane\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/areas\/stockport\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/areas\/cheadle\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/areas\/new-mills\/"/);
+  assert.match(leak, /href="\.\.\/\.\.\/contact\/"/);
+  assert.match(services, /Finding the source, then stopping it\./);
+  assert.match(services, /href="\.\.\/services\/leak-detection\/"/);
+  assert.match(readFileSync("public/index.html", "utf8"), /href="services\/leak-detection\/"/);
+  assert.match(readFileSync("public/services/emergency-plumber/index.html", "utf8"), /href="\.\.\/\.\.\/services\/leak-detection\/"/);
+  assert.match(readFileSync("public/services/plumbing/index.html", "utf8"), /href="\.\.\/\.\.\/services\/leak-detection\/"/);
+  assert.match(readFileSync("public/services/heating-faults/index.html", "utf8"), /href="\.\.\/\.\.\/services\/leak-detection\/"/);
+  assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/services/leak-detection/"), true);
+  for (const [file, title] of [
+    ["public/areas/new-mills/index.html", "Plumber and heat pump installer in New Mills | Lyme"],
+    ["public/areas/cheadle/index.html", "Plumber and heat pump installer in Cheadle | Lyme"],
+  ] as const) {
+    const html = readFileSync(file, "utf8");
+    assert.equal(html.match(/<title>([^<]*)<\/title>/)?.[1], title);
+    assert.ok(title.length <= 60, title);
+    const desc = html.match(/<meta name="description" content="([^"]*)"/)?.[1] || "";
+    const decoded = desc.replaceAll("&#x27;", "'").replaceAll("&amp;", "&");
+    assert.ok(decoded.length <= 155, `${decoded} ${decoded.length}`);
+    assert.match(html, /"@type": "FAQPage"/);
+    assert.match(html, /Do you do boilers\?/);
+    assert.match(html, /I don't do boiler or gas work|I don&#x27;t do boiler or gas work/);
+    assert.doesNotMatch(html, banned);
+    assert.equal(html.includes("07985"), false);
+  }
+  assert.equal(business.pages.includes("/services/leak-detection/"), true);
+});
