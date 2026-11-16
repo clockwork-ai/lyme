@@ -3,4 +3,49 @@ Allow: /
 Disallow: /photo-frame/
 Disallow: /api/
 
+User-agent: GPTBot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /photo-frame/
+Disallow: /api/
+
 Sitemap: https://lymeplumbing.co.uk/sitemap.xml
