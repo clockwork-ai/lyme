@@ -45,6 +45,33 @@
 .hero__draw { position: relative; align-self: center; transform: scale(calc(1 + var(--sc-p, 0) * 0.035)); transform-origin: 60% 55%; }
 #hero .h-back { transform: translateY(calc(var(--sc-p, 0) * 16px)); }
 #hero .h-front { transform: translateY(calc(var(--sc-p, 0) * -9px)); }
+
+/* Depth. Five planes, each moving at its own rate as the hero plays, like a camera easing in towards the house:
+   the blueprint grid and the far hills barely move, the house grows a little, and the hedge, wall and shrub in
+   front spread outwards fastest. On a desktop the pointer tilts the planes against each other too.
+   --depth scales all of it (less travel on a phone), --mx/--my come from home.js and stay 0 without a mouse. */
+#hero { --depth: 1; --mx: 0; --my: 0; }
+.house .h-far .glow { fill: url(#hglow); }
+.house .glow-a { stop-color: var(--copper); stop-opacity: 0.16; }
+.house .glow-b { stop-color: var(--copper); stop-opacity: 0; }
+.house .h-far .r1 { fill: color-mix(in oklab, var(--line) 13%, var(--sc-canvas)); stroke: var(--line); stroke-opacity: 0.14; stroke-width: 1.2; }
+.house .h-far .r2 { fill: color-mix(in oklab, var(--line) 21%, var(--sc-canvas)); stroke: var(--line); stroke-opacity: 0.3; stroke-width: 1.4; }
+.house .h-far .far-bits { fill: color-mix(in oklab, var(--line) 21%, var(--sc-canvas)); stroke: var(--line); stroke-opacity: 0.45; stroke-width: 1.4; stroke-linejoin: round; }
+.house .mist-a { stop-color: var(--sc-canvas); stop-opacity: 0; }
+.house .mist-b { stop-color: var(--sc-canvas); stop-opacity: 0.75; }
+.house .h-far .mist { fill: url(#hmist); }
+.house .shell { fill: color-mix(in oklab, var(--line) 6%, var(--sc-canvas)); }
+.house .h-near .hedge { fill: color-mix(in oklab, black 30%, var(--sc-canvas)); stroke: var(--line); stroke-width: 2.4; stroke-linejoin: round; }
+.house .h-near .wall { fill: color-mix(in oklab, black 22%, var(--sc-canvas)); stroke: var(--line); stroke-width: 2.4; stroke-linejoin: round; }
+.house .h-near .bricks { fill: none; stroke: var(--line); stroke-width: 1.2; opacity: 0.45; }
+#hero .h-far { transform-box: view-box; transform-origin: 490px 640px;
+  transform: translate(calc(var(--mx) * -10px * var(--depth)), calc((var(--sc-p, 0) * 22px + var(--my) * -6px) * var(--depth))) scale(calc(1 + var(--sc-p, 0) * 0.012 * var(--depth))); }
+#hero .h-mid, #hero .h-front { translate: calc(var(--mx) * 4px) calc(var(--my) * 3px); }
+#hero .near-l { transform: translate(calc((var(--sc-p, 0) * -46px + var(--mx) * 20px) * var(--depth)), calc((var(--sc-p, 0) * 26px + var(--my) * 10px) * var(--depth))); }
+#hero .near-r { transform: translate(calc((var(--sc-p, 0) * 46px + var(--mx) * 20px) * var(--depth)), calc((var(--sc-p, 0) * 26px + var(--my) * 10px) * var(--depth))); }
+/* The house arrives with its outline: the solid shell fades in as the lines draw. */
+html.sc-animate .house--hero .shell { opacity: 0; animation: shellin 700ms var(--sc-ease-out) 300ms forwards; }
+@keyframes shellin { to { opacity: 1; } }
 /* Drawn in full until the engine starts, so a missing script is not a blank house. */
 .house--hero .h-mid .ln { stroke-dashoffset: 0; }
 .house--hero .h-mid .room { opacity: 0.55; }
@@ -180,6 +207,8 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
   .hero__num { display: none; }
   .hero__cap { margin-top: 0.9rem; padding-top: 0.7rem; font-size: var(--sc-t-base); min-height: 2.7em; }
   .house .mk text, .house .room, .house .mk .leader { display: none; }
+  #hero { --depth: 0.6; }
+  .house--hero .h-near { display: none; } /* cropped to a stub at phone width, so the hills and the solid house carry the depth */
   .house .boiler__tag text { font-size: 24px; }
   .hero__draw { margin-bottom: 0.4rem; }
   .chips { gap: 0.4rem; }
@@ -205,6 +234,8 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
   #hero .sc-stage, #bloke .sc-stage { position: relative; top: 0; height: auto; min-height: calc(100svh - var(--bar-h)); }
   #where .sc-stage { position: relative; height: auto; padding-block: 4rem; }
   .hero__draw, #hero .h-back, #hero .h-front { transform: none; }
+  #hero .h-far, #hero .near-l, #hero .near-r { transform: none; translate: none; }
+  html.sc-animate .house--hero .shell { animation: none; opacity: 1; }
   .house--hero .h-mid .ln, .house--hero .h-mid .room { animation: none; stroke-dashoffset: 0; opacity: 1; }
   .house--hero .h-mid .room { opacity: 0.55; }
   .house--hero .pipe { stroke-dashoffset: 0; }
@@ -218,3 +249,70 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 
 /* The dashed guide duplicates the heat pump pipe, so the pipe is the line that lights up. */
 .house .hp-guide { display: none; }
+
+/* ================================================================ DEPTH ==
+   The page as layers of paper. Each section slides up over the one before it with a rounded edge and a soft
+   shadow cast upwards (the light is above, as on every card on the site). Featured follows Rates on the same
+   ground, so it joins it rather than starting a new sheet. Every section is its own stacking context (z-index 0),
+   so a later sheet always lands on top, including over a pinned stage that is still letting go. */
+#main > section { position: relative; z-index: 0; }
+#main > section:not(#hero, #featured) {
+  margin-top: calc(var(--sheet-r) * -1);
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+  box-shadow: 0 -1px 0 hsl(var(--sc-shadow-color) / 0.08), 0 -18px 36px -16px hsl(205 45% 6% / 0.32);
+}
+:root { --sheet-r: clamp(18px, 2.4vw, 32px); }
+.ground-dark + .ground-light, .ground-dark + .ground-light-2 { box-shadow: 0 -1px 0 #ffffff14, 0 -22px 44px -14px #000a; }
+#main > section.section:not(#hero, #featured) { padding-top: calc(clamp(3.5rem, 7vw, 7rem) + var(--sheet-r) * 0.5); }
+#close { margin-bottom: 0; }
+
+/* Call-out rates: three cards that pin under the bar and land on top of each other as you read down. Each one
+   stops a title's height lower than the last, so every heading in the pile stays readable. Desktop only: on a
+   phone the cards are tall and the prices underneath would be covered, so they stay as a plain stack of cards. */
+.rates { border-top: 0; max-width: 46rem; }
+.rates li {
+  top: calc(var(--bar-h) + 1rem + var(--i, 0) * 4rem);
+  padding: 1.25rem 1.4rem 1.3rem; margin-bottom: 1rem; border-bottom: 0;
+  border-radius: calc(var(--r) + 6px); background: #fff; box-shadow: var(--sc-e2);
+}
+.rates li:nth-child(2) { --i: 1; background: #fbfcfc; }
+.rates li:nth-child(3) { --i: 2; background: #f8fafb; box-shadow: var(--sc-e3); }
+@media (min-width: 861px) {
+  html.sc-animate .rates li { position: sticky; }
+  html.sc-animate .rates li:not(:last-child) { margin-bottom: 18vh; }
+  html.sc-animate .rates li:last-child { margin-bottom: 0; }
+}
+.rates li b { color: var(--paper-ink); }
+.rates li::before { content: ""; display: block; width: 2.2rem; height: 3px; border-radius: 2px; background: var(--copper-deep); margin-bottom: 0.7rem; }
+
+/* Recent work: the photos as prints on a table. White border, a slight tilt each, lifted on hover.
+   They arrive as a loose pile and deal out into the grid when the section comes into view. */
+.recent { gap: clamp(0.9rem, 2vw, 1.4rem); }
+.recent a { display: block; padding: 0.55rem 0.55rem 0.7rem; background: #fff; border-radius: 6px; box-shadow: var(--sc-e2); rotate: var(--tilt, 0deg); transition: rotate 220ms var(--sc-ease-out), box-shadow 220ms var(--sc-ease-out), translate 220ms var(--sc-ease-out); }
+.recent img { border-radius: 3px; }
+.recent span { margin-top: 0.5rem; padding-inline: 0.15rem; }
+.recent a:nth-child(1) { --tilt: -1.4deg; } .recent a:nth-child(2) { --tilt: 0.9deg; } .recent a:nth-child(3) { --tilt: -0.6deg; }
+.recent a:nth-child(4) { --tilt: 1.2deg; } .recent a:nth-child(5) { --tilt: -1deg; } .recent a:nth-child(6) { --tilt: 0.7deg; }
+@media (hover: hover) and (pointer: fine) { .recent a:hover { rotate: 0deg; translate: 0 -4px; box-shadow: var(--sc-e3); z-index: 1; position: relative; } }
+html.sc-animate .recent a { transition: transform 900ms var(--sc-ease-out) calc(var(--n, 0) * 70ms), rotate 220ms var(--sc-ease-out), box-shadow 220ms var(--sc-ease-out), translate 220ms var(--sc-ease-out); }
+html.sc-animate .recent:not(.in) a { transform: translate(var(--px, 0), var(--py, 0)) rotate(var(--pr, 0deg)); }
+.recent a:nth-child(1) { --n: 0; --px: 104%; --py: 52%; --pr: -7deg; }
+.recent a:nth-child(2) { --n: 1; --px: 0%;   --py: 50%; --pr: 4deg; }
+.recent a:nth-child(3) { --n: 2; --px: -104%; --py: 50%; --pr: 9deg; }
+.recent a:nth-child(4) { --n: 3; --px: 104%; --py: -48%; --pr: 6deg; }
+.recent a:nth-child(5) { --n: 4; --px: 0%;   --py: -50%; --pr: -5deg; }
+.recent a:nth-child(6) { --n: 5; --px: -104%; --py: -50%; --pr: -10deg; }
+
+/* About me: the photo sits on a nearer plane than the words and drifts up past them as the act plays. */
+#bloke .ph--photo { translate: 0 calc((0.5 - var(--sc-p, 0)) * 70px); box-shadow: var(--sc-e3); }
+
+@media (max-width: 860px) {
+  .rates li { padding: 1.1rem 1.15rem 1.15rem; }
+  .recent a:nth-child(odd) { --px: 52%; } .recent a:nth-child(even) { --px: -52%; }
+  .recent a:nth-child(-n+2) { --py: 104%; } .recent a:nth-child(n+5) { --py: -104%; } .recent a:nth-child(3), .recent a:nth-child(4) { --py: 0%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recent a { transition: none; }
+  html.sc-animate .rates li { position: static; }
+  #bloke .ph--photo { translate: none; }
+}

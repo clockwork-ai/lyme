@@ -78,9 +78,25 @@ ScrollCraft.mount(document.body);
   if (reduce) { paint(1); }
   else {
     var lastP = -1;
+    // Depth: on a desktop the pointer tilts the hero planes against each other (see home.css). Eased here so the
+    // planes drift rather than jump; touch screens never set it, so phones keep the scroll-only movement.
+    var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var tx = 0, ty = 0, mx = 0, my = 0;
+    if (fine) {
+      hero.addEventListener('pointermove', function (e) {
+        var r = hero.getBoundingClientRect();
+        tx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - 0.5) * 2));
+        ty = Math.max(-1, Math.min(1, ((e.clientY - Math.max(0, r.top)) / innerHeight - 0.5) * 2));
+      }, { passive: true });
+      hero.addEventListener('pointerleave', function () { tx = 0; ty = 0; });
+    }
     (function tick() {
       var p = parseFloat(hero.style.getPropertyValue('--sc-p')) || 0;
       if (Math.abs(p - lastP) > 0.0005) { lastP = p; paint(p); }
+      if (fine && (Math.abs(tx - mx) > 0.001 || Math.abs(ty - my) > 0.001)) {
+        mx += (tx - mx) * 0.08; my += (ty - my) * 0.08;
+        hero.style.setProperty('--mx', mx.toFixed(3)); hero.style.setProperty('--my', my.toFixed(3));
+      }
       requestAnimationFrame(tick);
     })();
   }
