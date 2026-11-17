@@ -1,5 +1,6 @@
-/* Lyme home page: "The house section". The hero drawing lights up as you scroll and stops dead at the boiler,
-   the fault finder answers the problem you point at, the close is the finished drawing. */
+/* Lyme home page. The hero is a drawing that comes to life: a pencil drawing of a High Peak house, the pipework
+   planned over it run by run, then the real house at dusk with the heating on. The fault finder answers the
+   problem you point at, the close is the finished drawing. */
 
 /* ------------------------------------------------------------- the drawing */
 .house { width: 100%; height: auto; overflow: visible; }
@@ -20,8 +21,6 @@
 .house .boiler__name { fill: var(--sc-ink-soft); font: 600 19px var(--sc-font-text); }
 .house .boiler__tag text { fill: var(--sc-ink); font: 800 25px var(--sc-font-display); font-stretch: 105%; letter-spacing: -0.02em; }
 .house .mk .leader { fill: none; stroke: var(--sc-ink-soft); stroke-width: 1.4; stroke-dasharray: 3 5; opacity: 0.8; }
-.house--hero .mk .leader { opacity: 0; transition: opacity 220ms var(--sc-ease-out); }
-.house--hero .mk.is-lit .leader { opacity: 0.8; }
 .house .boiler__tag { opacity: 0; transition: opacity 260ms var(--sc-ease-out); }
 .house .h-back, .house .h-front { transition: none; }
 
@@ -33,33 +32,7 @@
 .ground-light .house .mk.is-lit circle { fill: var(--copper-deep); }
 
 /* ---------------------------------------------------------------- 1. HERO */
-#hero .sc-stage { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.35fr); align-items: center; gap: clamp(1.5rem, 4vw, 4rem); padding: calc(var(--bar-h) * 0.4) var(--sc-gutter) 2rem; height: calc(100svh - var(--bar-h)); top: var(--bar-h); }
-.hero__copy { position: relative; z-index: 2; }
-.hero__h { font-size: clamp(2.4rem, 1.2rem + 3.1vw, 4.2rem); max-width: 15ch; }
-.hero__lede { max-width: 34ch; }
-.hero__num { margin: var(--sc-4) 0 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
-.hero__num a { color: var(--sc-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.hero__cap { margin: var(--sc-6) 0 0; min-height: 2.9em; font-family: var(--sc-font-display); font-stretch: 105%; font-weight: 650; font-size: var(--sc-t-lg); line-height: 1.3; letter-spacing: -0.015em; color: #dbe5ea; border-top: 1px solid var(--sc-hairline); padding-top: var(--sc-4); max-width: 30ch; }
-.hero__cap em { font-style: normal; color: var(--copper); }
-.hero__cap .no { color: #fff; }
-.hero__draw { position: relative; align-self: center; transform: scale(calc(1 + var(--sc-p, 0) * 0.035)); transform-origin: 60% 55%; }
-#hero .h-back { transform: translateY(calc(var(--sc-p, 0) * 16px)); }
-#hero .h-front { transform: translateY(calc(var(--sc-p, 0) * -9px)); }
 /* Drawn in full until the engine starts, so a missing script is not a blank house. */
-.house--hero .h-mid .ln { stroke-dashoffset: 0; }
-.house--hero .h-mid .room { opacity: 0.55; }
-.house--hero .pipe { stroke-dashoffset: 0; }
-.house--hero .mk text, .house--hero .mk circle { opacity: 1; }
-html.sc-animate .house--hero .h-mid .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: draw 1500ms var(--sc-ease-out) 120ms forwards; }
-html.sc-animate .house--hero .h-mid .room { opacity: 0; animation: fadein 500ms var(--sc-ease-out) 1100ms forwards; }
-html.sc-animate .house--hero .pipe { stroke-dashoffset: 1; }
-html.sc-animate .house--hero .mk text { opacity: 0; }
-html.sc-animate .house--hero .mk.is-lit text { opacity: 1; }
-html.sc-animate .house--hero .mk circle { opacity: 0; transition: fill 220ms var(--sc-ease-out), opacity 220ms var(--sc-ease-out); }
-html.sc-animate .house--hero .mk.is-near circle, html.sc-animate .house--hero .mk.is-lit circle { opacity: 1; }
-#hero.is-boiler .boiler__tag, .house--done .boiler__tag, .house--finder .boiler__tag { opacity: 1; }
-#hero.is-boiler .pipe-end, .house--done .pipe-end, .house--finder .pipe-end { opacity: 1; }
-#hero.is-boiler .boiler__box { stroke: #fff; opacity: 1; }
 /* Outdoor unit on the drawing. It lights up with the heat pump pipe. */
 .house .hp-guide { fill: none; stroke: var(--sc-ink-soft); stroke-width: 2.2; stroke-dasharray: 7 7; opacity: 0.8; }
 .house .hpu path, .house .hpu circle { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -172,16 +145,8 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 
 /* ------------------------------------------------------------------ phones */
 @media (max-width: 860px) {
-  #hero .sc-stage { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; align-items: start; gap: 0.6rem; padding-top: 0.6rem; padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
-  .hero__draw { order: -1; margin-inline: -0.5rem; }
-  .hero__h { font-size: clamp(1.9rem, 1.2rem + 3.4vw, 2.6rem); max-width: 16ch; }
-  .hero__lede { font-size: var(--sc-t-base); margin-top: 0.6rem; }
-  .hero__copy .cta-row { margin-top: 1rem; }
-  .hero__num { display: none; }
-  .hero__cap { margin-top: 0.9rem; padding-top: 0.7rem; font-size: var(--sc-t-base); min-height: 2.7em; }
-  .house .mk text, .house .room, .house .mk .leader { display: none; }
+  .house--finder .mk text, .house--finder .room, .house--finder .mk .leader { display: none; }
   .house .boiler__tag text { font-size: 24px; }
-  .hero__draw { margin-bottom: 0.4rem; }
   .chips { gap: 0.4rem; }
   .chip { min-height: 2.75rem; padding: 0.4rem 0.7rem; }
   .finder { grid-template-columns: 1fr; }
@@ -196,19 +161,13 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
   .close__draw { order: 2; }
 }
 @media (max-width: 860px) and (max-height: 700px) {
-  .hero__lede { display: none; }
 }
 
 /* --------------------------------------------------------- reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  #hero, #bloke, #where { height: auto !important; }
-  #hero .sc-stage, #bloke .sc-stage { position: relative; top: 0; height: auto; min-height: calc(100svh - var(--bar-h)); }
+  #bloke, #where { height: auto !important; }
+  #bloke .sc-stage { position: relative; top: 0; height: auto; min-height: calc(100svh - var(--bar-h)); }
   #where .sc-stage { position: relative; height: auto; padding-block: 4rem; }
-  .hero__draw, #hero .h-back, #hero .h-front { transform: none; }
-  .house--hero .h-mid .ln, .house--hero .h-mid .room { animation: none; stroke-dashoffset: 0; opacity: 1; }
-  .house--hero .h-mid .room { opacity: 0.55; }
-  .house--hero .pipe { stroke-dashoffset: 0; }
-  .house--hero .mk text, .house--hero .mk circle { opacity: 1; }
   html.sc-animate .swipe { clip-path: none; transition: none; }
   .answer.is-in { animation: none; }
   .tile { transition: none; }
@@ -218,3 +177,114 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 
 /* The dashed guide duplicates the heat pump pipe, so the pipe is the line that lights up. */
 .house .hp-guide { display: none; }
+
+/* ================================================================== HERO ==
+   "Planned first. Fitted right." Four layers share one 16:9 frame so they line up stone for stone:
+   the dusk photo, the pencil drawing of the same photo, the section grid and pipework (SVG in the
+   image's own pixels), and a section line that sweeps the drawing in. home.js plays the sweep on load and
+   then reads the act's --sc-p: the pipes draw run by run, the photo dissolves in over them, and the page
+   turns from paper to dusk. Without the engine (or with reduced motion) the photo shows with the copy on it. */
+#hero { --paper-s: #f6f5f1; --cold: #2c6a93; --heat: #c0612a; --ctrl: #56707e; background: var(--sc-canvas); color: #fff; }
+.scene__stage { top: var(--bar-h); height: calc(100svh - var(--bar-h)); overflow: clip; background: var(--sc-canvas); transition: background-color 600ms var(--sc-ease-out); }
+.scene__art { position: absolute; left: 50%; top: 50%; aspect-ratio: 16 / 9; width: max(100%, calc((100svh - var(--bar-h)) * 16 / 9)); translate: var(--fx, -50%) -50%; }
+.scene__layer { position: absolute; inset: 0; }
+.scene__layer img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.scene__draw { z-index: 1; background: var(--paper-s); }
+.scene__photo { z-index: 2; }
+.scene__photo img { transform-origin: 62% 60%; }
+.scene__plan { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.scene__cut { position: absolute; z-index: 4; top: 0; bottom: 0; left: 0; width: 2px; background: var(--heat); opacity: 0; pointer-events: none; }
+.scene__cut span { position: absolute; top: 24%; left: 10px; padding: 4px 8px; background: var(--paper-s); color: var(--heat); font: 600 11px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+
+/* the section drawing: datum lines, axes, labels */
+.scene__plan .g-datum line, .scene__plan .g-axis line { stroke: #4f6676; stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: 0.6; }
+.scene__plan .g-axis line { stroke-dasharray: none; }
+.scene__plan text { font: 600 25px ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 4px; fill: #3d5361; }
+.scene__plan .g-key line { stroke-width: 3; vector-effect: non-scaling-stroke; }
+.scene__plan .g-key text { font-size: 21px; letter-spacing: 3px; }
+.key--cold { stroke: var(--cold); } .key--heat { stroke: var(--heat); } .key--ctrl { stroke: var(--ctrl); stroke-dasharray: 6 6; }
+
+/* the pipework */
+.scene__plan .run { fill: none; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+.scene__plan .run--cold { stroke: var(--cold); }
+.scene__plan .run--heat { stroke: var(--heat); }
+.scene__plan .run--ctrl { stroke: var(--ctrl); stroke-width: 2.4; }
+.scene__plan .sym { fill: rgb(246 245 241 / 0.88); stroke: var(--heat); stroke-width: 2; vector-effect: non-scaling-stroke; transition: opacity 300ms var(--sc-ease-out); }
+.scene__plan .sym[data-k="cylinder"] { stroke: var(--cold); }
+.scene__plan .mk circle { fill: var(--paper-s); stroke-width: 3; vector-effect: non-scaling-stroke; transition: fill 220ms var(--sc-ease-out), opacity 220ms var(--sc-ease-out); }
+.scene__plan .mk--cold circle { stroke: var(--cold); } .scene__plan .mk--heat circle { stroke: var(--heat); } .scene__plan .mk--ctrl circle { stroke: var(--ctrl); }
+.scene__plan .mk.is-lit.mk--cold circle { fill: var(--cold); } .scene__plan .mk.is-lit.mk--heat circle { fill: var(--heat); } .scene__plan .mk.is-lit.mk--ctrl circle { fill: var(--ctrl); }
+.scene__plan .mk text { font: 650 27px var(--sc-font-text); letter-spacing: 0; fill: #14222b; paint-order: stroke; stroke: var(--paper-s); stroke-width: 9px; stroke-linejoin: round; transition: opacity 220ms var(--sc-ease-out); }
+
+/* copy */
+.scene__veil, .scene__shade { position: absolute; inset: 0; pointer-events: none; }
+.scene__shade { z-index: 5; opacity: 0; background:
+  linear-gradient(90deg, rgb(9 16 21 / 0.72), rgb(9 16 21 / 0.35) 38%, rgb(9 16 21 / 0) 62%),
+  linear-gradient(180deg, rgb(9 16 21 / 0.35), rgb(9 16 21 / 0) 30%, rgb(9 16 21 / 0) 70%, rgb(9 16 21 / 0.55)); }
+.scene__ui { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: clamp(1.75rem, 6vh, 4.5rem) var(--sc-gutter) clamp(1.25rem, 4vh, 2.5rem); pointer-events: none; }
+.scene__ui > * { pointer-events: auto; }
+.scene__copy { max-width: min(36rem, 38vw); }
+.scene__eyebrow { margin: 0 0 1.1rem; font: 600 0.72rem/1.4 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: var(--copper); }
+.scene__title { margin: 0; font-family: var(--sc-font-display); font-stretch: 112%; font-weight: 760; font-size: clamp(2.8rem, 0.5rem + 4.3vw, 6.2rem); line-height: 0.92; letter-spacing: -0.045em; color: #fff; text-wrap: balance; transition: color 500ms var(--sc-ease-out); }
+.scene__lede { margin: 1.25rem 0 0; max-width: 34ch; font-size: var(--sc-t-lg); line-height: 1.45; color: #dbe5ea; transition: color 500ms var(--sc-ease-out); }
+.scene__copy .cta-row { margin-top: 1.6rem; }
+.scene__foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2.5rem; }
+.scene__caps { list-style: none; margin: 0; padding: 0; position: relative; flex: 1 1 22rem; max-width: 32rem; min-height: 6.5rem; }
+.scene__caps li { padding: 0.95rem 1.1rem 1rem; border-radius: 6px; background: rgb(246 245 241 / 0.94); color: var(--paper-ink); box-shadow: 0 10px 30px -12px rgb(9 16 21 / 0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.scene__caps b { display: block; font-family: var(--sc-font-display); font-stretch: 108%; font-weight: 700; font-size: clamp(1.15rem, 0.9rem + 0.9vw, 1.6rem); letter-spacing: -0.02em; line-height: 1.12; }
+.scene__caps li > span:last-child { display: block; margin-top: 0.3rem; color: var(--paper-soft); font-size: var(--sc-t-sm); line-height: 1.45; }
+.scene__mono { display: block; margin-bottom: 0.4rem; font: 600 0.66rem/1.3 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.15em; text-transform: uppercase; color: var(--copper-deep); }
+.scene__right { display: grid; justify-items: end; gap: 0.6rem; }
+.scene__chip { padding: 0.25rem 0.6rem; border-radius: 99px; background: rgb(246 245 241 / 0.86); color: var(--paper-soft); font: 600 0.62rem/1.3 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.scene__prog { width: min(18rem, 50vw); height: 2px; background: rgb(255 255 255 / 0.22); position: relative; overflow: hidden; }
+.scene__prog i { position: absolute; inset: 0; background: var(--copper); transform: scaleX(var(--prog, 1)); transform-origin: left; }
+
+/* Without the engine: the finished photo, copy on the dusk sky, the last caption only. */
+.scene__draw, .scene__plan, .scene__cut { display: none; }
+.scene__shade { opacity: 1; }
+.scene__caps li:not(:last-child) { display: none; }
+
+/* With the engine: start on paper. js-scene is set by home.js only when motion is allowed. */
+html.js-scene .scene__draw, html.js-scene .scene__plan, html.js-scene .scene__cut { display: block; }
+html.js-scene .scene__caps li { display: block; position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; translate: 0 12px; transition: opacity 300ms var(--sc-ease-out), translate 300ms var(--sc-ease-out); }
+html.js-scene .scene__caps li.is-on { opacity: 1; translate: 0 0; }
+html.js-scene #hero:not(.is-photo) .scene__stage { background: var(--paper-s); }
+html.js-scene #hero:not(.is-photo) .scene__title { color: var(--paper-ink); }
+html.js-scene #hero:not(.is-photo) .scene__lede { color: var(--paper-soft); }
+html.js-scene #hero:not(.is-photo) .scene__eyebrow { color: var(--copper-deep); }
+html.js-scene #hero:not(.is-photo) .scene__prog { background: rgb(20 34 43 / 0.14); }
+html.js-scene #hero:not(.is-photo) .btn--quote { background: var(--paper-ink); color: #fff; }
+html.js-scene .scene__photo { opacity: var(--photo, 0); }
+html.js-scene .scene__photo img { scale: var(--zoom, 1.12); }
+html.js-scene .scene__shade { opacity: var(--shade, 0); }
+html.js-scene .scene__plan { opacity: var(--plan, 1); }
+/* a paper wash behind the copy while it sits on the drawing */
+html.js-scene .scene__stage::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(90deg, rgb(246 245 241 / 0.9), rgb(246 245 241 / 0.55) 34%, rgb(246 245 241 / 0) 52%); opacity: calc(1 - var(--photo, 0)); }
+
+@media (max-width: 860px) {
+  /* Phone: the house on top (cropped to the front), the words underneath on their own ground. */
+  .scene__stage { display: flex; flex-direction: column; }
+  .scene__art { position: relative; left: auto; top: auto; translate: none; flex: 0 0 auto; width: auto; height: 44svh; aspect-ratio: 16 / 9; margin-left: calc(50vw - 44svh * 16 / 9 * 0.6); }
+  .scene__ui { position: static; inset: auto; flex: 1 1 auto; padding: 1rem var(--sc-gutter) calc(5rem + env(safe-area-inset-bottom)); gap: 0.9rem; justify-content: flex-start; }
+  .scene__copy { max-width: none; }
+  .scene__caps li { box-shadow: 0 6px 18px -8px rgb(9 16 21 / 0.5); }
+  .scene__eyebrow { display: none; }
+  .scene__title { font-size: clamp(2.3rem, 1.2rem + 5vw, 3rem); }
+  .scene__lede { font-size: var(--sc-t-base); margin-top: 0.6rem; }
+  .scene__copy .cta-row { margin-top: 1rem; }
+  .scene__foot { position: absolute; left: var(--sc-gutter); right: var(--sc-gutter); top: calc(44svh - 0.6rem); }
+  .scene__right { display: none; }
+  .scene__caps { min-height: 0; max-width: none; flex-basis: auto; }
+  .scene__caps li { padding: 0.45rem 0.7rem; width: max-content; max-width: 100%; }
+  .scene__caps .scene__mono { display: none; }
+  .scene__caps li { position: absolute; left: 0; bottom: 0; }
+  .scene__caps li > span:last-child { display: none; }
+  .scene__caps b { font-size: 0.95rem; }
+  .scene__plan .mk text, .scene__plan .g-text, .scene__plan .g-key, .scene__cut span { display: none; }
+  html.js-scene .scene__stage::after { display: none; }
+  .scene__shade { display: none; }
+}
+@media (max-width: 860px) and (max-height: 700px) { .scene__lede { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .scene__title, .scene__lede, .scene__stage { transition: none; }
+}
