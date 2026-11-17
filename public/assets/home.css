@@ -67,7 +67,7 @@
 #hero .h-far { transform-box: view-box; transform-origin: 490px 640px;
   transform: translate(calc(var(--mx) * -10px * var(--depth)), calc((var(--sc-p, 0) * 22px + var(--my) * -6px) * var(--depth))) scale(calc(1 + var(--sc-p, 0) * 0.012 * var(--depth))); }
 #hero .h-mid, #hero .h-front { translate: calc(var(--mx) * 4px) calc(var(--my) * 3px); }
-#hero .near-l { transform: translate(calc((var(--sc-p, 0) * -46px + var(--mx) * 20px) * var(--depth)), calc((var(--sc-p, 0) * 26px + var(--my) * 10px) * var(--depth))); }
+#hero .near-l { transform: translate(calc((var(--sc-p, 0) * -24px + var(--mx) * 20px) * var(--depth)), calc((var(--sc-p, 0) * 26px + var(--my) * 10px) * var(--depth))); }
 #hero .near-r { transform: translate(calc((var(--sc-p, 0) * 46px + var(--mx) * 20px) * var(--depth)), calc((var(--sc-p, 0) * 26px + var(--my) * 10px) * var(--depth))); }
 /* The house arrives with its outline: the solid shell fades in as the lines draw. */
 html.sc-animate .house--hero .shell { opacity: 0; animation: shellin 700ms var(--sc-ease-out) 300ms forwards; }
