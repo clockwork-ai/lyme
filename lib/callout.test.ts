@@ -226,7 +226,8 @@ test("the leak detection page and the New Mills and Cheadle pages keep the copy 
   assert.equal(leak.includes("acoustic"), false);
   assert.equal(leak.includes("tracer"), false);
   assert.equal(/thermal/i.test(leak), false);
-  assert.equal(leak.includes("<img"), false);
+  const leakImgs = [...leak.matchAll(/<img src="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(leakImgs, ["../../assets/illustrations/leak-ceiling-damp.webp", "../../assets/illustrations/leak-pipe-drip.webp"]);
   assert.equal(leak.includes("07985"), false);
   assert.doesNotMatch(leak, banned);
   assert.match(leak, /href="\.\.\/\.\.\/services\/emergency-plumber\/"/);

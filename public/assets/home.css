@@ -108,6 +108,7 @@ html.sc-animate .house--hero .mk.is-near circle, html.sc-animate .house--hero .m
 /* ----------------------------------------------------------- 3. THE JOBS */
 .jobs { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
 .jobs__head .more { margin-top: var(--sc-5); }
+.jobs__head .shot { margin-top: var(--sc-5); }
 .key { border-top: 1px solid var(--sc-hairline); }
 .key a { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) 1.4rem; grid-template-rows: auto auto; column-gap: 1rem; align-items: center; padding: 1.15rem 0.3rem; border-bottom: 1px solid var(--sc-hairline); text-decoration: none; transition: background-color 160ms var(--sc-ease-out); }
 .key a:hover { background: color-mix(in oklab, var(--copper-deep) 7%, transparent); }
