@@ -12,7 +12,7 @@ test("the hero is the drawing that comes to life: photo, matching drawing, plan 
   assert.match(hero, /class="scene__layer scene__photo"><img src="assets\/scene\/house-photo-2400\.webp"[^>]+alt="A stone house in the High Peak at dusk/);
   assert.match(hero, /class="scene__layer scene__draw"><img src="assets\/scene\/house-drawing-2400\.webp"[^>]+alt=""/);
   assert.match(hero, /<svg class="scene__plan" viewBox="0 0 2720 1530"[^>]*aria-hidden="true">/);
-  assert.match(hero, /Illustrative image/);
+  assert.doesNotMatch(hero, /Illustrative image/, "no tag on the picture (Callum, 17 Nov)");
   for (const f of ["house-photo-2400", "house-photo-1280", "house-drawing-2400", "house-drawing-1280"]) {
     const p = `public/assets/scene/${f}.webp`;
     assert.ok(existsSync(p) && statSync(p).size < 500_000, `${p} missing or too heavy`);
