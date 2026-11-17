@@ -221,7 +221,8 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
 .scene__shade { z-index: 5; opacity: 0; background:
   linear-gradient(90deg, rgb(9 16 21 / 0.72), rgb(9 16 21 / 0.35) 38%, rgb(9 16 21 / 0) 62%),
   linear-gradient(180deg, rgb(9 16 21 / 0.35), rgb(9 16 21 / 0) 30%, rgb(9 16 21 / 0) 70%, rgb(9 16 21 / 0.55)); }
-.scene__ui { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: clamp(1.75rem, 6vh, 4.5rem) var(--sc-gutter) clamp(1.25rem, 4vh, 2.5rem); pointer-events: none; }
+.scene__ui { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: clamp(1.75rem, 6vh, 4.5rem) var(--sc-gutter) clamp(4.25rem, 9vh, 6rem); pointer-events: none; }
+/* the bottom padding keeps the caption card clear of the schematic key along the foot of the drawing */
 .scene__ui > * { pointer-events: auto; }
 .scene__copy { max-width: min(36rem, 38vw); }
 .scene__eyebrow { margin: 0 0 1.1rem; font: 600 0.72rem/1.4 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.16em; text-transform: uppercase; color: var(--copper); }
@@ -258,7 +259,7 @@ html.js-scene .scene__photo img { scale: var(--zoom, 1.12); }
 html.js-scene .scene__shade { opacity: var(--shade, 0); }
 html.js-scene .scene__plan { opacity: var(--plan, 1); }
 /* a paper wash behind the copy while it sits on the drawing */
-html.js-scene .scene__stage::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(90deg, rgb(246 245 241 / 0.9), rgb(246 245 241 / 0.55) 34%, rgb(246 245 241 / 0) 52%); opacity: calc(1 - var(--photo, 0)); }
+html.js-scene .scene__stage::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(90deg, rgb(246 245 241 / 0.9), rgb(246 245 241 / 0.55) 34%, rgb(246 245 241 / 0) 52%); opacity: calc(1 - var(--photo, 0)); -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 90%); mask-image: linear-gradient(180deg, #000 72%, transparent 90%); }
 
 /* schematic detail: flow and return pairs, water moving once a run is in, symbols, the cylinder heating up */
 .scene__plan .run--ret { stroke: var(--heat); stroke-width: 2.4; opacity: 0.6; }
