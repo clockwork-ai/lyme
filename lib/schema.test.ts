@@ -58,6 +58,26 @@ test("FAQPage questions and answers appear word for word on the page", () => {
   assert.ok(checked > 0);
 });
 
+test("about page credentials match the visible Qualifications list exactly and appear nowhere else", () => {
+  for (const page of pages) {
+    const html = readFileSync(page, "utf8");
+    const creds = blocksOf(html).flatMap((b) => JSON.parse(b).hasCredential ?? []);
+    if (page !== "public/about/index.html") {
+      assert.equal(creds.length, 0, `${page} should not carry hasCredential`);
+      continue;
+    }
+    const section = html.match(/<section id="qualifications"[\s\S]*?<\/section>/)![0];
+    const visible = [...section.matchAll(/<h3 class="h3">([\s\S]*?)<\/h3>/g)].map((m) => visibleText(m[1]).trim());
+    assert.deepEqual(creds.map((c: { name: string }) => c.name), visible);
+    const text = visibleText(section);
+    for (const c of creds) {
+      for (const part of (c.description ?? "").split(". ")) {
+        assert.ok(text.includes(part.replace(/\.$/, "")), `credential description not visible: ${part}`);
+      }
+    }
+  }
+});
+
 test("the sitewide business block is extended once, with real profiles only", () => {
   for (const page of pages) {
     const html = readFileSync(page, "utf8");
