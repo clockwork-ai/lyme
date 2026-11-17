@@ -184,7 +184,7 @@ html.sc-animate .swipe.in { clip-path: inset(0 0 0 0); }
    image's own pixels), and a section line that sweeps the drawing in. home.js plays the sweep on load and
    then reads the act's --sc-p: the pipes draw run by run, the photo dissolves in over them, and the page
    turns from paper to dusk. Without the engine (or with reduced motion) the photo shows with the copy on it. */
-#hero { --paper-s: #f6f5f1; --cold: #2c6a93; --heat: #c0612a; --ctrl: #56707e; background: var(--sc-canvas); color: #fff; }
+#hero { --paper-s: #f6f5f1; --cold: #2c6a93; --heat: #c0612a; --hot: #b3322a; --ctrl: #56707e; background: var(--sc-canvas); color: #fff; }
 .scene__stage { top: var(--bar-h); height: calc(100svh - var(--bar-h)); overflow: clip; background: var(--sc-canvas); transition: background-color 600ms var(--sc-ease-out); }
 .scene__art { position: absolute; left: 50%; top: 50%; aspect-ratio: 16 / 9; width: max(100%, calc((100svh - var(--bar-h)) * 16 / 9)); translate: var(--fx, -50%) -50%; }
 .scene__layer { position: absolute; inset: 0; }
@@ -259,6 +259,33 @@ html.js-scene .scene__shade { opacity: var(--shade, 0); }
 html.js-scene .scene__plan { opacity: var(--plan, 1); }
 /* a paper wash behind the copy while it sits on the drawing */
 html.js-scene .scene__stage::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(90deg, rgb(246 245 241 / 0.9), rgb(246 245 241 / 0.55) 34%, rgb(246 245 241 / 0) 52%); opacity: calc(1 - var(--photo, 0)); }
+
+/* schematic detail: flow and return pairs, water moving once a run is in, symbols, the cylinder heating up */
+.scene__plan .run--ret { stroke: var(--heat); stroke-width: 2.4; opacity: 0.6; }
+.scene__plan .run--hot { stroke: var(--hot); }
+.scene__plan .run--ctrl.is-done { stroke-dasharray: 0.01 0.012; animation: signal 1.6s linear infinite; }
+@keyframes signal { to { stroke-dashoffset: -0.044; } }
+.scene__plan .flow { fill: none; stroke: #fff4ea; stroke-width: 1.6; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 0.4 3.6; opacity: 0; transition: opacity 400ms var(--sc-ease-out); animation: flow 1.4s linear infinite; }
+.scene__plan .flow.is-on { opacity: 0.95; }
+@keyframes flow { to { stroke-dashoffset: -4; } }
+.scene__plan .sym { opacity: 0; fill: rgb(246 245 241 / 0.9); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; transition: opacity 300ms var(--sc-ease-out); }
+.scene__plan .sym.is-lit, .scene__plan .zone.is-lit, .scene__plan .dev.is-lit, .scene__plan .lbl.is-lit { opacity: 1; }
+.scene__plan .sym--heat { stroke: var(--heat); } .scene__plan .sym--cold { stroke: var(--cold); } .scene__plan .sym--hot { stroke: var(--hot); }
+.scene__plan .sym--solid.sym--cold { fill: var(--cold); } .scene__plan .sym--solid.sym--heat { fill: var(--heat); }
+.scene__plan .sym--cyl { fill: none; stroke: var(--cold); stroke-width: 2.6; }
+.scene__plan .sym--coil { fill: none; stroke: #7e3b14; stroke-width: 2.4; }
+.scene__plan .cyl-heat { fill: url(#cylgrad); transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(var(--cyl, 0)); }
+.scene__plan .zone { opacity: 0; fill: rgb(179 50 42 / 0.07); stroke: var(--hot); stroke-width: 1.6; stroke-dasharray: 7 6; vector-effect: non-scaling-stroke; transition: opacity 400ms var(--sc-ease-out); }
+.scene__plan .dev { opacity: 0; transition: opacity 300ms var(--sc-ease-out); }
+.scene__plan .dev rect { fill: var(--paper-s); stroke: var(--ctrl); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.scene__plan .dev text { font: 700 26px ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0; fill: #14222b; }
+.scene__plan .dev--tag rect { fill: var(--ctrl); }
+.scene__plan .dev--tag text { fill: #fff; font-size: 23px; letter-spacing: 2px; }
+.scene__plan .dev .wave { fill: none; stroke: var(--ctrl); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.scene__plan .lbl { opacity: 0; font: 650 26px var(--sc-font-text); letter-spacing: 0; fill: #14222b; paint-order: stroke; stroke: var(--paper-s); stroke-width: 9px; stroke-linejoin: round; transition: opacity 260ms var(--sc-ease-out); }
+.scene__plan .key--hot { stroke: var(--hot); }
+@media (max-width: 860px) { .scene__plan .lbl { display: none; } }
+@media (prefers-reduced-motion: reduce) { .scene__plan .flow, .scene__plan .run--ctrl.is-done { animation: none; } }
 
 @media (max-width: 860px) {
   /* Phone: the house on top (cropped to the front), the words underneath on their own ground. */

@@ -20,7 +20,7 @@ test("the hero is the drawing that comes to life: photo, matching drawing, plan 
 });
 
 test("every pipe run in the plan has a step in the scroll timeline, and the other way round", () => {
-  const inPlan = [...hero.matchAll(/<path class="run run--\w+" data-k="([\w-]+)"/g)].map((m) => m[1]).sort();
+  const inPlan = [...new Set([...hero.matchAll(/<path class="run run--\w+" data-k="([\w-]+)"/g)].map((m) => m[1]))].sort();
   const inJs = [...js.matchAll(/\['([\w-]+)', 0\.\d+, 0\.\d+, '/g)].map((m) => m[1]).sort();
   assert.ok(inPlan.length >= 8);
   assert.deepEqual(inPlan, inJs);
@@ -42,4 +42,14 @@ test("without motion the hero is the finished photo; the drawing only plays when
   assert.match(css, /\.scene__draw, \.scene__plan, \.scene__cut \{ display: none; \}/);
   assert.match(css, /html\.js-scene \.scene__draw, html\.js-scene \.scene__plan, html\.js-scene \.scene__cut \{ display: block; \}/);
   assert.match(js, /if \(hero && !reduce\) \{\n    document\.documentElement\.classList\.add\('js-scene'\);/);
+});
+
+test("the schematic shows the detail Callum asked for: smart controls, the bathroom, the cylinder heated by the heat pump", () => {
+  for (const label of ["Smart thermostat", "Outdoor sensor", "FLOW 38°", "Bathroom", "Cylinder", "3-port valve", "Outside tap", "Stopcock", "Heat pump"]) {
+    assert.match(hero, new RegExp(`>${label}<`), `missing ${label}`);
+  }
+  assert.doesNotMatch(hero, /Kitchen tap/);
+  assert.match(hero, /class="sym sym--coil" data-k="primary"/, "the heating coil inside the cylinder");
+  assert.match(js, /setProperty\('--cyl'/, "the cylinder fills with heat as the primary draws");
+  assert.doesNotMatch(js, /setProperty\('--heat'/, "--heat is the copper colour, never a number");
 });

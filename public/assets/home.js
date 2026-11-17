@@ -41,21 +41,24 @@ ScrollCraft.mount(document.body);
     var prog = hero.querySelector('.scene__prog');
     var lines = [].slice.call(plan.querySelectorAll('.g-datum line, .g-axis line'));
     var texts = [].slice.call(plan.querySelectorAll('.g-text text, .g-key'));
-    var runs = {}, marks = {}, syms = {};
-    plan.querySelectorAll('.run').forEach(function (r) { runs[r.dataset.k] = r; r.style.strokeDashoffset = 1; });
-    plan.querySelectorAll('.mk').forEach(function (m) { marks[m.dataset.k] = m; });
-    plan.querySelectorAll('.sym').forEach(function (m) { (syms[m.dataset.k] = syms[m.dataset.k] || []).push(m); });
+    // everything in the plan that belongs to a step, by its data-k
+    var parts = {};
+    plan.querySelectorAll('[data-k]').forEach(function (el) {
+      var k = el.dataset.k, b = parts[k] = parts[k] || { runs: [], flows: [], lit: [] };
+      if (el.classList.contains('run')) { b.runs.push(el); el.style.strokeDashoffset = 1; }
+      else if (el.classList.contains('flow')) b.flows.push(el);
+      else b.lit.push(el);
+    });
     // key, from, to (hero progress), caption once it's drawn
     var RUN = [
-      ['stopcock', 0.04, 0.10, 'Stopcock: where your water comes in.'],
-      ['tap', 0.10, 0.16, 'Kitchen tap: that’s me.'],
-      ['outside', 0.16, 0.22, 'Outside tap: me.'],
-      ['cylinder', 0.22, 0.28, 'Hot water cylinder: me.'],
-      ['heatpump', 0.28, 0.35, 'Air source heat pump: me.'],
-      ['rad-g', 0.35, 0.41, 'Radiators: me.'],
-      ['rad-f', 0.41, 0.47, 'Radiators upstairs: me.'],
-      ['rad-gable', 0.47, 0.50, 'Radiators upstairs: me.'],
-      ['stat', 0.50, 0.56, 'Thermostat and controls: me.']
+      ['stopcock', 0.04, 0.09, 'Stopcock: where your water comes in.'],
+      ['cold', 0.09, 0.16, 'Cold main to the cylinder, the bathroom and the outside tap: me.'],
+      ['heatpump', 0.16, 0.23, 'Air source heat pump, flow and return: me.'],
+      ['rad-g', 0.23, 0.29, 'Radiators: me.'],
+      ['rad-f', 0.29, 0.35, 'Radiators upstairs: me.'],
+      ['primary', 0.35, 0.43, 'A 3-port valve sends the heat pump’s heat to the cylinder too: me.'],
+      ['hot', 0.43, 0.49, 'Hot water to the bathroom: me.'],
+      ['controls', 0.49, 0.56, 'Smart controls read the room and the weather, and set the heat pump’s flow to match: me.']
     ];
     var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
     var span = function (p, a, b) { return clamp((p - a) / (b - a)); };
@@ -83,12 +86,14 @@ ScrollCraft.mount(document.body);
     function paint(p) {
       var capText = RUN[0][3];
       RUN.forEach(function (r) {
-        var t = span(p, r[1], r[2]);
-        if (runs[r[0]]) runs[r[0]].style.strokeDashoffset = (1 - t).toFixed(4);
-        if (marks[r[0]]) { marks[r[0]].classList.toggle('is-lit', t >= 1); }
-        (syms[r[0]] || []).forEach(function (s) { s.style.opacity = t > 0.6 ? 1 : 0; });
+        var t = span(p, r[1], r[2]), b = parts[r[0]];
+        if (!b) return;
+        b.runs.forEach(function (el) { el.style.strokeDashoffset = (1 - t).toFixed(4); el.classList.toggle('is-done', t >= 1); });
+        b.flows.forEach(function (el) { el.classList.toggle('is-on', t >= 1); });
+        b.lit.forEach(function (el) { el.classList.toggle('is-lit', t >= 0.85); });
         if (t > 0.5) capText = r[3];
       });
+      hero.style.setProperty('--cyl', ease(span(p, 0.40, 0.50)).toFixed(3));
       if (capText !== lastCap) { lastCap = capText; cap.textContent = capText; }
       var stage = p < 0.035 ? 0 : p < 0.6 ? 1 : 2;
       if (stage !== lastStage) { lastStage = stage; caps.forEach(function (c, i) { c.classList.toggle('is-on', i === stage); }); }
