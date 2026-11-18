@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createServer, request as httpRequest, type Server } from "node:http";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { forcedNotFoundStatus } from "./not-found.ts";
 import type { AddressInfo } from "node:net";
 import { test } from "node:test";
 
@@ -62,14 +63,11 @@ function start(): Promise<Server> {
       return;
     }
     const file = assetFile(rule?.code === "200" ? rule.to : url.pathname);
-    if (!file) {
-      res.writeHead(404, { "content-type": "text/html; charset=utf-8" });
-      res.end(readFileSync("public/404.html"));
-      return;
-    }
-    const type = file.endsWith(".svg") ? "image/svg+xml" : "text/html; charset=utf-8";
-    res.writeHead(rule?.code === "200" ? 200 : 200, { "content-type": type });
-    res.end(readFileSync(file));
+    const assetStatus = file ? 200 : 404;
+    const status = forcedNotFoundStatus(url.pathname, assetStatus) ?? assetStatus;
+    const type = file?.endsWith(".svg") ? "image/svg+xml" : "text/html; charset=utf-8";
+    res.writeHead(status, { "content-type": type });
+    res.end(readFileSync(file ?? "public/404.html"));
   });
   return new Promise((resolve) => {
     server.listen(0, "127.0.0.1", () => resolve(server));
@@ -142,9 +140,13 @@ test("404 and thanks carry noindex and are absent from the sitemap", async () =>
     assert.equal(missing.status, 404);
     assert.match(missing.body, /<meta name="robots" content="noindex, follow">/);
     assert.equal(/<link rel="canonical"/i.test(missing.body), false);
-    const notFound = await get(port, "/404/");
-    assert.match(notFound.body, /<meta name="robots" content="noindex, follow">/);
-    assert.equal(/<link rel="canonical"/i.test(notFound.body), false);
+    for (const path of ["/404/", "/404"]) {
+      const notFound = await get(port, path);
+      assert.equal(notFound.status, 404, path);
+      assert.match(notFound.body, /<meta name="robots" content="noindex, follow">/, path);
+      assert.match(notFound.body, /That page isn't here/, path);
+      assert.equal(/<link rel="canonical"/i.test(notFound.body), false, path);
+    }
   } finally {
     await new Promise<void>((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
   }
