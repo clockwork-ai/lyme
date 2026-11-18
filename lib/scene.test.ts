@@ -54,11 +54,11 @@ test("the schematic shows the detail Callum asked for: smart controls, the bathr
   assert.doesNotMatch(js, /setProperty\('--heat'/, "--heat is the copper colour, never a number");
 });
 
-test("Christmas: the dressed photo swaps in from 1 Dec to Twelfth Night, or with ?season=christmas", () => {
+test("Christmas: the dressed photo swaps in from 18 Nov to Twelfth Night, or with ?season=christmas", () => {
   for (const w of [1280, 2400]) {
     const p = `public/assets/scene/house-photo-xmas-${w}.webp`;
     assert.ok(existsSync(p) && statSync(p).size < 500_000, `${p} missing or too heavy`);
   }
-  assert.match(js, /m === 11 \|\| \(m === 0 && day <= 6\)/);
+  assert.match(js, /\(m === 10 && day >= 18\) \|\| m === 11 \|\| \(m === 0 && day <= 6\)/);
   assert.match(js, /q === 'christmas'/);
 });
