@@ -121,7 +121,8 @@ test("llms.txt exists with the required sections and numbers", () => {
   assert.match(llms, /^# Lyme Plumbing & Heating\n\n> /);
   for (const heading of ["## Services", "## Areas covered", "## Contact", "## Qualifications"]) assert.ok(llms.includes(heading), heading);
   assert.ok(llms.includes("07846 729203") && llms.includes("07359 838866"));
-  assert.ok(llms.includes("- City & Guilds qualified plumber\n- BPEC Level 3 heat pump qualified\n- G3 qualified for unvented cylinders"));
+  assert.ok(llms.includes("- City & Guilds qualified plumber\n- BPEC Level 3 heat pump qualified\n"));
+  assert.equal(llms.includes("qualified for unvented"), false);
   assert.doesNotMatch(llms, banned);
   assert.doesNotMatch(llms, bannedExact);
   for (const [, path] of llms.matchAll(/https:\/\/lymeplumbing\.co\.uk\/((?:services|areas)\/[a-z-]+\/)/g)) {

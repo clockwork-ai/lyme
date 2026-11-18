@@ -48,7 +48,7 @@ test("qualifications, refrigerant and the guarantee stay inside the site", () =>
   assert.doesNotMatch(gas, /Gas Safe/);
   assert.equal((fixedReply("Are you Gas Safe?", business) || "").includes("BPEC"), false);
   assert.match(fixedReply("What qualifications do you have?", business) || "", /City & Guilds qualified/);
-  assert.match(fixedReply("What qualifications do you have?", business) || "", /BPEC Level 3 Award/);
+  assert.match(fixedReply("What qualifications do you have?", business) || "", /BPEC Level 3 heat pump qualified/);
   assert.equal((fixedReply("Are you City and Guilds?", business) || "").includes("NVQ"), false);
   assert.match(fixedReply("Can you regas the heat pump?", business) || "", /doesn't do refrigerant/);
   assert.match(fixedReply("Do you give a 12 month guarantee?", business) || "", /12 month workmanship guarantee/);

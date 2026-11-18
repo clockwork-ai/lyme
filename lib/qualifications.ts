@@ -7,13 +7,16 @@
  *
  * Do not add dates, certificate numbers, or anything that is not verified.
  * Do not add MCS, F-gas, Gas Safe, Benchmark, NICEIC or insurance.
- * G3 is listed, for unvented cylinders only.
+ * Do not name a qualification for unvented cylinders. That service stays,
+ * with no qualification claim.
+ * The only qualification wordings are "City & Guilds qualified plumber"
+ * and "BPEC Level 3 heat pump qualified".
  */
 
 export type Qualification = {
   /** Wording to publish. Edit this when the verified name changes. */
   title: string;
-  /** Optional line under the title, such as "Ofqual regulated". */
+  /** Optional line under the title. */
   label?: string;
   /** Optional plain-language line about what it covers. */
   summary?: string;
@@ -23,19 +26,10 @@ export type Qualification = {
 
 export const qualifications: readonly Qualification[] = [
   {
-    title: "City & Guilds qualified",
+    title: "City & Guilds qualified plumber",
   },
   {
-    title:
-      "BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits)",
-    label: "Ofqual regulated",
-    summary:
-      "It covers installing, commissioning, servicing and maintaining heat pump systems (non-refrigerant circuits).",
-    short: "BPEC Level 3 Award in heat pump systems (non-refrigerant circuits)",
-  },
-  {
-    title: "G3 qualified for unvented cylinders",
-    summary: "It covers installing and servicing unvented hot water cylinders.",
+    title: "BPEC Level 3 heat pump qualified",
   },
 ];
 
@@ -64,17 +58,20 @@ export function qualificationKnowledge(items: readonly Qualification[] = qualifi
   const only = items.length === 1
     ? "That is the only qualification on the site."
     : "Those are the only qualifications on the site.";
-  return `${body} ${only} Do not add an NVQ, a level, a date or a certificate number unless those words are already in the wording above. Do not name any other qualification. Do not say he is insured, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
+  return `${body} ${only} Do not add an NVQ, a level, a date or a certificate number unless those words are already in the wording above. Do not name any other qualification. Do not claim a qualification for unvented cylinders. Do not say he is insured, MCS, F-gas, Gas Safe, Benchmark or NICEIC registered. If they ask about those, say the site does not list them.`;
 }
 
 export function qualificationReply(items: readonly Qualification[] = qualifications): string {
   if (items.length === 0) {
     return "The site does not list a qualification. Ring Callum on 07846 729203, or use Get a quote.";
   }
-  const body = items.map(detail).join(" ");
   const lead = "Callum is a City & Guilds qualified plumber, and he is BPEC Level 3 heat pump qualified.";
-  if (items.length === 1) {
-    return `${lead} ${body} That is the only qualification listed on the site.`;
-  }
-  return `${lead} ${body} Those are the only qualifications listed on the site.`;
+  const only = items.length === 1
+    ? "That is the only qualification listed on the site."
+    : "Those are the only qualifications listed on the site.";
+  const extra = items
+    .map(detail)
+    .filter((line) => !lead.includes(line.replace(/\.$/, "")))
+    .join(" ");
+  return extra ? `${lead} ${extra} ${only}` : `${lead} ${only}`;
 }
