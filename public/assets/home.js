@@ -1,5 +1,5 @@
 /* Lyme home page. The engine drives the acts; this file is the page's own behaviour:
-   1. the hero pipe run, read off the hero's --sc-p: copper reaches each fitting in turn and stops at the boiler
+   1. the hero: the drawing comes to life (grid, pipework run by run, then the photo), read off the hero's --sc-p
    2. "Point at the problem": the fault finder
    3. per-row swipe-ins for the job key and the reviews line */
 ScrollCraft.mount(document.body);
@@ -22,61 +22,106 @@ ScrollCraft.mount(document.body);
   (mq.addEventListener ? mq.addEventListener('change', crop) : mq.addListener(crop));
 })();
 
+/* Christmas: from 18 November (Callum, 18 Nov 2026: "run from now") to Twelfth Night (6 January) the dusk photo is the same house dressed for Christmas
+   (warm-white lights along the eaves, a wreath, candles, a hoar frost). Same framing, so the drawing still lines up.
+   ?season=christmas shows it any time (for previews), ?season=off hides it. */
+(function () {
+  var img = document.querySelector('#hero .scene__photo img');
+  if (!img) return;
+  var q = (location.search.match(/[?&]season=([a-z]+)/) || [])[1];
+  var d = new Date(), m = d.getMonth(), day = d.getDate();
+  var on = q ? q === 'christmas' : ((m === 10 && day >= 18) || m === 11 || (m === 0 && day <= 6));
+  if (!on) return;
+  document.documentElement.classList.add('is-christmas');
+  img.srcset = 'assets/scene/house-photo-xmas-1280.webp 1280w, assets/scene/house-photo-xmas-2400.webp 2400w';
+  img.src = 'assets/scene/house-photo-xmas-2400.webp';
+  img.alt = 'A stone house in the High Peak at dusk at Christmas, warm-white lights along the eaves, a wreath on the door and a frost on the drystone wall';
+})();
+
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduce) document.documentElement.classList.add('sc-animate');
 
   /* ---------------------------------------------------------------- 1. hero */
+  // The drawing comes to life. On load the section grid draws and the section line sweeps the pencil drawing in
+  // (time-based, so the first screen is never blank paper). Then the act's --sc-p drives the rest: each pipe run
+  // draws in turn and its label lights, the caption names what it is, then the dusk photo dissolves in over the
+  // drawing and the page turns from paper to dusk. Reduced motion skips all of it and shows the photo.
   var hero = document.getElementById('hero');
-  var svg = hero.querySelector('.house');
-  var cap = hero.querySelector('[data-cap]');
-  // key, from, to (hero progress), caption once it's lit
-  var RUN = [
-    ['stopcock', 0.02, 0.08, 'Stopcock: where your water comes in.'],
-    ['tap', 0.08, 0.16, 'Kitchen tap: <em>that’s me.</em>'],
-    ['outside', 0.16, 0.24, 'Outside tap: <em>me.</em>'],
-    ['basin', 0.24, 0.32, 'Basin and taps: <em>me.</em>'],
-    ['toilet', 0.32, 0.40, 'Toilet: <em>me.</em>'],
-    ['leak', 0.40, 0.48, 'Water where it shouldn’t be: <em>me.</em>'],
-    ['pump', 0.48, 0.56, 'Pump and valves: <em>me.</em>'],
-    ['rad1', 0.56, 0.62, 'Radiators: <em>me.</em>'],
-    ['rad2', 0.62, 0.66, 'Radiators: <em>me.</em>'],
-    ['stat', 0.66, 0.72, 'Thermostat and controls: <em>me.</em>'],
-    ['cylinder', 0.72, 0.78, 'Hot water cylinder: <em>me.</em>'],
-    ['heatpump', 0.78, 0.86, 'Air source heat pump: <em>me.</em>'],
-    ['toboiler', 0.86, 0.92, 'And the boiler?'],
-  ];
-  var BOILER_AT = 0.92, DONE_AT = 0.95, ANGLE_AT = 0.98;
-  var BOILER = '<span class="no">Boiler: not me.</span> You\'ll need a gas engineer.';
-  var DONE = '<span class="no">Boiler: not me.</span>';
-  var ANGLE = 'The bloke who quotes it is <em>the bloke who fixes it.</em>';
-  var pipes = {}, marks = {}, drips = svg.querySelector('.drips'), hpu = svg.querySelector('.hpu');
-  svg.querySelectorAll('.pipe').forEach(function (p) { pipes[p.dataset.k] = p; });
-  svg.querySelectorAll('.mk').forEach(function (m) { marks[m.dataset.k] = m; });
-  var lastCap = null;
-  function setCap(html) { if (html !== lastCap) { lastCap = html; cap.innerHTML = html; } }
-
-  function paint(p) {
-    var capHtml = 'Here’s what I do.';
-    RUN.forEach(function (r) {
-      var t = Math.min(1, Math.max(0, (p - r[1]) / (r[2] - r[1])));
-      if (pipes[r[0]]) pipes[r[0]].style.strokeDashoffset = (1 - t).toFixed(4);
-      var m = marks[r[0]];
-      if (m) { m.classList.toggle('is-lit', t >= 1); m.classList.toggle('is-near', t > 0); }
-      if (r[0] === 'leak' && drips) drips.classList.toggle('is-lit', t >= 1);
-      if (r[0] === 'heatpump' && hpu) hpu.classList.toggle('is-lit', t >= 1);
-      if (t > 0.5) capHtml = r[3];
-      if (r[0] === 'toboiler' && p >= BOILER_AT) capHtml = BOILER;
+  if (hero && !reduce) {
+    document.documentElement.classList.add('js-scene');
+    var plan = hero.querySelector('.scene__plan'), cut = hero.querySelector('.scene__cut');
+    var draw = hero.querySelector('.scene__draw');
+    var caps = [].slice.call(hero.querySelectorAll('.scene__caps li'));
+    var cap = hero.querySelector('[data-cap]');
+    var prog = hero.querySelector('.scene__prog');
+    var lines = [].slice.call(plan.querySelectorAll('.g-datum line, .g-axis line'));
+    var texts = [].slice.call(plan.querySelectorAll('.g-text text, .g-key'));
+    // everything in the plan that belongs to a step, by its data-k
+    var parts = {};
+    plan.querySelectorAll('[data-k]').forEach(function (el) {
+      var k = el.dataset.k, b = parts[k] = parts[k] || { runs: [], flows: [], lit: [] };
+      if (el.classList.contains('run')) { b.runs.push(el); el.style.strokeDashoffset = 1; }
+      else if (el.classList.contains('flow')) b.flows.push(el);
+      else b.lit.push(el);
     });
-    hero.classList.toggle('is-boiler', p >= BOILER_AT);
-    var done = p >= DONE_AT;
-    hero.classList.toggle('is-done', done);
-    if (done) capHtml = p >= ANGLE_AT ? ANGLE : DONE;
-    setCap(capHtml);
-  }
+    // key, from, to (hero progress), caption once it's drawn
+    var RUN = [
+      ['stopcock', 0.04, 0.09, 'Stopcock: where your water comes in.'],
+      ['cold', 0.09, 0.16, 'Cold main to the cylinder, the bathroom and the outside tap: me.'],
+      ['heatpump', 0.16, 0.23, 'Air source heat pump, flow and return: me.'],
+      ['rad-g', 0.23, 0.29, 'Radiators: me.'],
+      ['rad-f', 0.29, 0.35, 'Radiators upstairs: me.'],
+      ['primary', 0.35, 0.43, 'A 3-port valve sends the heat pump’s heat to the cylinder too: me.'],
+      ['hot', 0.43, 0.49, 'Hot water to the bathroom: me.'],
+      ['controls', 0.49, 0.56, 'Smart controls read the room and the weather, and set the heat pump’s flow to match: me.']
+    ];
+    var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+    var span = function (p, a, b) { return clamp((p - a) / (b - a)); };
+    var ease = function (t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
 
-  if (reduce) { paint(1); }
-  else {
+    // intro: grid then the section sweep, about 2.2 seconds
+    var t0 = null, introDone = false;
+    lines.forEach(function (l) { l.style.strokeDasharray = 1; l.style.strokeDashoffset = 1; });
+    texts.forEach(function (t) { t.style.opacity = 0; });
+    draw.style.clipPath = 'inset(0 100% 0 0)';
+    function intro(ts) {
+      if (t0 === null) t0 = ts;
+      var t = (ts - t0) / 2200;
+      lines.forEach(function (l, i) { l.style.strokeDashoffset = (1 - ease(span(t, i * 0.06, 0.4 + i * 0.06))).toFixed(4); });
+      texts.forEach(function (x, i) { x.style.opacity = span(t, 0.35 + i * 0.03, 0.5 + i * 0.03).toFixed(3); });
+      var w = ease(span(t, 0.3, 1));
+      draw.style.clipPath = 'inset(0 ' + ((1 - w) * 100).toFixed(2) + '% 0 0)';
+      cut.style.left = (w * 100).toFixed(2) + '%';
+      cut.style.opacity = t > 0.3 && t < 1 ? 1 : 0;
+      if (t < 1) requestAnimationFrame(intro); else { introDone = true; draw.style.clipPath = ''; }
+    }
+    requestAnimationFrame(intro);
+
+    var lastCap = null, lastStage = -1;
+    function paint(p) {
+      var capText = RUN[0][3];
+      RUN.forEach(function (r) {
+        var t = span(p, r[1], r[2]), b = parts[r[0]];
+        if (!b) return;
+        b.runs.forEach(function (el) { el.style.strokeDashoffset = (1 - t).toFixed(4); el.classList.toggle('is-done', t >= 1); });
+        b.flows.forEach(function (el) { el.classList.toggle('is-on', t >= 1); });
+        b.lit.forEach(function (el) { el.classList.toggle('is-lit', t >= 0.85); });
+        if (t > 0.5) capText = r[3];
+      });
+      hero.style.setProperty('--cyl', ease(span(p, 0.40, 0.50)).toFixed(3));
+      if (capText !== lastCap) { lastCap = capText; cap.textContent = capText; }
+      var stage = p < 0.035 ? 0 : p < 0.6 ? 1 : 2;
+      if (stage !== lastStage) { lastStage = stage; caps.forEach(function (c, i) { c.classList.toggle('is-on', i === stage); }); }
+      var photo = ease(span(p, 0.58, 0.76));
+      hero.style.setProperty('--photo', photo.toFixed(3));
+      hero.style.setProperty('--zoom', (1.12 - 0.12 * ease(span(p, 0.58, 0.97))).toFixed(4));
+      hero.style.setProperty('--plan', (1 - span(p, 0.66, 0.8)).toFixed(3));
+      hero.style.setProperty('--shade', span(p, 0.62, 0.8).toFixed(3));
+      hero.classList.toggle('is-photo', photo > 0.5);
+      if (prog) prog.style.setProperty('--prog', p.toFixed(3));
+    }
+    paint(0);
     var lastP = -1;
     (function tick() {
       var p = parseFloat(hero.style.getPropertyValue('--sc-p')) || 0;
@@ -95,7 +140,7 @@ ScrollCraft.mount(document.body);
     var spots = [].slice.call(finder.querySelectorAll('.spot'));
     var fmarks = {};
     fsvg.querySelectorAll('.mk').forEach(function (m) { fmarks[m.dataset.k] = m; });
-    var boilerG = fsvg.querySelector('.boiler'), fhpu = fsvg.querySelector('.hpu');
+    var fhpu = fsvg.querySelector('.hpu');
     var current = '';
     function show(k, fromSpot) {
       current = (k === current && fromSpot) ? '' : k;
@@ -107,7 +152,6 @@ ScrollCraft.mount(document.body);
       chips.forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.fault === current ? 'true' : 'false'); });
       spots.forEach(function (s) { s.classList.toggle('is-on', s.dataset.fault === current); });
       Object.keys(fmarks).forEach(function (key) { fmarks[key].classList.toggle('is-on', key === current); });
-      boilerG.classList.toggle('is-on', current === 'boiler');
       if (fhpu) fhpu.classList.toggle('is-on', current === 'heatpump');
     }
     function reveal() {
