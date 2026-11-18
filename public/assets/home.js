@@ -22,6 +22,22 @@ ScrollCraft.mount(document.body);
   (mq.addEventListener ? mq.addEventListener('change', crop) : mq.addListener(crop));
 })();
 
+/* Christmas: from 1 December to Twelfth Night (6 January) the dusk photo is the same house dressed for Christmas
+   (warm-white lights along the eaves, a wreath, candles, a hoar frost). Same framing, so the drawing still lines up.
+   ?season=christmas shows it any time (for previews), ?season=off hides it. */
+(function () {
+  var img = document.querySelector('#hero .scene__photo img');
+  if (!img) return;
+  var q = (location.search.match(/[?&]season=([a-z]+)/) || [])[1];
+  var d = new Date(), m = d.getMonth(), day = d.getDate();
+  var on = q ? q === 'christmas' : (m === 11 || (m === 0 && day <= 6));
+  if (!on) return;
+  document.documentElement.classList.add('is-christmas');
+  img.srcset = 'assets/scene/house-photo-xmas-1280.webp 1280w, assets/scene/house-photo-xmas-2400.webp 2400w';
+  img.src = 'assets/scene/house-photo-xmas-2400.webp';
+  img.alt = 'A stone house in the High Peak at dusk at Christmas, warm-white lights along the eaves, a wreath on the door and a frost on the drystone wall';
+})();
+
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduce) document.documentElement.classList.add('sc-animate');
