@@ -19,7 +19,7 @@ The static site for Callum Broadfoot's plumbing and heating business, served by 
 
 ## Lyme wording rules
 
-- Lyme does no gas or boiler work. Make no Gas Safe, F-gas, MCS, grant, BUS, Benchmark, NICEIC, "accredited", "certified", "approved installer" or "insured" claims, and do not name a qualification for unvented cylinders. The only qualification wordings are "City & Guilds qualified plumber" and "BPEC Level 3 heat pump qualified", from `lib/qualifications.ts`.
+- Lyme does no gas or boiler work. Make no Gas Safe, F-gas, MCS, grant, BUS, G3, Benchmark, NICEIC, "accredited", "certified", "approved installer" or "insured" claims, and do not name a qualification for unvented cylinders. The only qualification wordings are "City & Guilds qualified plumber" and "BPEC Level 3 heat pump qualified", from `lib/qualifications.ts`.
 - Numbers: calls and texts are the Twilio number 07846 729203. WhatsApp is 07359 838866 (https://wa.me/447359838866). Never use 07985 379605 publicly, in copy, links, schema or screenshots.
 - Lyme is not VAT registered: never add VAT or write "plus VAT".
 - Refer to customers by first name and area only, in copy, commit messages, pull requests and briefs.

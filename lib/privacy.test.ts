@@ -12,7 +12,8 @@ test("the privacy page explains AI call answering and names the processors", () 
   assert.match(html, /recorded/);
   assert.match(html, /transcript/);
   assert.match(html, /If you want a person/);
-  assert.match(html, /do not want the call recorded/);
+  assert.match(html, /If you do not want the call recorded, tell me on the call or afterwards\. I will delete any recording or transcript I hold when you ask\. I cannot promise the recording stops the moment you say so\./);
+  assert.doesNotMatch(html, /say that at the start of the call/);
   for (const name of ["Twilio", "ElevenLabs", "Stripe", "Cloudflare", "Google Business Profile", "Plausible", "Clockwork Jobs", "Meta"]) {
     assert.equal(html.includes(name), true, name);
   }
