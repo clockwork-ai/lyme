@@ -80,8 +80,14 @@ test("published pages and llms.txt do not use a banned qualification wording", (
   const files = [...htmlFiles("public"), "public/llms.txt"];
   for (const file of files) {
     const text = readFileSync(file, "utf8");
+    // The privacy page names the UK-US data bridge "where that company is certified".
+    // That is a transfer rule, not a claim that Callum is certified.
+    const claims = text.replace(
+      "where that company is certified, or on the UK International Data Transfer Agreement",
+      "where that company is covered, or on the UK International Data Transfer Agreement",
+    );
     assert.doesNotMatch(text, bannedWording, file);
-    assert.doesNotMatch(text, /\b(accredited|certified|approved installer|fully insured|\binsured\b|NICEIC|Benchmark|Gas Safe|F-gas|Boiler Upgrade)\b/i, file);
+    assert.doesNotMatch(claims, /\b(accredited|certified|approved installer|fully insured|\binsured\b|NICEIC|Benchmark|Gas Safe|F-gas|Boiler Upgrade)\b/i, file);
     assert.equal(/sumup/i.test(text), false, file);
   }
   const llms = readFileSync("public/llms.txt", "utf8");

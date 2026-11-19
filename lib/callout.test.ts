@@ -80,7 +80,12 @@ test("published pages keep the call-out rates and leave the open points out", ()
     const html = readFileSync(file, "utf8");
     assert.doesNotMatch(html, /[\u2013\u2014]/, file);
     assert.doesNotMatch(html, /already bought|bought myself|buy your own/i, file);
-    assert.doesNotMatch(html, banned, file);
+    // The privacy transfer line uses "certified" for a US company's data bridge, not for Callum.
+    const claims = html.replace(
+      "where that company is certified, or on the UK International Data Transfer Agreement",
+      "where that company is covered, or on the UK International Data Transfer Agreement",
+    );
+    assert.doesNotMatch(claims, banned, file);
   }
 });
 

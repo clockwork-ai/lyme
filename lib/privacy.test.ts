@@ -18,7 +18,9 @@ test("the privacy page explains AI call answering and names the processors", () 
     assert.equal(html.includes(name), true, name);
   }
   assert.match(html, /United States/);
-  assert.match(html, /European Union/);
+  assert.match(html, /Where a company in that list is in the United States, the transfer relies on the UK-US data bridge where that company is certified, or on the UK International Data Transfer Agreement or the UK Addendum to the EU standard contractual clauses\./);
+  assert.doesNotMatch(html, /Plausible is based in the European Union/);
+  assert.doesNotMatch(html, /Plausible<\/b> \(European Union\)/);
   assert.match(html, /lawful basis/);
   assert.match(html, /before a contract/);
   assert.match(html, /legitimate interest/);
