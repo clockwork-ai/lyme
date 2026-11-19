@@ -3,6 +3,7 @@ import { handleQuote } from "../functions/api/quote.js";
 import { handleGuideSignup } from "../functions/api/guide-signup.js";
 import { handleChat } from "../server/chat.ts";
 import { canonicalRedirectTarget } from "../lib/canonical.ts";
+import { forcedNotFoundStatus } from "../lib/not-found.ts";
 
 export default {
   async fetch(request, env, ctx) {
@@ -18,6 +19,25 @@ export default {
     }
 
     const assetResponse = await env.ASSETS.fetch(request);
+    const forced = forcedNotFoundStatus(url.pathname, assetResponse.status);
+    if (forced) {
+      let page = assetResponse;
+      if (page.status !== 200) {
+        await page.body?.cancel();
+        const fileUrl = new URL(request.url);
+        fileUrl.pathname = "/404";
+        fileUrl.search = "";
+        page = await env.ASSETS.fetch(new Request(fileUrl, { method: "GET" }));
+      }
+      const headers = new Headers(page.headers);
+      if (request.method === "HEAD") await page.body?.cancel();
+      return new Response(request.method === "HEAD" ? null : page.body, {
+        status: forced,
+        statusText: "Not Found",
+        headers,
+      });
+    }
+
     const target = canonicalRedirectTarget(
       request.url,
       request.method,
