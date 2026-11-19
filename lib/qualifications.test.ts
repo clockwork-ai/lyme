@@ -1,35 +1,39 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { test } from "node:test";
 import { business } from "./business.ts";
 import { fixedReply } from "./intent.ts";
 import { buildInstructions } from "./prompt.ts";
 import { heatPumpLine, homeTrust, homeTrustStrip, qualificationReply, qualifications } from "./qualifications.ts";
 
-const bpec =
-  "BPEC Level 3 Award in the Installation and Maintenance of Heat Pump Systems (Non-refrigerant Circuits)";
-const summary =
-  "It covers installing, commissioning, servicing and maintaining heat pump systems (non-refrigerant circuits).";
 const forbidden = /\b(MCS|F-gas|Gas Safe|NICEIC|Benchmark|insurance|NVQ)\b/i;
+const bannedWording = /\bG3\b|Ofqual|BPEC Level 3 Award|non-refrigerant|qualified for unvented/i;
+
+function htmlFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = `${dir}/${name}`;
+    if (statSync(path).isDirectory()) return htmlFiles(path);
+    return path.endsWith(".html") ? [path] : [];
+  });
+}
 
 test("the published list is the verified wording", () => {
   assert.deepEqual(
     qualifications.map((item) => item.title),
-    ["City & Guilds qualified", bpec, "G3 qualified for unvented cylinders"],
+    ["City & Guilds qualified plumber", "BPEC Level 3 heat pump qualified"],
   );
-  const heatPump = qualifications[1];
-  const g3 = qualifications[2];
-  assert.equal(g3?.summary, "It covers installing and servicing unvented hot water cylinders.");
-  assert.equal(heatPump?.label, "Ofqual regulated");
-  assert.equal(heatPump?.summary, summary);
-  assert.equal(heatPump?.short?.includes("BPEC Level 3"), true);
-  assert.equal(homeTrust(qualifications[0]!), "City & Guilds qualified");
-  assert.equal(
-    homeTrust(heatPump!),
-    "BPEC Level 3 Award in heat pump systems (non-refrigerant circuits), Ofqual regulated",
-  );
+  assert.equal(qualifications[0]?.label, undefined);
+  assert.equal(qualifications[0]?.summary, undefined);
+  assert.equal(qualifications[1]?.label, undefined);
+  assert.equal(qualifications[1]?.summary, undefined);
+  assert.equal(qualifications[1]?.short, undefined);
+  assert.equal(homeTrust(qualifications[0]!), "City & Guilds qualified plumber");
+  assert.equal(homeTrust(qualifications[1]!), "BPEC Level 3 heat pump qualified");
+  assert.equal(homeTrustStrip.includes("City & Guilds qualified plumber"), true);
+  assert.equal(homeTrustStrip.includes("BPEC Level 3 heat pump qualified"), true);
   assert.doesNotMatch(JSON.stringify(qualifications), /[\u2013\u2014]/);
   assert.doesNotMatch(JSON.stringify(qualifications), forbidden);
+  assert.doesNotMatch(JSON.stringify(qualifications), bannedWording);
   assert.equal(JSON.stringify(qualifications).includes(".html"), false);
 });
 
@@ -49,6 +53,7 @@ test("the about page lists every qualification in the array", () => {
   assert.equal(section.includes(".html"), false);
   assert.doesNotMatch(section, /[\u2013\u2014]/);
   assert.doesNotMatch(section, forbidden);
+  assert.doesNotMatch(section, bannedWording);
 });
 
 test("the home page trust strip sits with the years of experience", () => {
@@ -71,23 +76,41 @@ test("the heat pump page uses the final wording", () => {
   assert.equal(html.includes(".html"), false);
 });
 
+test("published pages and llms.txt do not use a banned qualification wording", () => {
+  const files = [...htmlFiles("public"), "public/llms.txt"];
+  for (const file of files) {
+    const text = readFileSync(file, "utf8");
+    // The privacy page names the UK-US data bridge "where that company is certified".
+    // That is a transfer rule, not a claim that Callum is certified.
+    const claims = text.replace(
+      "where that company is certified, or on the UK International Data Transfer Agreement",
+      "where that company is covered, or on the UK International Data Transfer Agreement",
+    );
+    assert.doesNotMatch(text, bannedWording, file);
+    assert.doesNotMatch(claims, /\b(accredited|certified|approved installer|fully insured|\binsured\b|NICEIC|Benchmark|Gas Safe|F-gas|Boiler Upgrade)\b/i, file);
+    assert.equal(/sumup/i.test(text), false, file);
+  }
+  const llms = readFileSync("public/llms.txt", "utf8");
+  assert.ok(llms.includes("- City & Guilds qualified plumber\n- BPEC Level 3 heat pump qualified\n"));
+});
+
 test("the chat names that qualification and still refuses the ones not listed", () => {
   const reply = fixedReply("What qualifications do you have?", business) || "";
   assert.equal(reply, qualificationReply());
   assert.match(reply, /City & Guilds qualified plumber/);
   assert.match(reply, /BPEC Level 3 heat pump qualified/);
-  assert.match(reply, /BPEC Level 3 Award/);
-  assert.match(reply, /Ofqual regulated/);
-  assert.match(reply, /non-refrigerant circuits/);
   assert.match(reply, /only qualifications listed/);
-  assert.match(reply, /G3 qualified for unvented cylinders/);
-  assert.match(fixedReply("Are you G3 qualified?", business) || "", /unvented hot water cylinders/);
+  assert.doesNotMatch(reply, bannedWording);
   assert.equal(reply.includes("NVQ"), false);
   assert.doesNotMatch(reply, forbidden);
   assert.doesNotMatch(reply, /[\u2013\u2014]/);
   const city = fixedReply("Are you City and Guilds?", business) || "";
-  assert.match(city, /City & Guilds qualified/);
+  assert.match(city, /City & Guilds qualified plumber/);
   assert.equal(city.includes("NVQ"), false);
+
+  const unventedQualification = fixedReply("Are you G3 qualified?", business) || "";
+  assert.equal(unventedQualification, qualificationReply());
+  assert.doesNotMatch(unventedQualification, bannedWording);
 
   const gasSafe = fixedReply("Are you Gas Safe?", business) || "";
   assert.match(gasSafe, /doesn't list that/);
@@ -98,14 +121,12 @@ test("the chat names that qualification and still refuses the ones not listed", 
   assert.match(fixedReply("Is he MCS registered?", business) || "", /doesn't list/);
 
   const instructions = buildInstructions(business, "/about/");
-  assert.match(instructions, new RegExp(escapeReg(bpec)));
-  assert.match(instructions, /City & Guilds qualified/);
+  assert.match(instructions, /BPEC Level 3 heat pump qualified/);
+  assert.match(instructions, /City & Guilds qualified plumber/);
   assert.match(instructions, /only qualifications on the site/);
   assert.match(instructions, /Do not add an NVQ/);
   assert.match(instructions, /Do not say he is insured/);
+  assert.match(instructions, /Do not claim a qualification for unvented cylinders/);
+  assert.doesNotMatch(instructions, bannedWording);
   assert.doesNotMatch(instructions, /[\u2013\u2014]/);
 });
-
-function escapeReg(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
