@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 const pagePath = "public/services/smart-controls/index.html";
 const answer =
-  "Yes, if the controls need it. I can make the low-voltage control and power connections at the boiler, like any controls engineer. I don't touch any gas parts or the boiler's gas settings.";
+  "Yes, if the controls need it. I can make the control and power connections at the boiler, like any controls engineer. I don't touch any gas parts or the boiler's gas settings.";
 const oldAnswer = "No. I don't do any work inside the boiler";
 
 function textFiles(dir: string): string[] {
@@ -17,7 +17,7 @@ function textFiles(dir: string): string[] {
   });
 }
 
-test("the smart controls FAQ allows low-voltage connections at the boiler", () => {
+test("the smart controls FAQ allows control and power connections at the boiler", () => {
   const html = readFileSync(pagePath, "utf8");
   const visible = html.match(/<summary>Will you wire it inside the boiler\?<\/summary><p>([^<]*)<\/p>/);
   assert.equal(visible?.[1], answer);
