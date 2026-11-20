@@ -128,7 +128,7 @@ test("404 and thanks carry noindex and are absent from the sitemap", async () =>
   const sitemap = readFileSync("public/sitemap.xml", "utf8");
   assert.equal(sitemap.includes("https://lymeplumbing.co.uk/404"), false);
   assert.equal(sitemap.includes("https://lymeplumbing.co.uk/thanks"), false);
-  assert.equal(sitemap.match(/<loc>/g)?.length, 44);
+  assert.equal(sitemap.match(/<loc>/g)?.length, 47);
 
   const server = await start();
   const { port } = server.address() as AddressInfo;
@@ -191,4 +191,21 @@ test("the sitewide OfferCatalog includes leak detection, power flush and heat pu
     }
   }
   assert.ok(catalogs >= 47, String(catalogs));
+});
+
+test("heat pump town pages are listed, linked and keep Lyme's wording rules", () => {
+  const sitemap = readFileSync("public/sitemap.xml", "utf8");
+  for (const [slug, name] of [["whaley-bridge", "Whaley Bridge"], ["new-mills", "New Mills"], ["disley", "Disley"]]) {
+    const url = `https://lymeplumbing.co.uk/areas/${slug}/heat-pumps/`;
+    assert.match(sitemap, new RegExp(`<loc>${url}</loc>`));
+    const html = readFileSync(`public/areas/${slug}/heat-pumps/index.html`, "utf8");
+    assert.match(html, new RegExp(`<title>Air source heat pumps in ${name} \\| Lyme</title>`));
+    assert.match(html, new RegExp(`<link rel="canonical" href="${url}">`));
+    assert.match(html, /"@type": "FAQPage"/);
+    assert.match(html, /<!-- measure:start -->[\s\S]*<!-- measure:end -->/);
+    assert.match(html, /BPEC Level 3 heat pump qualified/);
+    assert.doesNotMatch(html, /\bMCS\b|F-gas|Gas Safe|\bgrants?\b(?!\s+Aerona)|BUS\b|accredited|certified|approved installer|insured|\u2013|\u2014|07985 379605/i);
+    const town = readFileSync(`public/areas/${slug}/index.html`, "utf8");
+    assert.match(town, new RegExp(`href="../../areas/${slug}/heat-pumps/"`));
+  }
 });
