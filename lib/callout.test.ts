@@ -215,6 +215,25 @@ test("power flush is a service page and the heat pump titles stay short", () => 
   assert.equal(readFileSync("public/sitemap.xml", "utf8").includes("https://lymeplumbing.co.uk/services/power-flush/"), true);
 });
 
+test("the leak detection page says there is no underground detection kit", () => {
+  const leak = readFileSync("public/services/leak-detection/index.html", "utf8");
+  const sentence =
+    "I don't bring underground leak detection kit. If the leak looks to be under a drive or in the outside water main and needs that kind of kit, I'll tell you straight and stop there.";
+  const faqAnswer =
+    "No. I find leaks around the house, including under floors and pipework I can get to, but I don't bring underground leak detection kit. If the leak looks to be under a drive or in the outside water main and needs that kind of kit, I'll tell you straight and stop there.";
+  const visible = leak.replace(/<script[\s\S]*?<\/script>/g, " ");
+  assert.ok(visible.includes(sentence), "sentence missing from the page body");
+  const faq = [...leak.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .map((m) => JSON.parse(m[1]))
+    .find((data) => data["@type"] === "FAQPage");
+  assert.ok(faq, "FAQPage JSON-LD missing");
+  const answer = faq.mainEntity.find((q: { name: string }) => q.name === "Do you find leaks underground or under the drive?");
+  assert.equal(answer?.acceptedAnswer?.text, faqAnswer);
+  assert.ok(visible.includes("Do you find leaks underground or under the drive?"), "FAQ question missing from the page");
+  assert.ok(visible.includes(faqAnswer), "FAQ answer missing from the page");
+  assert.equal(leak.includes("What about an underground leak under a drive or on the outside mains?"), false);
+});
+
 test("the leak detection page and the New Mills and Cheadle pages keep the copy rules", () => {
   const services = readFileSync("public/services/index.html", "utf8");
   const leak = readFileSync("public/services/leak-detection/index.html", "utf8");
