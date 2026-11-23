@@ -146,9 +146,42 @@ test("the quote form accepts the renamed heating faults job", async () => {
   assert.equal((await parseSubmission(dropped)).ok, false);
 });
 
-test("the heating faults heading stays away from the boiler", () => {
-  const page = readFileSync("public/services/heating-faults/index.html", "utf8");
-  assert.match(page, /<h1 class="h1">Heating faults away from the boiler<\/h1>/);
+function copyFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = `${dir}/${name}`;
+    if (statSync(path).isDirectory()) return name === "node_modules" ? [] : copyFiles(path);
+    if (path === "lib/heating-label.test.ts") return [];
+    if (/\.(png|jpe?g|webp|gif|ico|woff2?|ttf|map)$/i.test(name)) return [];
+    return [path];
+  });
+}
+
+test("not the boiler and away from the boiler do not appear in the site copy", () => {
+  const phrases = [/not the boiler/i, /away from the boiler/i];
+  const hits: string[] = [];
+  for (const root of ["public", "functions", "lib"]) {
+    for (const path of copyFiles(root)) {
+      const text = readFileSync(path, "utf8");
+      for (const phrase of phrases) {
+        if (phrase.test(text)) hits.push(path);
+      }
+    }
+  }
+  assert.deepEqual([...new Set(hits)], []);
+});
+
+test("the rewritten heating faults lines stay neutral", () => {
+  const faults = readFileSync("public/services/heating-faults/index.html", "utf8");
+  assert.match(faults, /<h1 class="h1">Heating faults<\/h1>/);
+  assert.match(faults, /Plenty of heating problems are in the system: pumps, valves, controls, radiators and pipework\./);
   const services = readFileSync("public/services/index.html", "utf8");
-  assert.match(services, /Heating faults away from the boiler\./);
+  assert.match(services, /Heating faults\. I quote it and I do it\./);
+  const about = readFileSync("public/about/index.html", "utf8");
+  assert.match(
+    about,
+    /and heating faults\. I don&#x27;t do boiler or gas work\. If it&#x27;s the boiler, you&#x27;ll need a gas engineer\./,
+  );
+  const knowledge = readFileSync("lib/business.ts", "utf8");
+  assert.match(knowledge, /Heating controls and heating faults on the system side\./);
+  assert.match(knowledge, /If the fault is inside the boiler, they'll need a gas engineer\./);
 });

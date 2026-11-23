@@ -33,7 +33,7 @@ test("the call, WhatsApp and quote buttons are still in the hero", () => {
 });
 
 test("the homepage no longer singles out the boiler, and never offers boiler or gas work", () => {
-  assert.doesNotMatch(html, /not the boiler\.<\/h1>|Boiler: not me|Not me<\/text>|data-fault="boiler"|data-answer="boiler"/);
+  assert.doesNotMatch(html, /Boiler: not me|Not me<\/text>|data-fault="boiler"|data-answer="boiler"/);
   assert.doesNotMatch(hero, /boiler|gas/i);
   assert.doesNotMatch(html, /Gas Safe|gas engineer for hire|boiler (installation|service|repair)s?\b/i);
 });
