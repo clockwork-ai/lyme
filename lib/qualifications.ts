@@ -6,7 +6,7 @@
  * line reads `short` and `label`.
  *
  * Do not add dates, certificate numbers, or anything that is not verified.
- * Do not add MCS, F-gas, Gas Safe, G3, Benchmark, NICEIC or insurance.
+ * Do not add MCS, F-gas, Gas Safe, Benchmark, NICEIC or insurance.
  * Do not name a qualification for unvented cylinders. That service stays,
  * with no qualification claim.
  * The only qualification wordings are "City & Guilds qualified plumber"

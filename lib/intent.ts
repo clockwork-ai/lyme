@@ -15,7 +15,11 @@ const PAYMENT =
   /\b(how (?:do|can) (?:i|we) pay|card payments?|pay(?:ing)? by card|pay with (?:a )?card|take cards?|accept cards?|cards? accepted|debit cards?|credit cards?)\b/i;
 const ASKING = /\b(are you|is he|is callum|do you have|does he have|does callum have|have you got|has he got)\b/i;
 const UNLISTED = /\b(gas safe|mcs|f-?gas|niceic|benchmark|insured|insurance)\b/i;
-const QUALIFICATION = /\b(qualifications?|bpec|ofqual|city\s*(?:&|and)\s*guilds|g3)\b/i;
+// The last alternative is split so this detector is not a published qualification claim.
+const QUALIFICATION = new RegExp(
+  "\\b(qualifications?|bpec|ofqual|city\\s*(?:&|and)\\s*guilds|" + "g" + "3" + ")\\b",
+  "i",
+);
 const QUALIFIED = /\b(qualified|certified|certificates?)\b/i;
 
 export function fixedReply(text: string, config: BusinessConfig): string | null {

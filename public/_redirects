@@ -8,6 +8,8 @@
 /services/unvented-cylinder/ /services/unvented-cylinders/ 301
 /services/underfloor /services/underfloor-heating/ 301
 /services/underfloor/ /services/underfloor-heating/ 301
+/services/power-flush /services/system-flush/ 301
+/services/power-flush/ /services/system-flush/ 301
 /about-us /about/ 301
 /about-us/ /about/ 301
 /contact-us /contact/ 301

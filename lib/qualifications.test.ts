@@ -130,3 +130,33 @@ test("the chat names that qualification and still refuses the ones not listed", 
   assert.doesNotMatch(instructions, bannedWording);
   assert.doesNotMatch(instructions, /[\u2013\u2014]/);
 });
+
+test("published files do not say power flush or claim a G3 qualification, and the old URL redirects", () => {
+  const banned = /power[\s-]?flush|powerflush|chemical flush|\bG3\b|qualified for unvented/i;
+  const roots = ["public", "functions", "lib"];
+  const skipExt = new Set([".webp", ".jpg", ".jpeg", ".png", ".gif", ".mp4", ".woff", ".woff2", ".ico"]);
+
+  function files(dir: string): string[] {
+    return readdirSync(dir).flatMap((name) => {
+      const path = `${dir}/${name}`;
+      if (statSync(path).isDirectory()) return files(path);
+      if (skipExt.has(name.slice(name.lastIndexOf(".")))) return [];
+      return [path];
+    });
+  }
+
+  const hits: string[] = [];
+  for (const root of roots) {
+    for (const file of files(root)) {
+      // Other tests name these phrases only to assert they are absent. _redirects keeps the old URL as a source.
+      if (file.endsWith(".test.ts") || file === "public/_redirects") continue;
+      const text = readFileSync(file, "utf8");
+      if (banned.test(text)) hits.push(file);
+    }
+  }
+  assert.deepEqual(hits, []);
+
+  const redirects = readFileSync("public/_redirects", "utf8");
+  assert.match(redirects, /^\/services\/power-flush \/services\/system-flush\/ 301$/m);
+  assert.match(redirects, /^\/services\/power-flush\/ \/services\/system-flush\/ 301$/m);
+});

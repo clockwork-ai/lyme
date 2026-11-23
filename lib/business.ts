@@ -108,7 +108,7 @@ Emergency, water leaking. Turn the water off at the stop tap (the stopcock) if t
 
 Leak detection. There is a page for finding and stopping leaks. He finds the leak first, then stops it, then does the proper fix, and gives a price before the repair starts. He is based in High Lane and works across Stockport and Cheshire. He is called for leaking pipes, joints, taps and toilets, water through a ceiling or across a floor, a leak under a floor or in a cupboard where the water shows up somewhere else, the sound of water or a damp patch with no obvious source, and heating pressure that keeps dropping because of a leak on pipes, radiators or valves. He can make it safe so the rest of the house can be used. He does not take floors or walls up until he knows where it is, or he has said why that is the next step and what it would cost. If the leak is in the boiler itself, or under a drive or in the outside mains and needs specialist detection kit he does not have, he says so and stops. He does not bring underground leak detection kit. Do not say he has specialist detection kit, and do not name detection equipment that is not written here. An emergency is water you cannot stop: a burst pipe, no water, or something overflowing. If the stopcock stops it, it can wait for a booked visit. A visit uses the published call-out rates. Those rates are for the visit, not a price for a big repair. Larger repairs are a free quote. He does not do gas or boiler work.
 
-Power flush. Radiators that stay cold at the bottom after bleeding are usually sludge on the jobs he sees: rust and debris in the system water. The fix is a power flush, or sometimes a chemical flush, usually with a magnetic filter and fresh inhibitor. He looks at the system first, because a full power flush is not always needed. He does not promise a result, and he does not give a price for the flush until he has seen the system. A visit to look uses the published call-out rates. He does not do gas or boiler work.
+System flush. Radiators that stay cold at the bottom after bleeding are usually sludge on the jobs he sees: rust and debris in the system water. A system flush is a mains water system flush that sends water both ways through the pipes and radiators. He uses a Thoroughflush unit. He only pre-doses with a cleaning chemical before the flush. He usually fits a magnetic filter and adds fresh inhibitor. He looks at the system first, because a system flush is not always needed. He does not promise a result, and he does not give a price for the flush until he has seen the system. A visit to look uses the published call-out rates. He does not do gas or boiler work.
 
 Radiators. New radiators, swaps, moving one to another wall, and valves, including thermostatic radiator valves and lockshields. Cold at the top is usually air. Cold all over can be a valve, the pump or how the system is balanced. He supplies the radiator. The customer says what style and size they have in mind. He does not fit a radiator the customer has bought. He does not always drain the whole system.
 
@@ -198,7 +198,7 @@ Contact. Ring or text ${phone}, tap WhatsApp, email callum@lymeplumbing.co.uk, o
     "/services/heating-controls/",
     "/services/heating-faults/",
     "/services/plumbing/",
-    "/services/power-flush/",
+    "/services/system-flush/",
     "/services/radiators/",
     "/services/smart-controls/",
     "/services/underfloor-heating/",
