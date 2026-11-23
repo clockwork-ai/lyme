@@ -5,7 +5,7 @@ import { JOBS, parseSubmission } from "../functions/_lib/quote-mail.js";
 
 const OLD_LABEL = "Heating faults (not the boiler)";
 const OLD_FAQ = ", not the boiler.";
-const FAQ = "Often it's the thermostat, the programmer or a valve. I can check those first.";
+const FAQ = "Often it's the thermostat, the programmer or a valve. I can check those first. If it's the boiler, you'll need a gas engineer.";
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
