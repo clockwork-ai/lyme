@@ -163,10 +163,10 @@ function htmlFiles(dir: string): string[] {
 const blocksOf = (html: string) =>
   [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => match[1]);
 
-test("the sitewide OfferCatalog includes leak detection, power flush and heat pump servicing", () => {
+test("the sitewide OfferCatalog includes leak detection, system flush and heat pump servicing", () => {
   const wanted = [
     ["Leak detection", "https://lymeplumbing.co.uk/services/leak-detection/"],
-    ["Power flush", "https://lymeplumbing.co.uk/services/power-flush/"],
+    ["System flush", "https://lymeplumbing.co.uk/services/system-flush/"],
     ["Heat pump servicing and repair", "https://lymeplumbing.co.uk/services/heat-pump-servicing/"],
   ];
   let catalogs = 0;

@@ -27,6 +27,7 @@ export const JOBS = [
   "Heating controls",
   "Smart controls",
   "Heating faults",
+  "System flush",
   "Something else",
 ];
 

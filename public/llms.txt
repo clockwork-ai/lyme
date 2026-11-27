@@ -18,7 +18,7 @@ Callum Broadfoot is a sole trader, trading as Lyme Plumbing & Heating, based in 
 - [Heating controls](https://lymeplumbing.co.uk/services/heating-controls/): Thermostats, timers, programmers and valves.
 - [Smart controls](https://lymeplumbing.co.uk/services/smart-controls/): Room-by-room temperatures and schedules.
 - [Heating faults](https://lymeplumbing.co.uk/services/heating-faults/): Cold radiators, pumps, valves and pressure loss on the system side.
-- [Power flush](https://lymeplumbing.co.uk/services/power-flush/): Sludge in the system, when radiators stay cold at the bottom.
+- [System flush](https://lymeplumbing.co.uk/services/system-flush/): A mains water system flush that sends water both ways through the pipes and radiators.
 
 ## Areas covered
 
