@@ -26,7 +26,7 @@ export const JOBS = [
   "Unvented cylinders",
   "Heating controls",
   "Smart controls",
-  "Heating faults (not the boiler)",
+  "Heating faults",
   "System flush",
   "Something else",
 ];
