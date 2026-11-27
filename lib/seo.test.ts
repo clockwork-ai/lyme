@@ -128,7 +128,7 @@ test("404 and thanks carry noindex and are absent from the sitemap", async () =>
   const sitemap = readFileSync("public/sitemap.xml", "utf8");
   assert.equal(sitemap.includes("https://lymeplumbing.co.uk/404"), false);
   assert.equal(sitemap.includes("https://lymeplumbing.co.uk/thanks"), false);
-  assert.equal(sitemap.match(/<loc>/g)?.length, 47);
+  assert.equal(sitemap.match(/<loc>/g)?.length, 49);
 
   const server = await start();
   const { port } = server.address() as AddressInfo;
