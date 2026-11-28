@@ -24,7 +24,7 @@ Add the custom domains on the Worker: `lymeplumbing.co.uk` and `www.lymeplumbing
 
 `www.lymeplumbing.co.uk` stays attached to the Worker. The Worker answers it with one 301 to the same path on `https://lymeplumbing.co.uk`, and the query string is kept. A path without a trailing slash, such as `/services`, is a 301 to the slashed path. When both apply, that is one hop to the slashed apex address. `lymeplumbing.uk` is unchanged.
 
-`public/_redirects` is the Workers static-asset redirect file (same line format as Pages). There is no `_headers` file.
+`public/_redirects` is the Workers static-asset redirect file (same line format as Pages). `public/_headers` sets browser caching for fonts (a year) and images (a week); give a replaced image a new file name.
 
 ### Email binding
 
