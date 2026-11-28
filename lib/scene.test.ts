@@ -9,7 +9,8 @@ const hero = html.slice(html.indexOf('<section id="hero"'), html.indexOf("</sect
 
 test("the hero is the drawing that comes to life: photo, matching drawing, plan and section line", () => {
   assert.match(hero, /<h1 id="hero-h" class="scene__title">/);
-  assert.match(hero, /class="scene__layer scene__photo"><img src="assets\/scene\/house-photo-2400\.webp"[^>]+alt="A stone house in the High Peak at dusk/);
+  assert.match(hero, /class="scene__layer scene__photo"><img data-photo [^>]+alt="A stone house in the High Peak at dusk/);
+  assert.match(hero, /<noscript><img src="assets\/scene\/house-photo-2400\.webp"[^>]+alt="A stone house in the High Peak at dusk/, "without JS the photo is a plain img");
   assert.match(hero, /class="scene__layer scene__draw"><img src="assets\/scene\/house-drawing-2400\.webp"[^>]+alt=""/);
   assert.match(hero, /<svg class="scene__plan" viewBox="0 0 2720 1530"[^>]*aria-hidden="true">/);
   assert.doesNotMatch(hero, /Illustrative image/, "no tag on the picture (Callum, 17 Nov)");
@@ -59,6 +60,20 @@ test("Christmas: the dressed photo swaps in from 18 Nov to Twelfth Night, or wit
     const p = `public/assets/scene/house-photo-xmas-${w}.webp`;
     assert.ok(existsSync(p) && statSync(p).size < 500_000, `${p} missing or too heavy`);
   }
-  assert.match(js, /\(m === 10 && day >= 18\) \|\| m === 11 \|\| \(m === 0 && day <= 6\)/);
-  assert.match(js, /q === 'christmas'/);
+  const head = html.slice(0, html.indexOf("</head>"));
+  assert.match(head, /\(m === 10 && day >= 18\) \|\| m === 11 \|\| \(m === 0 && day <= 6\)/, "season is decided in the head, before first paint");
+  assert.match(head, /q === 'christmas'/);
+  assert.match(hero, /house-photo-xmas/, "the photo loader picks the season's photo");
+});
+
+test("speed: the drawing never waits for home.js, and only one dusk photo is fetched, after the page loads or on a real scroll", () => {
+  const head = html.slice(0, html.indexOf("</head>"));
+  assert.match(head, /h\.classList\.add\('js-scene'\)/);
+  assert.doesNotMatch(hero.replace(/<noscript>[\s\S]*?<\/noscript>/g, ""), /<img src="assets\/scene\/house-photo/, "no dusk photo in the markup for the browser to fetch early");
+  assert.match(hero, /addEventListener\('load', function \(\) \{ setTimeout\(once, 2500\); \}\)/);
+  assert.match(hero, /if \(scrollY > 40\) once\(\)/);
+  assert.match(css, /html\.js-scene \.scene__draw \{ clip-path: inset\(0 100% 0 0\); \}/, "no flash of the whole drawing before the wipe");
+  assert.match(js, /draw\.style\.clipPath = 'none'/, "the wipe ends fully open, not back on the hidden start");
+  const h = readFileSync("public/_headers", "utf8");
+  assert.match(h, /\/assets\/fonts\/\*\n  Cache-Control: public, max-age=31536000, immutable/);
 });

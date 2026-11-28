@@ -22,21 +22,7 @@ ScrollCraft.mount(document.body);
   (mq.addEventListener ? mq.addEventListener('change', crop) : mq.addListener(crop));
 })();
 
-/* Christmas: from 18 November (Callum, 18 Nov 2026: "run from now") to Twelfth Night (6 January) the dusk photo is the same house dressed for Christmas
-   (warm-white lights along the eaves, a wreath, candles, a hoar frost). Same framing, so the drawing still lines up.
-   ?season=christmas shows it any time (for previews), ?season=off hides it. */
-(function () {
-  var img = document.querySelector('#hero .scene__photo img');
-  if (!img) return;
-  var q = (location.search.match(/[?&]season=([a-z]+)/) || [])[1];
-  var d = new Date(), m = d.getMonth(), day = d.getDate();
-  var on = q ? q === 'christmas' : ((m === 10 && day >= 18) || m === 11 || (m === 0 && day <= 6));
-  if (!on) return;
-  document.documentElement.classList.add('is-christmas');
-  img.srcset = 'assets/scene/house-photo-xmas-1280.webp 1280w, assets/scene/house-photo-xmas-2400.webp 2400w';
-  img.src = 'assets/scene/house-photo-xmas-2400.webp';
-  img.alt = 'A stone house in the High Peak at dusk at Christmas, warm-white lights along the eaves, a wreath on the door and a frost on the drystone wall';
-})();
+/* Christmas (18 Nov to Twelfth Night, ?season=christmas / ?season=off): set in the page head before first paint, with the photo loader next to the photo. */
 
 (function () {
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -94,7 +80,7 @@ ScrollCraft.mount(document.body);
       draw.style.clipPath = 'inset(0 ' + ((1 - w) * 100).toFixed(2) + '% 0 0)';
       cut.style.left = (w * 100).toFixed(2) + '%';
       cut.style.opacity = t > 0.3 && t < 1 ? 1 : 0;
-      if (t < 1) requestAnimationFrame(intro); else { introDone = true; draw.style.clipPath = ''; }
+      if (t < 1) requestAnimationFrame(intro); else { introDone = true; draw.style.clipPath = 'none'; }
     }
     requestAnimationFrame(intro);
 
